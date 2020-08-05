@@ -1,0 +1,44 @@
+{
+  "name": "universal-texture-transcoders",
+  "version": "0.1.0",
+  "description": "Lightweight WebAssembly transcoder implementations of universal texture formats.",
+  "keywords": [
+    "gpu",
+    "webgl",
+    "wasm",
+    "basis",
+    "uastc",
+    "texture",
+    "gltf"
+  ],
+  "author": "The Khronos Group, Inc.",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "assemblyscript": "^0.14.7",
+    "@typescript-eslint/eslint-plugin": "^3.8.0",
+    "@typescript-eslint/parser": "^3.8.0",
+    "eslint": "^7.6.0",
+    "eslint-plugin-unicorn": "^21.0.0",
+    "typescript": "^3.9.7"
+  },
+  "scripts": {
+    "asbuild:uastc-astc": "asc assembly/uastc-astc.ts -b build/uastc_astc.wasm --optimize --converge --runtime none --noAssert --importMemory",
+    "asbuild:uastc-bc7": "asc assembly/uastc-bc7.ts -b build/uastc_bc7.wasm --optimize --converge --runtime none --noAssert --importMemory",
+    "asbuild": "npm run asbuild:uastc-bc7 && npm run asbuild:uastc-astc"
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint",
+      "unicorn"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+      "@typescript-eslint/ban-ts-comment": "off",
+      "unicorn/number-literal-case": "error"
+    }
+  }
+}
