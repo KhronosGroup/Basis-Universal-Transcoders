@@ -1303,8 +1303,8 @@ function mode6LA(ll: i32, lh: i32, al: i32, ah: i32): i64 {
 }
 
 /**
- * Quantize 8-bit RGBA endpoint pair to 5 bits with 2 p-bits and pack for BC7 mode 7.
- * The result needs to be further repacked for BC7 mode 3.
+ * Quantize 8-bit RGBA endpoint pair to 5 bits with 2 p-bits.
+ * The result needs to be further repacked for BC7 mode 7.
  */
 function mode7(rl: i32, rh: i32, gl: i32, gh: i32, bl: i32, bh: i32, al: i32, ah: i32): i64 {
   const rlq0 = min(((((rl * 0xFD) >> 10) + 1) & 0x7E), 62);
@@ -1360,8 +1360,8 @@ function mode7(rl: i32, rh: i32, gl: i32, gh: i32, bl: i32, bh: i32, al: i32, ah
 }
 
 /**
- * Quantize 8-bit RGBA endpoint pair to 5 bits with 2 p-bits and pack for BC7 mode 7.
- * The result needs to be further repacked for BC7 mode 3.
+ * Quantize 8-bit LA endpoint pair to 5 bits with 2 p-bits.
+ * The result needs to be further repacked for BC7 mode 7.
  */
 function mode7LA(ll: i32, lh: i32, al: i32, ah: i32): i32 {
   const llq0 = min(((((ll * 0xFD) >> 10) + 1) & 0x7E), 62);
