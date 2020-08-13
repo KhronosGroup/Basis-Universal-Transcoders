@@ -52,14 +52,15 @@ Like UASTC, both these GPU formats use 16 bytes per 4x4 block. The transcoders t
     const memory = new WebAssembly.Memory({ initial: texMemoryPages + 1 });
     ```
 
-3. Create a view into the memory region that will be used for transferring texture data.
+3. Create a view into the memory region that will be used for transferring texture data. This step must be repeated after calling [`memory.grow`](
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Memory/grow), such as when allocating space for another, larger, texture.
     ```js
-    const textureView = new Uint8Array(memory.buffer, 65536, nBlocks * 16);
+    let textureView = new Uint8Array(memory.buffer, 65536, nBlocks * 16);
     ```
 
 4. The memory could be populated with the UASTC data even before the transcoder is ready.
     ```js
-    textureView.set(compressedData);
+    textureView.set(compressedData /* Uint8Array */);
     ```
 
 5. Fetch and instantiate the transcoder with the created memory. Note, that the example code uses [Fetch](https://fetch.spec.whatwg.org/) and [WebAssembly Web](https://webassembly.github.io/spec/web-api/index.html) APIs. Other JavaScript environments (such as Node.js) would need slightly different steps.
@@ -67,7 +68,7 @@ Like UASTC, both these GPU formats use 16 bytes per 4x4 block. The transcoders t
     const transcoder = (
         await WebAssembly.instantiateStreaming(
             fetch('uastc_{bc7,astc}.wasm'),
-            { env: { memory: memory } }
+            { env: { memory } }
         )
     ).instance.exports;
     ```
@@ -83,4 +84,4 @@ Like UASTC, both these GPU formats use 16 bytes per 4x4 block. The transcoders t
     ```
 
 7. In a case when a new texture does not fit into the existing memory, the latter could be expanded by calling [`memory.grow`](
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Memory/grow). Note that the memory view would need to be recreated afterwards.
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Memory/grow). Note that the memory view would need to be recreated afterwards, by repeating step (3).
