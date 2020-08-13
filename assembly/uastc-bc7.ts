@@ -31,10 +31,14 @@ export function transcode(nBlocks: i32): i32 {
        0...1475: Common data
     1536...2047: BC7 solid color endpoints
     2048...2239: Pattern data
+    3072...4095: BC7 mode 1 data
+    4096...5119: BC7 mode 7 data
     */
     storeCommonData();
     storeSolidEndpoints();
     storePatterns();
+    storeMode1();
+    storeMode7();
     firstRun = false;
   }
 
@@ -1098,8 +1102,7 @@ function quant7(v: i32): i32 {
  */
 // @ts-ignore: 1206
 @inline
-function mode5LA(
-  ll: i32, lh: i32, al: i32, ah: i32): i64 {
+function mode5LA(ll: i32, lh: i32, al: i32, ah: i32): i64 {
   const llq = <i64>quant7(ll) * 0x10004001;
   const lhq = <i64>quant7(lh) * 0x800200080;
   return (<i64>ah << 50) | (<i64>al << 42) | lhq | llq;
@@ -1114,25 +1117,17 @@ function mode5LA(
 function mode5(rl: i32, rh: i32, gl: i32, gh: i32, bl: i32, bh: i32, al: i32, ah: i32, compSel: i32): i64 {
   switch (compSel) {
     case 0:
-      return (<i64>rh << 50) | (<i64>rl << 42) |
-        (<i64>quant7(bh) << 35) | (<i64>quant7(bl) << 28) |
-        (quant7(gh) << 21) | (quant7(gl) << 14) |
-        (quant7(ah) << 7) | quant7(al);
+      return (<i64>((rh << 22) | (rl << 14) | (quant7(bh) << 7) | quant7(bl)) << 28) |
+        ((quant7(gh) << 21) | (quant7(gl) << 14) | (quant7(ah) << 7) | quant7(al));
     case 1:
-      return (<i64>gh << 50) | (<i64>gl << 42) |
-        (<i64>quant7(bh) << 35) | (<i64>quant7(bl) << 28) |
-        (quant7(ah) << 21) | (quant7(al) << 14) |
-        (quant7(rh) << 7) | quant7(rl);
+      return (<i64>((gh << 22) | (gl << 14) | (quant7(bh) << 7) | quant7(bl)) << 28) |
+        ((quant7(ah) << 21) | (quant7(al) << 14) | (quant7(rh) << 7) | quant7(rl));
     case 2:
-      return (<i64>bh << 50) | (<i64>bl << 42) |
-        (<i64>quant7(ah) << 35) | (<i64>quant7(al) << 28) |
-        (quant7(gh) << 21) | (quant7(gl) << 14) |
-        (quant7(rh) << 7) | quant7(rl);
+      return (<i64>((bh << 22) | (bl << 14) | (quant7(ah) << 7) | quant7(al)) << 28) |
+        ((quant7(gh) << 21) | (quant7(gl) << 14) | (quant7(rh) << 7) | quant7(rl));
     default:
-      return (<i64>ah << 50) | (<i64>al << 42) |
-        (<i64>quant7(bh) << 35) | (<i64>quant7(bl) << 28) |
-        (quant7(gh) << 21) | (quant7(gl) << 14) |
-        (quant7(rh) << 7) | quant7(rl);
+      return (<i64>((ah << 22) | (al << 14) | (quant7(bh) << 7) | quant7(bl)) << 28) |
+        ((quant7(gh) << 21) | (quant7(gl) << 14) | (quant7(rh) << 7) | quant7(rl));
   }
 }
 
@@ -1142,46 +1137,51 @@ function square(v: i32): i32 {
   return v * v;
 }
 
+/// BC7 mode 1 endpoints precomputation
+
+const mode1EndpointsOffset = 3072;
+
+function storeMode1(): void {
+  for (let v = 0; v < 256; v++) {
+    const vq0 = min(((v + 1) >> 2) << 1, 126);
+    const vq1 = min((((max(v, 1) - 1) >> 2) << 1) + 1, 127);
+    const vs0 = (vq0 << 1) | (vq0 >> 6);
+    const vs1 = (vq1 << 1) | (vq1 >> 6);
+    const error = square(v - vs1) - square(v - vs0);
+    store<u8>(v << 2, vq0, mode1EndpointsOffset + 0);
+    store<u8>(v << 2, vq1, mode1EndpointsOffset + 1);
+    store<i8>(v << 2, error, mode1EndpointsOffset + 2);
+  }
+}
+
 /**
  * Quantize 8-bit RGB endpoint pair to 6 bits with a p-bit.
  * The result needs to be further repacked for BC7 mode 1.
  */
 function mode1(rl: i32, rh: i32, gl: i32, gh: i32, bl: i32, bh: i32): i64 {
-  const rlq0 = min(((rl + 1) >> 2) << 1, 126);
-  const rhq0 = min(((rh + 1) >> 2) << 1, 126);
-  const glq0 = min(((gl + 1) >> 2) << 1, 126);
-  const ghq0 = min(((gh + 1) >> 2) << 1, 126);
-  const blq0 = min(((bl + 1) >> 2) << 1, 126);
-  const bhq0 = min(((bh + 1) >> 2) << 1, 126);
+  rl = (rl << 2) + mode1EndpointsOffset;
+  rh = (rh << 2) + mode1EndpointsOffset;
+  gl = (gl << 2) + mode1EndpointsOffset;
+  gh = (gh << 2) + mode1EndpointsOffset;
+  bl = (bl << 2) + mode1EndpointsOffset;
+  bh = (bh << 2) + mode1EndpointsOffset;
 
-  const rlq1 = min((((max(rl, 1) - 1) >> 2) << 1) + 1, 127);
-  const rhq1 = min((((max(rh, 1) - 1) >> 2) << 1) + 1, 127);
-  const glq1 = min((((max(gl, 1) - 1) >> 2) << 1) + 1, 127);
-  const ghq1 = min((((max(gh, 1) - 1) >> 2) << 1) + 1, 127);
-  const blq1 = min((((max(bl, 1) - 1) >> 2) << 1) + 1, 127);
-  const bhq1 = min((((max(bh, 1) - 1) >> 2) << 1) + 1, 127);
+  const rlq0: i32 = load<u8>(rl, 0);
+  const rlq1: i32 = load<u8>(rl, 1);
+  const rhq0: i32 = load<u8>(rh, 0);
+  const rhq1: i32 = load<u8>(rh, 1);
+  const glq0: i32 = load<u8>(gl, 0);
+  const glq1: i32 = load<u8>(gl, 1);
+  const ghq0: i32 = load<u8>(gh, 0);
+  const ghq1: i32 = load<u8>(gh, 1);
+  const blq0: i32 = load<u8>(bl, 0);
+  const blq1: i32 = load<u8>(bl, 1);
+  const bhq0: i32 = load<u8>(bh, 0);
+  const bhq1: i32 = load<u8>(bh, 1);
 
-  const rls0 = (rlq0 << 1) | (rlq0 >> 6);
-  const rhs0 = (rhq0 << 1) | (rhq0 >> 6);
-  const gls0 = (glq0 << 1) | (glq0 >> 6);
-  const ghs0 = (ghq0 << 1) | (ghq0 >> 6);
-  const bls0 = (blq0 << 1) | (blq0 >> 6);
-  const bhs0 = (bhq0 << 1) | (bhq0 >> 6);
-
-  const rls1 = (rlq1 << 1) | (rlq1 >> 6);
-  const rhs1 = (rhq1 << 1) | (rhq1 >> 6);
-  const gls1 = (glq1 << 1) | (glq1 >> 6);
-  const ghs1 = (ghq1 << 1) | (ghq1 >> 6);
-  const bls1 = (blq1 << 1) | (blq1 >> 6);
-  const bhs1 = (bhq1 << 1) | (bhq1 >> 6);
-
-  const error0 =
-    square(rl - rls0) + square(gl - gls0) + square(bl - bls0) +
-    square(rh - rhs0) + square(gh - ghs0) + square(bh - bhs0);
-
-  const error1 =
-    square(rl - rls1) + square(gl - gls1) + square(bl - bls1) +
-    square(rh - rhs1) + square(gh - ghs1) + square(bh - bhs1);
+  const error =
+    <i32>load<i8>(rl, 2) + <i32>load<i8>(gl, 2) + <i32>load<i8>(bl, 2) +
+    <i32>load<i8>(rh, 2) + <i32>load<i8>(gh, 2) + <i32>load<i8>(bh, 2);
 
   const packed0 =
     (<i64>(bhq0 >> 1) << 30) | ((blq0 >> 1) << 24) |
@@ -1193,7 +1193,7 @@ function mode1(rl: i32, rh: i32, gl: i32, gh: i32, bl: i32, bh: i32): i64 {
     ((ghq1 >> 1) << 18) | ((glq1 >> 1) << 12) |
     ((rhq1 >> 1) << 6) | (rlq1 >> 1);
 
-  return select(packed0, packed1, error0 <= error1);
+  return select(packed0, packed1, error >= 0);
 }
 
 /**
@@ -1201,30 +1201,24 @@ function mode1(rl: i32, rh: i32, gl: i32, gh: i32, bl: i32, bh: i32): i64 {
  * The result needs to be further repacked for BC7 mode 3.
  */
 function mode3(rl: i32, rh: i32, gl: i32, gh: i32, bl: i32, bh: i32): i64 {
-  const rlq0 = min((rl + 1) & 0x1FE, 254);
-  const rlq1 = min((rl & 0x1FE) + 1, 255);
-  const rhq0 = min((rh + 1) & 0x1FE, 254);
-  const rhq1 = min((rh & 0x1FE) + 1, 255);
-  const glq0 = min((gl + 1) & 0x1FE, 254);
-  const glq1 = min((gl & 0x1FE) + 1, 255);
-  const ghq0 = min((gh + 1) & 0x1FE, 254);
-  const ghq1 = min((gh & 0x1FE) + 1, 255);
-  const blq0 = min((bl + 1) & 0x1FE, 254);
-  const blq1 = min((bl & 0x1FE) + 1, 255);
-  const bhq0 = min((bh + 1) & 0x1FE, 254);
-  const bhq1 = min((bh & 0x1FE) + 1, 255);
+  const rlq0 = rl == 255 ? 254 : (rl + 1);
+  const rhq0 = rh == 255 ? 254 : (rh + 1);
+  const glq0 = gl == 255 ? 254 : (gl + 1);
+  const ghq0 = gh == 255 ? 254 : (gh + 1);
+  const blq0 = bl == 255 ? 254 : (bl + 1);
+  const bhq0 = bh == 255 ? 254 : (bh + 1);
 
-  const errorLo0 = square(rlq0 - rl) + square(glq0 - gl) + square(blq0 - bl);
-  const errorHi0 = square(rhq0 - rh) + square(ghq0 - gh) + square(bhq0 - bh);
+  const errorLo0 = (rl & 1) + (gl & 1) + (bl & 1);
+  const errorHi0 = (rh & 1) + (gh & 1) + (bh & 1);
 
-  const errorLo1 = square(rlq1 - rl) + square(glq1 - gl) + square(blq1 - bl);
-  const errorHi1 = square(rhq1 - rh) + square(ghq1 - gh) + square(bhq1 - bh);
+  const errorLo1 = (~rl & 1) + (~gl & 1) + (~bl & 1);
+  const errorHi1 = (~rh & 1) + (~gh & 1) + (~bh & 1);
 
   const packedLo0 = (<i64>(blq0 >> 1) << 28) | ((glq0 >> 1) << 14) | (rlq0 >> 1);
   const packedHi0 = (<i64>(bhq0 >> 1) << 35) | ((ghq0 >> 1) << 21) | ((rhq0 >> 1) << 7);
 
-  const packedLo1 = (<i64>1 << 42) | (<i64>(blq1 >> 1) << 28) | ((glq1 >> 1) << 14) | (rlq1 >> 1);
-  const packedHi1 = (<i64>1 << 43) | (<i64>(bhq1 >> 1) << 35) | ((ghq1 >> 1) << 21) | ((rhq1 >> 1) << 7);
+  const packedLo1 = (<i64>1 << 42) | (<i64>(bl >> 1) << 28) | ((gl >> 1) << 14) | (rl >> 1);
+  const packedHi1 = (<i64>1 << 43) | (<i64>(bh >> 1) << 35) | ((gh >> 1) << 21) | ((rh >> 1) << 7);
 
   const packedLo = select(packedLo0, packedLo1, errorLo0 <= errorLo1);
   const packedHi = select(packedHi0, packedHi1, errorHi0 <= errorHi1);
@@ -1236,34 +1230,26 @@ function mode3(rl: i32, rh: i32, gl: i32, gh: i32, bl: i32, bh: i32): i64 {
  * Quantize 8-bit RGBA endpoint pair to 7 bits with 2 p-bits and pack for BC7 mode 6.
  */
 function mode6(rl: i32, rh: i32, gl: i32, gh: i32, bl: i32, bh: i32, al: i32, ah: i32): i64 {
-  const rlq0 = min(((rl + 1) & 0x1FE), 254);
-  const rlq1 = min((rl & 0x1FE) + 1, 255);
-  const rhq0 = min(((rh + 1) & 0x1FE), 254);
-  const rhq1 = min((rh & 0x1FE) + 1, 255);
-  const glq0 = min(((gl + 1) & 0x1FE), 254);
-  const glq1 = min((gl & 0x1FE) + 1, 255);
-  const ghq0 = min(((gh + 1) & 0x1FE), 254);
-  const ghq1 = min((gh & 0x1FE) + 1, 255);
-  const blq0 = min(((bl + 1) & 0x1FE), 254);
-  const blq1 = min((bl & 0x1FE) + 1, 255);
-  const bhq0 = min(((bh + 1) & 0x1FE), 254);
-  const bhq1 = min((bh & 0x1FE) + 1, 255);
-  const alq0 = min(((al + 1) & 0x1FE), 254);
-  const alq1 = min((al & 0x1FE) + 1, 255);
-  const ahq0 = min(((ah + 1) & 0x1FE), 254);
-  const ahq1 = min((ah & 0x1FE) + 1, 255);
+  const rlq0 = rl == 255 ? 254 : (rl + 1);
+  const rhq0 = rh == 255 ? 254 : (rh + 1);
+  const glq0 = gl == 255 ? 254 : (gl + 1);
+  const ghq0 = gh == 255 ? 254 : (gh + 1);
+  const blq0 = bl == 255 ? 254 : (bl + 1);
+  const bhq0 = bh == 255 ? 254 : (bh + 1);
+  const alq0 = al == 255 ? 254 : (al + 1);
+  const ahq0 = ah == 255 ? 254 : (ah + 1);
 
-  const errorLo0 = square(rlq0 - rl) + square(glq0 - gl) + square(blq0 - bl) + square(alq0 - al);
-  const errorHi0 = square(rhq0 - rh) + square(ghq0 - gh) + square(bhq0 - bh) + square(ahq0 - ah);
+  const errorLo0 = (rl & 1) + (gl & 1) + (bl & 1) + (al & 1);
+  const errorHi0 = (rh & 1) + (gh & 1) + (bh & 1) + (ah & 1);
 
-  const errorLo1 = square(rlq1 - rl) + square(glq1 - gl) + square(blq1 - bl) + square(alq1 - al);
-  const errorHi1 = square(rhq1 - rh) + square(ghq1 - gh) + square(bhq1 - bh) + square(ahq1 - ah);
+  const errorLo1 = (~rl & 1) + (~gl & 1) + (~bl & 1) + (~al & 1);
+  const errorHi1 = (~rh & 1) + (~gh & 1) + (~bh & 1) + (~ah & 1);
 
   const packedLo0 = (<i64>(alq0 >> 1) << 42) | (<i64>(blq0 >> 1) << 28) | ((glq0 >> 1) << 14) | (rlq0 >> 1);
   const packedHi0 = (<i64>(ahq0 >> 1) << 49) | (<i64>(bhq0 >> 1) << 35) | ((ghq0 >> 1) << 21) | ((rhq0 >> 1) << 7);
 
-  const packedLo1 = (<i64>1 << 56) | (<i64>(alq1 >> 1) << 42) | (<i64>(blq1 >> 1) << 28) | ((glq1 >> 1) << 14) | (rlq1 >> 1);
-  const packedHi1 = (<i64>1 << 57) | (<i64>(ahq1 >> 1) << 49) | (<i64>(bhq1 >> 1) << 35) | ((ghq1 >> 1) << 21) | ((rhq1 >> 1) << 7);
+  const packedLo1 = (<i64>1 << 56) | (<i64>(al >> 1) << 42) | (<i64>(bl >> 1) << 28) | ((gl >> 1) << 14) | (rl >> 1);
+  const packedHi1 = (<i64>1 << 57) | (<i64>(ah >> 1) << 49) | (<i64>(bh >> 1) << 35) | ((gh >> 1) << 21) | ((rh >> 1) << 7);
 
   const packedLo = select(packedLo0, packedLo1, errorLo0 <= errorLo1);
   const packedHi = select(packedHi0, packedHi1, errorHi0 <= errorHi1);
@@ -1275,26 +1261,22 @@ function mode6(rl: i32, rh: i32, gl: i32, gh: i32, bl: i32, bh: i32, al: i32, ah
  * Quantize 8-bit LA endpoint pair to 7 bits with 2 p-bits and pack for BC7 mode 6.
  */
 function mode6LA(ll: i32, lh: i32, al: i32, ah: i32): i64 {
-  const llq0 = min(((ll + 1) & 0x1FE), 254);
-  const llq1 = min((ll & 0x1FE) + 1, 255);
-  const lhq0 = min(((lh + 1) & 0x1FE), 254);
-  const lhq1 = min((lh & 0x1FE) + 1, 255);
-  const alq0 = min(((al + 1) & 0x1FE), 254);
-  const alq1 = min((al & 0x1FE) + 1, 255);
-  const ahq0 = min(((ah + 1) & 0x1FE), 254);
-  const ahq1 = min((ah & 0x1FE) + 1, 255);
+  const llq0 = ll == 255 ? 254 : (ll + 1);
+  const lhq0 = lh == 255 ? 254 : (lh + 1);
+  const alq0 = al == 255 ? 254 : (al + 1);
+  const ahq0 = ah == 255 ? 254 : (ah + 1);
 
-  const errorLo0 = 3 * square(llq0 - ll) + square(alq0 - al);
-  const errorHi0 = 3 * square(lhq0 - lh) + square(ahq0 - ah);
+  const errorLo0 = 3 * (ll & 1) + (al & 1);
+  const errorHi0 = 3 * (lh & 1) + (ah & 1);
 
-  const errorLo1 = 3 * square(llq1 - ll) + square(alq1 - al);
-  const errorHi1 = 3 * square(lhq1 - lh) + square(ahq1 - ah);
+  const errorLo1 = 3 * (~ll & 1) + (~al & 1);
+  const errorHi1 = 3 * (~lh & 1) + (~ah & 1);
 
   const packedLo0 = (<i64>(alq0 >> 1) << 42) | (<i64>(llq0 >> 1) * 0x10004001);
   const packedHi0 = (<i64>(ahq0 >> 1) << 49) | (<i64>(lhq0 >> 1) * 0x800200080);
 
-  const packedLo1 = (<i64>1 << 56) | (<i64>(alq1 >> 1) << 42) | (<i64>(llq1 >> 1) * 0x10004001);
-  const packedHi1 = (<i64>1 << 57) | (<i64>(ahq1 >> 1) << 49) | (<i64>(lhq1 >> 1) * 0x800200080);
+  const packedLo1 = (<i64>1 << 56) | (<i64>(al >> 1) << 42) | (<i64>(ll >> 1) * 0x10004001);
+  const packedHi1 = (<i64>1 << 57) | (<i64>(ah >> 1) << 49) | (<i64>(lh >> 1) * 0x800200080);
 
   const packedLo = select(packedLo0, packedLo1, errorLo0 <= errorLo1);
   const packedHi = select(packedHi0, packedHi1, errorHi0 <= errorHi1);
@@ -1302,50 +1284,59 @@ function mode6LA(ll: i32, lh: i32, al: i32, ah: i32): i64 {
   return packedLo | packedHi;
 }
 
+/// BC7 mode 7 endpoints precomputation
+
+const mode7EndpointsOffset = 4096;
+
+function storeMode7(): void {
+  for (let v = 0; v < 256; v++) {
+    const vq0 = min(((((v * 0xFD) >> 10) + 1) & 0x7E), 62);
+    const vq1 = min(((((v * 0xFD) >> 10)) & 0x7E) + 1, 63);
+    const vs0 = (vq0 << 2) | (vq0 >> 4);
+    const vs1 = (vq1 << 2) | (vq1 >> 4);
+    const error = square(v - vs1) - square(v - vs0);
+    store<u8>(v << 2, vq0, mode7EndpointsOffset + 0);
+    store<u8>(v << 2, vq1, mode7EndpointsOffset + 1);
+    store<i8>(v << 2, error, mode7EndpointsOffset + 2);
+  }
+}
+
 /**
  * Quantize 8-bit RGBA endpoint pair to 5 bits with 2 p-bits.
  * The result needs to be further repacked for BC7 mode 7.
  */
 function mode7(rl: i32, rh: i32, gl: i32, gh: i32, bl: i32, bh: i32, al: i32, ah: i32): i64 {
-  const rlq0 = min(((((rl * 0xFD) >> 10) + 1) & 0x7E), 62);
-  const rlq1 = min(((((rl * 0xFD) >> 10)) & 0x7E) + 1, 63);
-  const rhq0 = min(((((rh * 0xFD) >> 10) + 1) & 0x7E), 62);
-  const rhq1 = min(((((rh * 0xFD) >> 10)) & 0x7E) + 1, 63);
-  const glq0 = min(((((gl * 0xFD) >> 10) + 1) & 0x7E), 62);
-  const glq1 = min(((((gl * 0xFD) >> 10)) & 0x7E) + 1, 63);
-  const ghq0 = min(((((gh * 0xFD) >> 10) + 1) & 0x7E), 62);
-  const ghq1 = min(((((gh * 0xFD) >> 10)) & 0x7E) + 1, 63);
-  const blq0 = min(((((bl * 0xFD) >> 10) + 1) & 0x7E), 62);
-  const blq1 = min(((((bl * 0xFD) >> 10)) & 0x7E) + 1, 63);
-  const bhq0 = min(((((bh * 0xFD) >> 10) + 1) & 0x7E), 62);
-  const bhq1 = min(((((bh * 0xFD) >> 10)) & 0x7E) + 1, 63);
-  const alq0 = min(((((al * 0xFD) >> 10) + 1) & 0x7E), 62);
-  const alq1 = min(((((al * 0xFD) >> 10)) & 0x7E) + 1, 63);
-  const ahq0 = min(((((ah * 0xFD) >> 10) + 1) & 0x7E), 62);
-  const ahq1 = min(((((ah * 0xFD) >> 10)) & 0x7E) + 1, 63);
+  rl = (rl << 2) + mode7EndpointsOffset;
+  rh = (rh << 2) + mode7EndpointsOffset;
+  gl = (gl << 2) + mode7EndpointsOffset;
+  gh = (gh << 2) + mode7EndpointsOffset;
+  bl = (bl << 2) + mode7EndpointsOffset;
+  bh = (bh << 2) + mode7EndpointsOffset;
+  al = (al << 2) + mode7EndpointsOffset;
+  ah = (ah << 2) + mode7EndpointsOffset;
 
-  const rls0 = (rlq0 << 2) | (rlq0 >> 4);
-  const rhs0 = (rhq0 << 2) | (rhq0 >> 4);
-  const gls0 = (glq0 << 2) | (glq0 >> 4);
-  const ghs0 = (ghq0 << 2) | (ghq0 >> 4);
-  const bls0 = (blq0 << 2) | (blq0 >> 4);
-  const bhs0 = (bhq0 << 2) | (bhq0 >> 4);
-  const als0 = (alq0 << 2) | (alq0 >> 4);
-  const ahs0 = (ahq0 << 2) | (ahq0 >> 4);
-  const rls1 = (rlq1 << 2) | (rlq1 >> 4);
-  const rhs1 = (rhq1 << 2) | (rhq1 >> 4);
-  const gls1 = (glq1 << 2) | (glq1 >> 4);
-  const ghs1 = (ghq1 << 2) | (ghq1 >> 4);
-  const bls1 = (blq1 << 2) | (blq1 >> 4);
-  const bhs1 = (bhq1 << 2) | (bhq1 >> 4);
-  const als1 = (alq1 << 2) | (alq1 >> 4);
-  const ahs1 = (ahq1 << 2) | (ahq1 >> 4);
+  const rlq0: i32 = load<u8>(rl, 0);
+  const rlq1: i32 = load<u8>(rl, 1);
+  const rhq0: i32 = load<u8>(rh, 0);
+  const rhq1: i32 = load<u8>(rh, 1);
+  const glq0: i32 = load<u8>(gl, 0);
+  const glq1: i32 = load<u8>(gl, 1);
+  const ghq0: i32 = load<u8>(gh, 0);
+  const ghq1: i32 = load<u8>(gh, 1);
+  const blq0: i32 = load<u8>(bl, 0);
+  const blq1: i32 = load<u8>(bl, 1);
+  const bhq0: i32 = load<u8>(bh, 0);
+  const bhq1: i32 = load<u8>(bh, 1);
+  const alq0: i32 = load<u8>(al, 0);
+  const alq1: i32 = load<u8>(al, 1);
+  const ahq0: i32 = load<u8>(ah, 0);
+  const ahq1: i32 = load<u8>(ah, 1);
 
-  const errorLo0 = square(rls0 - rl) + square(gls0 - gl) + square(bls0 - bl) + square(als0 - al);
-  const errorHi0 = square(rhs0 - rh) + square(ghs0 - gh) + square(bhs0 - bh) + square(ahs0 - ah);
+  const errorLo =
+    <i32>load<i8>(rl, 2) + <i32>load<i8>(gl, 2) + <i32>load<i8>(bl, 2) + <i32>load<i8>(al, 2);
 
-  const errorLo1 = square(rls1 - rl) + square(gls1 - gl) + square(bls1 - bl) + square(als1 - al);
-  const errorHi1 = square(rhs1 - rh) + square(ghs1 - gh) + square(bhs1 - bh) + square(ahs1 - ah);
+  const errorHi =
+    <i32>load<i8>(rh, 2) + <i32>load<i8>(gh, 2) + <i32>load<i8>(bh, 2) + <i32>load<i8>(ah, 2);
 
   const packedLo0 = (<i64>(alq0 >> 1) << 30) | (<i64>(blq0 >> 1) << 20) | ((glq0 >> 1) << 10) | (rlq0 >> 1);
   const packedHi0 = (<i64>(ahq0 >> 1) << 35) | (<i64>(bhq0 >> 1) << 25) | ((ghq0 >> 1) << 15) | ((rhq0 >> 1) << 5);
@@ -1353,8 +1344,8 @@ function mode7(rl: i32, rh: i32, gl: i32, gh: i32, bl: i32, bh: i32, al: i32, ah
   const packedLo1 = (<i64>1 << 40) | (<i64>(alq1 >> 1) << 30) | (<i64>(blq1 >> 1) << 20) | ((glq1 >> 1) << 10) | (rlq1 >> 1);
   const packedHi1 = (<i64>1 << 41) | (<i64>(ahq1 >> 1) << 35) | (<i64>(bhq1 >> 1) << 25) | ((ghq1 >> 1) << 15) | ((rhq1 >> 1) << 5);
 
-  const packedLo = select(packedLo0, packedLo1, errorLo0 <= errorLo1);
-  const packedHi = select(packedHi0, packedHi1, errorHi0 <= errorHi1);
+  const packedLo = select(packedLo0, packedLo1, errorLo >= 0);
+  const packedHi = select(packedHi0, packedHi1, errorHi >= 0);
 
   return packedLo | packedHi;
 }
@@ -1364,29 +1355,22 @@ function mode7(rl: i32, rh: i32, gl: i32, gh: i32, bl: i32, bh: i32, al: i32, ah
  * The result needs to be further repacked for BC7 mode 7.
  */
 function mode7LA(ll: i32, lh: i32, al: i32, ah: i32): i32 {
-  const llq0 = min(((((ll * 0xFD) >> 10) + 1) & 0x7E), 62);
-  const llq1 = min(((((ll * 0xFD) >> 10)) & 0x7E) + 1, 63);
-  const lhq0 = min(((((lh * 0xFD) >> 10) + 1) & 0x7E), 62);
-  const lhq1 = min(((((lh * 0xFD) >> 10)) & 0x7E) + 1, 63);
-  const alq0 = min(((((al * 0xFD) >> 10) + 1) & 0x7E), 62);
-  const alq1 = min(((((al * 0xFD) >> 10)) & 0x7E) + 1, 63);
-  const ahq0 = min(((((ah * 0xFD) >> 10) + 1) & 0x7E), 62);
-  const ahq1 = min(((((ah * 0xFD) >> 10)) & 0x7E) + 1, 63);
+  ll = (ll << 2) + mode7EndpointsOffset;
+  lh = (lh << 2) + mode7EndpointsOffset;
+  al = (al << 2) + mode7EndpointsOffset;
+  ah = (ah << 2) + mode7EndpointsOffset;
 
-  const lls0 = (llq0 << 2) | (llq0 >> 4);
-  const lhs0 = (lhq0 << 2) | (lhq0 >> 4);
-  const als0 = (alq0 << 2) | (alq0 >> 4);
-  const ahs0 = (ahq0 << 2) | (ahq0 >> 4);
-  const lls1 = (llq1 << 2) | (llq1 >> 4);
-  const lhs1 = (lhq1 << 2) | (lhq1 >> 4);
-  const als1 = (alq1 << 2) | (alq1 >> 4);
-  const ahs1 = (ahq1 << 2) | (ahq1 >> 4);
+  const llq0: i32 = load<u8>(ll, 0);
+  const llq1: i32 = load<u8>(ll, 1);
+  const lhq0: i32 = load<u8>(lh, 0);
+  const lhq1: i32 = load<u8>(lh, 1);
+  const alq0: i32 = load<u8>(al, 0);
+  const alq1: i32 = load<u8>(al, 1);
+  const ahq0: i32 = load<u8>(ah, 0);
+  const ahq1: i32 = load<u8>(ah, 1);
 
-  const errorLo0 = 3 * square(lls0 - ll) + square(als0 - al);
-  const errorHi0 = 3 * square(lhs0 - lh) + square(ahs0 - ah);
-
-  const errorLo1 = 3 * square(lls1 - ll) + square(als1 - al);
-  const errorHi1 = 3 * square(lhs1 - lh) + square(ahs1 - ah);
+  const errorLo = 3 * <i32>load<i8>(ll, 2) + <i32>load<i8>(al, 2);
+  const errorHi = 3 * <i32>load<i8>(lh, 2) + <i32>load<i8>(ah, 2);
 
   const packedLo0 = ((alq0 >> 1) << 10) | (llq0 >> 1);
   const packedHi0 = ((ahq0 >> 1) << 15) | ((lhq0 >> 1) << 5);
@@ -1394,8 +1378,8 @@ function mode7LA(ll: i32, lh: i32, al: i32, ah: i32): i32 {
   const packedLo1 = (1 << 20) | ((alq1 >> 1) << 10) | (llq1 >> 1);
   const packedHi1 = (1 << 21) | ((ahq1 >> 1) << 15) | ((lhq1 >> 1) << 5);
 
-  const packedLo = select(packedLo0, packedLo1, errorLo0 <= errorLo1);
-  const packedHi = select(packedHi0, packedHi1, errorHi0 <= errorHi1);
+  const packedLo = select(packedLo0, packedLo1, errorLo >= 0);
+  const packedHi = select(packedHi0, packedHi1, errorHi >= 0);
 
   return packedLo | packedHi;
 }
