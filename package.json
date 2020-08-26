@@ -14,17 +14,19 @@
   "author": "The Khronos Group, Inc.",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^3.9.0",
-    "@typescript-eslint/parser": "^3.9.0",
-    "assemblyscript": "^0.14.8",
-    "eslint": "^7.6.0",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
+    "assemblyscript": "^0.14.9",
+    "eslint": "^7.7.0",
     "eslint-plugin-unicorn": "^21.0.0",
     "typescript": "^3.9.7"
   },
   "scripts": {
+    "asbuild:uastc-rgba32-unorm": "asc assembly/uastc-rgba32.ts -u SRGB=0 -b build/uastc_rgba32_unorm.wasm --optimize --converge --runtime none --noAssert --importMemory",
+    "asbuild:uastc-rgba32-srgb": "asc assembly/uastc-rgba32.ts -u SRGB=1 -b build/uastc_rgba32_srgb.wasm --optimize --converge --runtime none --noAssert --importMemory",
     "asbuild:uastc-astc": "asc assembly/uastc-astc.ts -b build/uastc_astc.wasm --optimize --converge --runtime none --noAssert --importMemory",
     "asbuild:uastc-bc7": "asc assembly/uastc-bc7.ts -b build/uastc_bc7.wasm --optimize --converge --runtime none --noAssert --importMemory",
-    "asbuild": "npm run asbuild:uastc-bc7 && npm run asbuild:uastc-astc"
+    "asbuild": "npm run asbuild:uastc-bc7 && npm run asbuild:uastc-astc && npm run asbuild:uastc-rgba32-unorm && npm run asbuild:uastc-rgba32-srgb"
   },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
@@ -37,7 +39,9 @@
       "plugin:@typescript-eslint/recommended"
     ],
     "rules": {
+      "semi": "off",
       "@typescript-eslint/ban-ts-comment": "off",
+      "@typescript-eslint/semi": ["error", "always"],
       "unicorn/number-literal-case": "error"
     }
   }
