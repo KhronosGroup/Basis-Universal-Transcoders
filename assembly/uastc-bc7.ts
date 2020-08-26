@@ -6,14 +6,14 @@ import {
   storeCommonData,
   getModeIndex,
   unpackQuints, unpackTrits,
-  unq11, unq15, unq31, unq39, unq47, unq159, unq191,
+  unq11, unq39, unq47, unq159, unq191,
   getThreeSubsetAnchorL, getThreeSubsetAnchorH,
   getTwoSubsetAnchorForModeIndex7, getTwoSubsetAnchor,
 } from './lib/uastc/common';
 
 import {
   duplicate32, duplicate16, triplicate16
-} from './lib/uastc/patterns'
+} from './lib/uastc/patterns';
 
 let firstRun = true;
 
@@ -130,7 +130,7 @@ function transcodeBC7(q0: i64, q1: i64, offset: i32): void {
         packedWeights = ((packedWeights >> 1) & 0x3FFFFFFE) | (packedWeights & 1);
 
         r0 = (gu1 << 52) | (gu0 << 38) | (ru1 << 24) | (ru0 << 10) | 8;
-        r1 = (<i64>packedWeights << 34) | (pu1 << 32) | (pu0 << 30) | (bu1 << 16) | (bu0 << 2) | (gu1 >> 12)
+        r1 = (<i64>packedWeights << 34) | (pu1 << 32) | (pu0 << 30) | (bu1 << 16) | (bu0 << 2) | (gu1 >> 12);
       }
       break;
     case 2:
@@ -141,24 +141,28 @@ function transcodeBC7(q0: i64, q1: i64, offset: i32): void {
           break;
         }
 
-        // 4-bit endpoints
-        const rl0 = unq15(<i32>(q0 >> 25) & 0xF);
-        const rh0 = unq15(<i32>(q0 >> 29) & 0xF);
-        const gl0 = unq15(<i32>(q0 >> 33) & 0xF);
-        const gh0 = unq15(<i32>(q0 >> 37) & 0xF);
-        const bl0 = unq15(<i32>(q0 >> 41) & 0xF);
-        const bh0 = unq15(<i32>(q0 >> 45) & 0xF);
-        const rl1 = unq15(<i32>(q0 >> 49) & 0xF);
-        const rh1 = unq15(<i32>(q0 >> 53) & 0xF);
-        const gl1 = unq15(<i32>(q0 >> 57) & 0xF);
-        const gh1 = unq15((<i32>(q0 >> 61) & 0x7) | (<i32>(q1 << 3) & 0x8));
-        const bl1 = unq15(<i32>(q1 >> 1) & 0xF);
-        const bh1 = unq15(<i32>(q1 >> 5) & 0xF);
+        // 4-bit endpoints, unquantize in-place
+        let lo = ((q1 << 39) | (q0 >>> 25)) & 0x0F0F0F0F0F0F0F0F;
+        let hi = ((q1 << 35) | (q0 >>> 29)) & 0x0F0F0F0F0F0F0F0F;
+        lo |= lo << 4;
+        hi |= hi << 4;
+        const rl0 = <i32>(lo) & 0xFF;
+        const rh0 = <i32>(hi) & 0xFF;
+        const gl0 = <i32>(lo >> 8) & 0xFF;
+        const gh0 = <i32>(hi >> 8) & 0xFF;
+        const bl0 = <i32>(lo >> 16) & 0xFF;
+        const bh0 = <i32>(hi >> 16) & 0xFF;
+        const rl1 = <i32>(lo >> 24) & 0xFF;
+        const rh1 = <i32>(hi >> 24) & 0xFF;
+        const gl1 = <i32>(lo >> 32) & 0xFF;
+        const gh1 = <i32>(hi >> 32) & 0xFF;
+        const bl1 = <i32>(lo >> 40) & 0xFF;
+        const bh1 = <i32>(hi >> 40) & 0xFF;
 
         // Anchor bits location depends on the pattern index
         const anchor = getTwoSubsetAnchor(pat);
         const loMask = (0xFFFFFFFFFFFF << ((anchor * 3) + 2)) ^ 0xFFFFFFFFFFF8;
-        const hiMask = 0xFFFFFFFFFFFF << ((anchor * 3) + 3)
+        const hiMask = 0xFFFFFFFFFFFF << ((anchor * 3) + 3);
 
         // 3-bit weights, start at 73
         const weights = ((q1 >> 7) & hiMask) | ((q1 >> 8) & loMask) | ((q1 >> 9) & 3);
@@ -214,7 +218,7 @@ function transcodeBC7(q0: i64, q1: i64, offset: i32): void {
         packedWeights = ((packedWeights >> 2) & bc7hMask) | ((packedWeights >> 1) & bc7lMask) | (packedWeights & 3);
 
         r0 = (bu0 << 56) | (gu1 << 44) | (gu0 << 32) | (ru1 << 20) | (ru0 << 8) | (bc7patternIndex << 2) | 2;
-        r1 = (packedWeights << 18) | (pu1 << 17) | (pu0 << 16) | (bu1 << 4) | (bu0 >> 8)
+        r1 = (packedWeights << 18) | (pu1 << 17) | (pu0 << 16) | (bu1 << 4) | (bu0 >> 8);
       }
       break;
     case 3:
@@ -350,7 +354,7 @@ function transcodeBC7(q0: i64, q1: i64, offset: i32): void {
           ((packedWeights >> 1) & bc7lMask) | (packedWeights & 1);
 
         r0 = (packedEndpoints0 << 9) | (bc7patternIndex << 3) | 4;
-        r1 = (<i64>packedWeights << 35) | packedEndpoints1
+        r1 = (<i64>packedWeights << 35) | packedEndpoints1;
       }
       break;
     case 4:
@@ -553,7 +557,7 @@ function transcodeBC7(q0: i64, q1: i64, offset: i32): void {
         // Anchor bits location depends on the pattern index
         const anchor = getTwoSubsetAnchorForModeIndex7(pat);
         const loMask = (0xFFFFFFFF << ((anchor << 1) | 1)) ^ 0xFFFFFFFC;
-        const hiMask = 0xFFFFFFFF << ((anchor << 1) + 2)
+        const hiMask = 0xFFFFFFFF << ((anchor << 1) + 2);
 
         // 2-bit weights, start at 89
         const weights = <i32>(((q1 >> 23) & hiMask) | ((q1 >> 24) & loMask) | ((q1 >> 25) & 1));
@@ -630,7 +634,7 @@ function transcodeBC7(q0: i64, q1: i64, offset: i32): void {
           ((packedWeights >> 1) & bc7lMask) | (packedWeights & 1);
 
         r0 = (packedEndpoints0 << 9) | (bc7patternIndex << 3) | 4;
-        r1 = (<i64>packedWeights << 35) | packedEndpoints1
+        r1 = (<i64>packedWeights << 35) | packedEndpoints1;
       }
       break;
     case 8:
@@ -659,28 +663,32 @@ function transcodeBC7(q0: i64, q1: i64, offset: i32): void {
           break;
         }
 
-        // 4-bit endpoints
-        const rl0 = unq15(<i32>(q0 >> 33) & 0xF);
-        const rh0 = unq15(<i32>(q0 >> 37) & 0xF);
-        const gl0 = unq15(<i32>(q0 >> 41) & 0xF);
-        const gh0 = unq15(<i32>(q0 >> 45) & 0xF);
-        const bl0 = unq15(<i32>(q0 >> 49) & 0xF);
-        const bh0 = unq15(<i32>(q0 >> 53) & 0xF);
-        const al0 = unq15(<i32>(q0 >> 57) & 0xF);
-        const ah0 = unq15((<i32>(q0 >> 61) & 0x7) | (<i32>(q1 << 3) & 0x8));
-        const rl1 = unq15(<i32>(q1 >> 1) & 0xF);
-        const rh1 = unq15(<i32>(q1 >> 5) & 0xF);
-        const gl1 = unq15(<i32>(q1 >> 9) & 0xF);
-        const gh1 = unq15(<i32>(q1 >> 13) & 0xF);
-        const bl1 = unq15(<i32>(q1 >> 17) & 0xF);
-        const bh1 = unq15(<i32>(q1 >> 21) & 0xF);
-        const al1 = unq15(<i32>(q1 >> 25) & 0xF);
-        const ah1 = unq15(<i32>(q1 >> 29) & 0xF);
+        // 4-bit endpoints, unquantize in-place
+        let lo = ((q1 << 31) | (q0 >>> 33)) & 0x0F0F0F0F0F0F0F0F;
+        let hi = ((q1 << 27) | (q0 >>> 37)) & 0x0F0F0F0F0F0F0F0F;
+        lo |= lo << 4;
+        hi |= hi << 4;
+        const rl0 = <i32>(lo) & 0xFF;
+        const rh0 = <i32>(hi) & 0xFF;
+        const gl0 = <i32>(lo >> 8) & 0xFF;
+        const gh0 = <i32>(hi >> 8) & 0xFF;
+        const bl0 = <i32>(lo >> 16) & 0xFF;
+        const bh0 = <i32>(hi >> 16) & 0xFF;
+        const al0 = <i32>(lo >> 24) & 0xFF;
+        const ah0 = <i32>(hi >> 24) & 0xFF;
+        const rl1 = <i32>(lo >> 32) & 0xFF;
+        const rh1 = <i32>(hi >> 32) & 0xFF;
+        const gl1 = <i32>(lo >> 40) & 0xFF;
+        const gh1 = <i32>(hi >> 40) & 0xFF;
+        const bl1 = <i32>(lo >> 48) & 0xFF;
+        const bh1 = <i32>(hi >> 48) & 0xFF;
+        const al1 = <i32>(lo >> 56) & 0xFF;
+        const ah1 = <i32>(hi >> 56) & 0xFF;
 
         // Anchor bits location depends on the pattern index
         const anchor = getTwoSubsetAnchor(pat);
         const loMask = (0xFFFFFFFF << ((anchor << 1) | 1)) ^ 0xFFFFFFFC;
-        const hiMask = 0xFFFFFFFF << ((anchor << 1) + 2)
+        const hiMask = 0xFFFFFFFF << ((anchor << 1) + 2);
 
         // 2-bit weights, start at 97
         const weights = ((q1 >> 31) & hiMask) | ((q1 >> 32) & loMask) | ((q1 >> 33) & 1);
@@ -942,7 +950,7 @@ function transcodeBC7(q0: i64, q1: i64, offset: i32): void {
         // Anchor bits location depends on the pattern index
         const anchor = getTwoSubsetAnchor(pat);
         const loMask = (0xFFFFFFFF << ((anchor << 1) | 1)) ^ 0xFFFFFFFC;
-        const hiMask = 0xFFFFFFFF << ((anchor << 1) + 2)
+        const hiMask = 0xFFFFFFFF << ((anchor << 1) + 2);
 
         // 2-bit weights, start at 98
         const weights = <i32>(((q1 >> 32) & hiMask) | ((q1 >> 33) & loMask) | ((q1 >> 34) & 1));
@@ -1013,13 +1021,17 @@ function transcodeBC7(q0: i64, q1: i64, offset: i32): void {
       break;
     case 18:
       {
-        // 5-bit endpoints
-        const rl0 = unq31(<i32>(q0 >> 19) & 0x1F);
-        const rh0 = unq31(<i32>(q0 >> 24) & 0x1F);
-        const gl0 = unq31(<i32>(q0 >> 29) & 0x1F);
-        const gh0 = unq31(<i32>(q0 >> 34) & 0x1F);
-        const bl0 = unq31(<i32>(q0 >> 39) & 0x1F);
-        const bh0 = unq31(<i32>(q0 >> 44) & 0x1F);
+        // 5-bit endpoints, unquantize in-place
+        let lo = <i32>(q0 >> 16) & 0xF83E0F8;
+        let hi = <i32>(q0 >> 21) & 0xF83E0F8;
+        lo |= lo >> 5;
+        hi |= hi >> 5;
+        const rl0 = (lo) & 0xFF;
+        const rh0 = (hi) & 0xFF;
+        const gl0 = (lo >> 10) & 0xFF;
+        const gh0 = (hi >> 10) & 0xFF;
+        const bl0 = (lo >> 20) & 0xFF;
+        const bh0 = (hi >> 20) & 0xFF;
 
         // 5-bit weights, start at 49
         // All 16 weights do not fit into a single 64-bit variable,
