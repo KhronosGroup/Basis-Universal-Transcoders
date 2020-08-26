@@ -159,4 +159,4 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
     ```
 
 7. In a case when a new texture does not fit into the existing memory, the latter could be expanded by calling [`memory.grow`](
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Memory/grow). Note that the memory view would need to be recreated afterwards, by repeating step (3).
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Memory/grow). Note that the memory views would need to be recreated afterwards, by repeating step (3) and repeating step (5) in this case.
