@@ -22,10 +22,10 @@
     "typescript": "^3.9.7"
   },
   "scripts": {
-    "asbuild:uastc-rgba32-unorm": "asc assembly/uastc-rgba32.ts -u SRGB=0 -b build/uastc_rgba32_unorm.wasm --optimize --converge --runtime none --noAssert --importMemory",
-    "asbuild:uastc-rgba32-srgb": "asc assembly/uastc-rgba32.ts -u SRGB=1 -b build/uastc_rgba32_srgb.wasm --optimize --converge --runtime none --noAssert --importMemory",
-    "asbuild:uastc-astc": "asc assembly/uastc-astc.ts -b build/uastc_astc.wasm --optimize --converge --runtime none --noAssert --importMemory",
-    "asbuild:uastc-bc7": "asc assembly/uastc-bc7.ts -b build/uastc_bc7.wasm --optimize --converge --runtime none --noAssert --importMemory",
+    "asbuild:uastc-rgba32-unorm": "asc assembly/uastc-rgba32.ts -u SRGB=0 -b build/uastc_rgba32_unorm.wasm -t build/uastc_rgba32_unorm.wat --optimize --converge --runtime none --noAssert --importMemory",
+    "asbuild:uastc-rgba32-srgb": "asc assembly/uastc-rgba32.ts -u SRGB=1 -b build/uastc_rgba32_srgb.wasm -t build/uastc_rgba32_srgb.wat --optimize --converge --runtime none --noAssert --importMemory",
+    "asbuild:uastc-astc": "asc assembly/uastc-astc.ts -b build/uastc_astc.wasm -t build/uastc_astc.wat --optimize --converge --runtime none --noAssert --importMemory",
+    "asbuild:uastc-bc7": "asc assembly/uastc-bc7.ts -b build/uastc_bc7.wasm -t build/uastc_bc7.wat --optimize --converge --runtime none --noAssert --importMemory",
     "asbuild": "npm run asbuild:uastc-bc7 && npm run asbuild:uastc-astc && npm run asbuild:uastc-rgba32-unorm && npm run asbuild:uastc-rgba32-srgb"
   },
   "eslintConfig": {
@@ -41,7 +41,10 @@
     "rules": {
       "semi": "off",
       "@typescript-eslint/ban-ts-comment": "off",
-      "@typescript-eslint/semi": ["error", "always"],
+      "@typescript-eslint/semi": [
+        "error",
+        "always"
+      ],
       "unicorn/number-literal-case": "error"
     }
   }
