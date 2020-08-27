@@ -1269,6 +1269,6 @@ function reverse64(v: i64): i64 {
   v = ((v >> 4) & 0x0F0F0F0F0F0F0F0F) | ((v & 0x0F0F0F0F0F0F0F0F) << 4);
   v = ((v >> 8) & 0x00FF00FF00FF00FF) | ((v & 0x00FF00FF00FF00FF) << 8);
   v = ((v >> 16) & 0x0000FFFF0000FFFF) | ((v & 0x0000FFFF0000FFFF) << 16);
-  v = ((v >> 32) & 0x00000000FFFFFFFF) | (v << 32);
+  v = rotr(v, 32);
   return v;
 }
