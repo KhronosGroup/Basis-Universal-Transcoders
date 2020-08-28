@@ -6486,72 +6486,41 @@
       i64.xor
       local.get $1
       local.get $3
-      i64.const 19
+      i64.const 39
       i64.shr_s
       i32.wrap_i64
       i32.const 31
       i32.and
       local.tee $2
-      i32.const 3
-      i32.shl
-      local.get $2
-      i32.const 2
-      i32.shr_s
-      i32.or
+      local.get $3
+      i64.const 19
+      i64.shr_s
+      i32.wrap_i64
+      i32.const 31
+      i32.and
+      local.tee $4
       local.get $3
       i64.const 29
       i64.shr_s
       i32.wrap_i64
       i32.const 31
       i32.and
-      local.tee $4
+      local.tee $6
+      i32.add
+      i32.add
       i32.const 3
       i32.shl
       local.get $4
       i32.const 2
       i32.shr_s
-      i32.or
       i32.add
-      local.get $3
-      i64.const 39
-      i64.shr_s
-      i32.wrap_i64
-      i32.const 31
-      i32.and
-      local.tee $6
-      i32.const 3
-      i32.shl
       local.get $6
       i32.const 2
       i32.shr_s
-      i32.or
       i32.add
-      local.get $3
-      i64.const 24
-      i64.shr_s
-      i32.wrap_i64
-      i32.const 31
-      i32.and
-      local.tee $7
-      i32.const 3
-      i32.shl
-      local.get $7
+      local.get $2
       i32.const 2
       i32.shr_s
-      i32.or
-      local.get $3
-      i64.const 34
-      i64.shr_s
-      i32.wrap_i64
-      i32.const 31
-      i32.and
-      local.tee $8
-      i32.const 3
-      i32.shl
-      local.get $8
-      i32.const 2
-      i32.shr_s
-      i32.or
       i32.add
       local.get $3
       i64.const 44
@@ -6559,13 +6528,36 @@
       i32.wrap_i64
       i32.const 31
       i32.and
+      local.tee $7
+      local.get $3
+      i64.const 24
+      i64.shr_s
+      i32.wrap_i64
+      i32.const 31
+      i32.and
+      local.tee $8
+      local.get $3
+      i64.const 34
+      i64.shr_s
+      i32.wrap_i64
+      i32.const 31
+      i32.and
       local.tee $9
+      i32.add
+      i32.add
       i32.const 3
       i32.shl
+      local.get $8
+      i32.const 2
+      i32.shr_s
+      i32.add
       local.get $9
       i32.const 2
       i32.shr_s
-      i32.or
+      i32.add
+      local.get $7
+      i32.const 2
+      i32.shr_s
       i32.add
       i32.gt_s
       local.tee $0
@@ -6641,11 +6633,11 @@
       i64.extend_i32_s
       i64.const 48
       i64.shl
+      local.get $8
       local.get $7
-      local.get $9
       i32.const 20
       i32.shl
-      local.get $8
+      local.get $9
       i32.const 10
       i32.shl
       i32.or
@@ -6655,11 +6647,11 @@
       local.get $0
       select
       i32.shl
+      local.get $4
       local.get $2
-      local.get $6
       i32.const 20
       i32.shl
-      local.get $4
+      local.get $6
       i32.const 10
       i32.shl
       i32.or

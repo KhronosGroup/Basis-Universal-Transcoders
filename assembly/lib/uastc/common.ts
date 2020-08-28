@@ -140,17 +140,6 @@ export function unq11(bits: i32, trit: i32): i32 {
 }
 
 /**
- * Unquantize 0..31 UASTC endpoint range
- * @param bits - 5-bit value
- * @returns Unquantized 0..255 value
- */
-// @ts-ignore: 1206
-@inline
-export function unq31(bits: i32): i32 {
-  return (bits << 3) | (bits >> 2);
-}
-
-/**
  * Precompute unquantized 0..39 range: 1 quint, 3 bits
  */
 function storeUnq39(): void {

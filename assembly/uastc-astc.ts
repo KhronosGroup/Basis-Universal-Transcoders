@@ -6,7 +6,7 @@ import {
   storeCommonData,
   getModeIndex,
   unpackQuints, unpackTrits,
-  unq11, unq31, unq39, unq47, unq159, unq191,
+  unq11, unq39, unq47, unq159, unq191,
   getThreeSubsetAnchorL, getThreeSubsetAnchorH,
   getTwoSubsetAnchorForModeIndex7, getTwoSubsetAnchor,
 } from './lib/uastc/common';
@@ -905,9 +905,7 @@ function repackASTC(q0: i64, q1: i64, offset: i32): void {
         const weights = (q1 << 16) | ((q0 >> 48) & 0xFFE0) | ((q0 >> 49) & 0xF);
 
         // Check blue contraction and pack endpoints & weights
-        const swap =
-          (unq31(rl0) + unq31(gl0) + unq31(bl0)) >
-          (unq31(rh0) + unq31(gh0) + unq31(bh0));
+        const swap = sumUnq31(rl0, gl0, bl0) > sumUnq31(rh0, gh0, bh0);
         const packedEndpoints =
           (packRGBz5(rh0, gh0, bh0) << (swap ? 0 : 5)) | (packRGBz5(rl0, gl0, bl0) << (swap ? 5 : 0));
 
@@ -926,6 +924,12 @@ function repackASTC(q0: i64, q1: i64, offset: i32): void {
   }
   store<i64>(offset, r0, 0);
   store<i64>(offset, r1, 8);
+}
+
+// @ts-ignore: 1206
+@inline
+function sumUnq31(r: i32, g: i32, b: i32): i32 {
+  return ((r + g + b) << 3) + (r >> 2) + (g >> 2) + (b >> 2);
 }
 
 const threeSubsetsPatternIndicesOffset = 1920;
