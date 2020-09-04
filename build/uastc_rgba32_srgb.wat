@@ -8,37 +8,37 @@
  (export "decodeRGBA32" (func $assembly/uastc-rgba32/decodeRGBA32))
  (func $assembly/uastc-rgba32/writeErrorBlock (param $0 i32) (param $1 i32)
   local.get $0
-  i64.const -71776119077928961
+  i64.const -280375465148161
   i64.store
   local.get $0
-  i64.const -71776119077928961
+  i64.const -280375465148161
   i64.store offset=8
   local.get $0
   local.get $1
   i32.add
   local.tee $0
-  i64.const -71776119077928961
+  i64.const -280375465148161
   i64.store
   local.get $0
-  i64.const -71776119077928961
+  i64.const -280375465148161
   i64.store offset=8
   local.get $0
   local.get $1
   i32.add
   local.tee $0
-  i64.const -71776119077928961
+  i64.const -280375465148161
   i64.store
   local.get $0
-  i64.const -71776119077928961
+  i64.const -280375465148161
   i64.store offset=8
   local.get $0
   local.get $1
   i32.add
   local.tee $0
-  i64.const -71776119077928961
+  i64.const -280375465148161
   i64.store
   local.get $0
-  i64.const -71776119077928961
+  i64.const -280375465148161
   i64.store offset=8
  )
  (func $assembly/uastc-rgba32/decodeBlock (param $0 i32) (param $1 i32) (param $2 i32)
