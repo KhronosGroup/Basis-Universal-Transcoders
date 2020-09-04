@@ -696,7 +696,7 @@ function writeSolidBlock(color: i64, offset: i32, stride: i32): void {
 }
 
 function writeErrorBlock(offset: i32, stride: i32): void {
-  writeSolidBlock(0xFF00FFFFFF00FFFF, offset, stride);
+  writeSolidBlock(0xFFFF00FFFFFF00FF, offset, stride);
 }
 
 // @ts-ignore: 1206
