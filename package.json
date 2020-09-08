@@ -14,12 +14,12 @@
   "author": "The Khronos Group, Inc.",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^3.10.1",
-    "@typescript-eslint/parser": "^3.10.1",
-    "assemblyscript": "0.14.9",
-    "eslint": "^7.7.0",
+    "@typescript-eslint/eslint-plugin": "^4.1.0",
+    "@typescript-eslint/parser": "^4.1.0",
+    "assemblyscript": "0.14.10",
+    "eslint": "^7.8.1",
     "eslint-plugin-unicorn": "^21.0.0",
-    "typescript": "^3.9.7"
+    "typescript": "^4.0.2"
   },
   "scripts": {
     "asbuild:uastc-rgba32-unorm": "asc assembly/uastc-rgba32.ts -u SRGB=0 -b build/uastc_rgba32_unorm.wasm -t build/uastc_rgba32_unorm.wat --optimize --converge --runtime none --noAssert --importMemory",

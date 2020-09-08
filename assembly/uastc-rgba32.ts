@@ -184,10 +184,10 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         const bl1 = (lo >> 40) & 0xFF;
         const bh1 = (hi >> 40) & 0xFF;
 
-        // anchor bits location depends on the pattern index 
+        // Anchor bits location depends on the pattern index
         const anchor = getTwoSubsetAnchor(pat);
-        const loMask = (0xFFFFFFFFFFFF << ((anchor * 3) + 2)) ^ 0xFFFFFFFFFFF8;
-        const hiMask = 0xFFFFFFFFFFFF << ((anchor * 3) + 3);
+        const loMask: i64 = (0xFFFFFFFFFFFFFFFF << ((anchor * 3) + 2)) ^ 0xFFFFFFFFFFFFFFF8;
+        const hiMask: i64 = (0xFFFFFFFFFFFFFFFF << ((anchor * 3) + 3));
 
         // 3-bit weights, start at 73
         const weights = ((q1 >> 7) & hiMask) | ((q1 >> 8) & loMask) | ((q1 >> 9) & 3);

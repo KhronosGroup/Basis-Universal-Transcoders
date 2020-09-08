@@ -2369,7 +2369,7 @@
                       i64.shr_s
                       i64.const 3
                       i64.and
-                      i64.const 281474976710655
+                      i64.const -1
                       i64.const 5651576228422017
                       i64.const -4286381023083155150
                       local.get $2
@@ -2399,13 +2399,13 @@
                       i64.const 7
                       i64.shr_s
                       i64.and
-                      i64.const 281474976710655
+                      i64.const -1
                       local.get $19
                       i32.const 2
                       i32.add
                       i64.extend_i32_s
                       i64.shl
-                      i64.const 281474976710648
+                      i64.const -8
                       i64.xor
                       local.get $3
                       i64.const 8
