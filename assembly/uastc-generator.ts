@@ -389,12 +389,31 @@ const crcOffset = memory.data<u64>([
 ]);
 
 function crc64(crc: u64, seed: u64): u64 {
-  let count = 8;
+  let byte: usize;
+  
+  byte = usize((crc ^ (seed & 0xFF)) & 0xFF);
+  crc = load<u64>(byte, crcOffset) ^ (crc >> 8);
 
-  while (count--) {
-    const byte = <u8>(crc ^ (seed & 0xFF));
-    crc = load<u64>(byte, crcOffset) ^ (crc >> 8);
-    seed >>= 8;
-  }
+  byte = usize((crc ^ (seed >> 8 & 0xFF)) & 0xFF);
+  crc = load<u64>(byte, crcOffset) ^ (crc >> 8);
+
+  byte = usize((crc ^ (seed >> 16 & 0xFF)) & 0xFF);
+  crc = load<u64>(byte, crcOffset) ^ (crc >> 8);
+
+  byte = usize((crc ^ (seed >> 24 & 0xFF)) & 0xFF);
+  crc = load<u64>(byte, crcOffset) ^ (crc >> 8);
+
+  byte = usize((crc ^ (seed >> 32 & 0xFF)) & 0xFF);
+  crc = load<u64>(byte, crcOffset) ^ (crc >> 8);
+
+  byte = usize((crc ^ (seed >> 40 & 0xFF)) & 0xFF);
+  crc = load<u64>(byte, crcOffset) ^ (crc >> 8);
+
+  byte = usize((crc ^ (seed >> 48 & 0xFF)) & 0xFF);
+  crc = load<u64>(byte, crcOffset) ^ (crc >> 8);
+
+  byte = usize((crc ^ (seed >> 58)) & 0xFF);
+  crc = load<u64>(byte, crcOffset) ^ (crc >> 8);
+
   return crc;
 }
