@@ -1,18 +1,17 @@
 /**
  * Generate UASTC data
- * @param mode - UASTC Mode Index
+ * @param mode - UASTC Mode Index. Values 0..18 result in a single-mode data. Negative values generate all modes, slightly shuffled.
  * @param nBlocks - The total number of UASTC blocks
  */
 export function generate(mode: i32, nBlocks: u32): i32 {
-  if (mode < 0 || mode > 18) return 0;
+  if (mode > 18) return 0;
 
   const totalBytes = nBlocks * 16;
   if (<u32>(memory.size() - 1) * 65536 < totalBytes) return -1;
 
   for (let seed: u64 = 0; seed < nBlocks; seed++) {
     let r0: u64 = 0;
-
-    switch (mode) {
+    switch ((mode >= 0) ? mode : <u32>(seed * 7 + seed / 19 + 1) % 19) {
       case 0:
         r0 = 0x01; //0001
 
@@ -390,7 +389,7 @@ const crcOffset = memory.data<u64>([
 
 function crc64(crc: u64, seed: u64): u64 {
   let byte: usize;
-  
+
   byte = usize((crc ^ (seed & 0xFF)) & 0xFF);
   crc = load<u64>(byte, crcOffset) ^ (crc >> 8);
 
