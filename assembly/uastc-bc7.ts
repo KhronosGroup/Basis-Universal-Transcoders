@@ -1075,15 +1075,9 @@ function solidEndpoints(c: i32): i32 {
 @inline
 function storeSolidEndpoints(): void {
   for (let c = 0; c < 256; c++) {
-    for (let i = 0; i < 16384; i++) {
-      const h = ((i << 1) & 0xFE) | ((i >> 6) & 1);
-      const l = ((i >> 6) & 0xFE) | (i >> 13);
-      const ci = (l * 43 + h * 21 + 32) >> 6;
-      if (c === ci) {
-        store<i16>(c << 1, ((h >> 1) << 7) | (l >> 1), solidEndpointsOffset);
-        break;
-      }
-    }
+    const l = c >> 1;
+    const h = (c >> 1) + (c & 1) - (c >> 7);
+    store<i16>(c << 1, (h << 7) | l, solidEndpointsOffset);
   }
 }
 

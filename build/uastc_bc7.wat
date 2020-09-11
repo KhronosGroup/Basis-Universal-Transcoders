@@ -1762,78 +1762,34 @@
     end
    end
    loop $for-loop|010
-    local.get $22
+    local.get $21
     i32.const 256
     i32.lt_s
     if
-     i32.const 0
-     local.set $0
-     loop $for-loop|111
-      local.get $0
-      i32.const 16384
-      i32.lt_s
-      if
-       block $for-break1
-        local.get $22
-        local.get $0
-        i32.const 6
-        i32.shr_s
-        local.tee $2
-        i32.const 254
-        i32.and
-        local.get $0
-        i32.const 13
-        i32.shr_s
-        i32.or
-        local.tee $4
-        i32.const 43
-        i32.mul
-        local.get $0
-        i32.const 1
-        i32.shl
-        i32.const 254
-        i32.and
-        local.get $2
-        i32.const 1
-        i32.and
-        i32.or
-        local.tee $2
-        i32.const 21
-        i32.mul
-        i32.add
-        i32.const 32
-        i32.add
-        i32.const 6
-        i32.shr_s
-        i32.eq
-        if
-         local.get $22
-         i32.const 1
-         i32.shl
-         local.get $2
-         i32.const 1
-         i32.shr_s
-         i32.const 7
-         i32.shl
-         local.get $4
-         i32.const 1
-         i32.shr_s
-         i32.or
-         i32.store16 offset=1536
-         br $for-break1
-        end
-        local.get $0
-        i32.const 1
-        i32.add
-        local.set $0
-        br $for-loop|111
-       end
-      end
-     end
-     local.get $22
+     local.get $21
+     i32.const 1
+     i32.shl
+     local.get $21
+     i32.const 1
+     i32.shr_s
+     local.tee $0
+     local.get $0
+     local.get $21
+     i32.const 1
+     i32.and
+     i32.add
+     local.get $21
+     i32.const 7
+     i32.shr_s
+     i32.sub
+     i32.const 7
+     i32.shl
+     i32.or
+     i32.store16 offset=1536
+     local.get $21
      i32.const 1
      i32.add
-     local.set $22
+     local.set $21
      br $for-loop|010
     end
    end
@@ -1844,50 +1800,50 @@
    global.set $assembly/uastc-bc7/firstRun
   end
   i32.const 65536
-  local.set $22
+  local.set $21
   local.get $6
   i32.const 65536
   i32.add
   local.set $35
-  loop $for-loop|2
-   local.get $22
+  loop $for-loop|111
+   local.get $21
    local.get $35
    i32.lt_s
    if
-    local.get $22
+    local.get $21
     i64.load offset=8
     local.set $3
     i64.const 0
     local.set $5
-    block $break|3
-     block $case19|3
-      block $case18|3
-       block $case17|3
-        block $case16|3
-         block $case15|3
-          block $case14|3
-           block $case13|3
-            block $case12|3
-             block $case11|3
-              block $case10|3
-               block $case9|3
-                block $case8|3
-                 block $case7|3
-                  block $case6|3
-                   block $case5|3
-                    block $case4|3
-                     block $case3|3
-                      block $case2|3
-                       block $case1|3
-                        block $case0|3
-                         local.get $22
+    block $break|2
+     block $case19|2
+      block $case18|2
+       block $case17|2
+        block $case16|2
+         block $case15|2
+          block $case14|2
+           block $case13|2
+            block $case12|2
+             block $case11|2
+              block $case10|2
+               block $case9|2
+                block $case8|2
+                 block $case7|2
+                  block $case6|2
+                   block $case5|2
+                    block $case4|2
+                     block $case3|2
+                      block $case2|2
+                       block $case1|2
+                        block $case0|2
+                         local.get $21
                          i64.load
                          local.tee $1
                          i32.wrap_i64
                          i32.const 127
                          i32.and
                          i32.load8_u
-                         br_table $case0|3 $case1|3 $case2|3 $case3|3 $case4|3 $case5|3 $case6|3 $case7|3 $case8|3 $case9|3 $case10|3 $case11|3 $case12|3 $case13|3 $case14|3 $case15|3 $case16|3 $case17|3 $case18|3 $case19|3
+                         br_table $case0|2 $case1|2 $case2|2 $case3|2 $case4|2 $case5|2 $case6|2 $case7|2 $case8|2 $case9|2 $case10|2 $case11|2 $case12|2 $case13|2 $case14|2 $case15|2 $case16|2 $case17|2 $case18|2 $case19|2
                         end
                         local.get $1
                         i64.const 29
@@ -2014,7 +1970,7 @@
                         i64.shr_u
                         i64.or
                         local.set $5
-                        br $break|3
+                        br $break|2
                        end
                        local.get $1
                        i64.const 21
@@ -2206,7 +2162,7 @@
                        i64.shr_s
                        i64.or
                        local.set $5
-                       br $break|3
+                       br $break|2
                       end
                       local.get $1
                       i64.const 20
@@ -2220,7 +2176,7 @@
                       if
                        i64.const -9151873029083480128
                        local.set $7
-                       br $break|3
+                       br $break|2
                       end
                       local.get $3
                       i64.const 39
@@ -2635,7 +2591,7 @@
                       i64.shr_s
                       i64.or
                       local.set $5
-                      br $break|3
+                      br $break|2
                      end
                      local.get $1
                      i64.const 20
@@ -2649,7 +2605,7 @@
                      if
                       i64.const -9151873029083480128
                       local.set $7
-                      br $break|3
+                      br $break|2
                      end
                      local.get $3
                      i64.const 5
@@ -2789,7 +2745,7 @@
                      i32.add
                      i32.const 11
                      i32.shr_s
-                     local.tee $21
+                     local.tee $22
                      local.get $3
                      i64.const 19
                      i64.shr_s
@@ -3210,7 +3166,7 @@
                      local.get $11
                      select
                      local.tee $27
-                     local.get $21
+                     local.get $22
                      local.get $24
                      local.get $26
                      local.get $10
@@ -3232,7 +3188,7 @@
                      i64.const 40
                      i64.shl
                      i64.or
-                     local.get $21
+                     local.get $22
                      local.get $24
                      local.get $26
                      local.get $12
@@ -3322,7 +3278,7 @@
                      select
                      local.get $9
                      select
-                     local.tee $21
+                     local.tee $22
                      local.get $3
                      i64.const 3
                      i64.shr_s
@@ -3401,7 +3357,7 @@
                      i64.extend_i32_s
                      i64.or
                      local.get $8
-                     local.get $21
+                     local.get $22
                      local.get $4
                      select
                      i32.const 20
@@ -3563,7 +3519,7 @@
                      i64.shl
                      i64.or
                      local.set $5
-                     br $break|3
+                     br $break|2
                     end
                     local.get $1
                     i64.const 20
@@ -3577,7 +3533,7 @@
                     if
                      i64.const -9151873029083480128
                      local.set $7
-                     br $break|3
+                     br $break|2
                     end
                     local.get $3
                     i64.const 7
@@ -4100,7 +4056,7 @@
                     i64.shr_s
                     i64.or
                     local.set $5
-                    br $break|3
+                    br $break|2
                    end
                    local.get $1
                    i64.const 20
@@ -4224,7 +4180,7 @@
                    i64.shr_u
                    i64.or
                    local.set $5
-                   br $break|3
+                   br $break|2
                   end
                   local.get $3
                   i64.const 2
@@ -4428,10 +4384,10 @@
                    i32.or
                    i32.load8_u offset=1124
                    local.set $9
-                   block $case3|4
-                    block $case2|4
-                     block $case1|4
-                      block $case0|4
+                   block $case3|3
+                    block $case2|3
+                     block $case1|3
+                      block $case0|3
                        local.get $1
                        i64.const 20
                        i64.shr_s
@@ -4439,7 +4395,7 @@
                        i32.const 3
                        i32.and
                        local.tee $10
-                       br_table $case0|4 $case1|4 $case2|4 $case3|4
+                       br_table $case0|3 $case1|3 $case2|3 $case3|3
                       end
                       local.get $6
                       i32.const 1
@@ -4695,7 +4651,7 @@
                   i64.shr_u
                   i64.or
                   local.set $5
-                  br $break|3
+                  br $break|2
                  end
                  local.get $1
                  i64.const 20
@@ -4709,7 +4665,7 @@
                  if
                   i64.const -9151873029083480128
                   local.set $7
-                  br $break|3
+                  br $break|2
                  end
                  local.get $3
                  i64.const 25
@@ -4870,7 +4826,7 @@
                  i32.add
                  i32.const 11
                  i32.shr_s
-                 local.tee $21
+                 local.tee $22
                  local.get $1
                  i64.const 59
                  i64.shr_s
@@ -4929,7 +4885,7 @@
                  i32.shl
                  i64.extend_i32_s
                  local.get $19
-                 local.get $21
+                 local.get $22
                  local.get $26
                  local.get $8
                  select
@@ -5008,7 +4964,7 @@
                  i64.const 35
                  i64.shl
                  i64.or
-                 local.get $21
+                 local.get $22
                  local.get $26
                  local.get $10
                  select
@@ -5058,7 +5014,7 @@
                  local.tee $14
                  local.get $8
                  select
-                 local.tee $21
+                 local.tee $22
                  local.get $3
                  i64.const 10
                  i64.shr_s
@@ -5113,7 +5069,7 @@
                  i64.extend_i32_s
                  i64.or
                  local.get $24
-                 local.get $21
+                 local.get $22
                  local.get $2
                  select
                  i32.const 20
@@ -5124,7 +5080,7 @@
                  local.get $14
                  local.get $9
                  select
-                 local.tee $21
+                 local.tee $22
                  local.get $18
                  local.get $20
                  local.get $9
@@ -5137,7 +5093,7 @@
                  i64.extend_i32_s
                  i64.or
                  local.get $24
-                 local.get $21
+                 local.get $22
                  local.get $4
                  select
                  i32.const 10
@@ -5423,7 +5379,7 @@
                  i64.shl
                  i64.or
                  local.set $5
-                 br $break|3
+                 br $break|2
                 end
                 local.get $1
                 i64.const 5
@@ -5485,7 +5441,7 @@
                 i64.const 2863311532
                 i64.or
                 local.set $5
-                br $break|3
+                br $break|2
                end
                local.get $1
                i64.const 28
@@ -5499,7 +5455,7 @@
                if
                 i64.const -9151873029083480128
                 local.set $7
-                br $break|3
+                br $break|2
                end
                local.get $3
                i64.const 31
@@ -5648,7 +5604,7 @@
                i32.wrap_i64
                i32.const 255
                i32.and
-               local.tee $21
+               local.tee $22
                local.get $1
                i64.const 24
                i64.shr_s
@@ -5793,7 +5749,7 @@
                local.get $4
                select
                local.get $24
-               local.get $21
+               local.get $22
                local.get $0
                select
                local.tee $8
@@ -5970,7 +5926,7 @@
                i64.or
                i64.or
                local.set $5
-               br $break|3
+               br $break|2
               end
               local.get $1
               i64.const 33
@@ -6126,7 +6082,7 @@
               i64.shr_u
               i64.or
               local.set $5
-              br $break|3
+              br $break|2
              end
              local.get $3
              i64.const 2
@@ -6292,10 +6248,10 @@
               i32.or
               i32.load8_u offset=1076
               local.set $11
-              block $case3|5
-               block $case2|5
-                block $case1|5
-                 block $case0|5
+              block $case3|4
+               block $case2|4
+                block $case1|4
+                 block $case0|4
                   local.get $1
                   i64.const 19
                   i64.shr_s
@@ -6303,7 +6259,7 @@
                   i32.const 3
                   i32.and
                   local.tee $12
-                  br_table $case0|5 $case1|5 $case2|5 $case3|5
+                  br_table $case0|4 $case1|4 $case2|4 $case3|4
                  end
                  local.get $8
                  i32.const 1
@@ -6688,7 +6644,7 @@
              i64.shr_u
              i64.or
              local.set $5
-             br $break|3
+             br $break|2
             end
             local.get $1
             i64.const 33
@@ -6906,7 +6862,7 @@
             i64.shr_u
             i64.or
             local.set $5
-            br $break|3
+            br $break|2
            end
            local.get $3
            i64.const 28
@@ -6978,10 +6934,10 @@
             i32.const 255
             i32.and
             local.set $11
-            block $case3|6
-             block $case2|6
-              block $case1|6
-               block $case0|6
+            block $case3|5
+             block $case2|5
+              block $case1|5
+               block $case0|5
                 local.get $1
                 i64.const 28
                 i64.shr_s
@@ -6989,7 +6945,7 @@
                 i32.const 3
                 i32.and
                 local.tee $12
-                br_table $case0|6 $case1|6 $case2|6 $case3|6
+                br_table $case0|5 $case1|5 $case2|5 $case3|5
                end
                local.get $6
                i32.const 1
@@ -7411,7 +7367,7 @@
            i64.shr_u
            i64.or
            local.set $5
-           br $break|3
+           br $break|2
           end
           local.get $1
           i64.const 28
@@ -7538,7 +7494,7 @@
           i64.shr_u
           i64.or
           local.set $5
-          br $break|3
+          br $break|2
          end
          local.get $1
          i64.const 30
@@ -7589,7 +7545,7 @@
          i64.shr_u
          i64.or
          local.set $5
-         br $break|3
+         br $break|2
         end
         local.get $1
         i64.const 29
@@ -7603,7 +7559,7 @@
         if
          i64.const -9151873029083480128
          local.set $7
-         br $break|3
+         br $break|2
         end
         local.get $3
         i64.const 2
@@ -7951,7 +7907,7 @@
         i64.or
         i64.or
         local.set $5
-        br $break|3
+        br $break|2
        end
        local.get $1
        i64.const 29
@@ -8123,7 +8079,7 @@
        i64.shr_u
        i64.or
        local.set $5
-       br $break|3
+       br $break|2
       end
       local.get $1
       i64.const 16
@@ -8342,22 +8298,22 @@
       i64.shr_u
       i64.or
       local.set $5
-      br $break|3
+      br $break|2
      end
      i64.const -9151873029083480128
      local.set $7
     end
-    local.get $22
+    local.get $21
     local.get $7
     i64.store
-    local.get $22
+    local.get $21
     local.get $5
     i64.store offset=8
-    local.get $22
+    local.get $21
     i32.const 16
     i32.add
-    local.set $22
-    br $for-loop|2
+    local.set $21
+    br $for-loop|111
    end
   end
   i32.const 0
