@@ -30,7 +30,7 @@ const nBlocks = 8 * 1024 * 1024; // to match UASTC generator example
     imageInfo.alphaByteLength = 0;
 
     /*
-    Currently implemented UASTC targets:
+    Matching transcode targets:
         BC7_RGBA:       uastc_bc7.wasm
         ASTC_4x4_RGBA:  uastc_astc.wasm
         RGBA32:         uastc_rgba32_unorm.wasm
@@ -43,7 +43,7 @@ const nBlocks = 8 * 1024 * 1024; // to match UASTC generator example
         true,
         false
     );
-    const decoded = result.transcodedImage.get_typed_memory_view();
+    const decoded = result.transcodedImage.get_typed_memory_view().slice();
     result.transcodedImage.delete();
 
     // Compare decoded results
