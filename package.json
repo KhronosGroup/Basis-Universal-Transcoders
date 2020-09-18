@@ -14,11 +14,15 @@
   "author": "The Khronos Group, Inc.",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@types/node": "^14.6.4",
     "@typescript-eslint/eslint-plugin": "^4.1.0",
     "@typescript-eslint/parser": "^4.1.0",
     "assemblyscript": "0.14.10",
-    "eslint": "^7.8.1",
     "eslint-plugin-unicorn": "^21.0.0",
+    "eslint": "^7.8.1",
+    "tap-spec": "^5.0.0",
+    "tape": "^5.0.1",
+    "ts-node": "^9.0.0",
     "typescript": "^4.0.2"
   },
   "scripts": {
@@ -28,7 +32,8 @@
     "asbuild:uastc-astc": "asc assembly/uastc-astc.ts -b build/uastc_astc.wasm -t build/uastc_astc.wat --optimize --converge --runtime none --noAssert --importMemory",
     "asbuild:uastc-bc7": "asc assembly/uastc-bc7.ts -b build/uastc_bc7.wasm -t build/uastc_bc7.wat --optimize --converge --runtime none --noAssert --importMemory",
     "asbuild:transcoders": "npm run asbuild:uastc-bc7 && npm run asbuild:uastc-astc && npm run asbuild:uastc-rgba32-unorm && npm run asbuild:uastc-rgba32-srgb",
-    "asbuild": "npm run asbuild:generator && npm run asbuild:transcoders"
+    "asbuild": "npm run asbuild:generator && npm run asbuild:transcoders",
+    "test": "ts-node node_modules/tape/bin/tape test/test.ts | tap-spec"
   },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
