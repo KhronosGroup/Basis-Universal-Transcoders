@@ -76,14 +76,17 @@ test('RGBA32', async (t) => {
   t.end();
 });
 
-test('RGBA32 - npot', async (t) => {
-  const decoder = await setup<IDecoder>('build/uastc_rgba32_unorm.wasm', WIDTH - 1, HEIGHT - 1);
+test('RGBA32 - not a multiple of 4', async (t) => {
+  const width = WIDTH - 1;
+  const height = HEIGHT - 1;
+
+  const decoder = await setup<IDecoder>('build/uastc_rgba32_unorm.wasm', width, height);
 
   for (let m = 0; m < NUM_MODES; m++) {
     generator.generate(m, numBlocks);
     const expected = reference.transcode(compressedView.slice(), reference.TranscodeTarget.RGBA32);
-    t.equals(decoder.decodeRGBA32(WIDTH - 1, HEIGHT - 1), 0, `mode ${m}: ok`);
-    t.ok(arrayEquals(uncompressedView, expected), `mode ${m}: data`);
+    t.equals(decoder.decodeRGBA32(width, height), 0, `mode ${m}: ok`);
+    t.ok(arrayEquals(uncompressedView.slice(0, width * height * 4), expected), `mode ${m}: data`);
   }
 
   t.end();
