@@ -14,7 +14,7 @@ export class ReferenceTranscoder {
   private transcoder;
   private imageInfo;
 
-  constructor (private readonly nBlocks: number = 8 * 1024 * 1024) {}
+  constructor (private readonly nBlocks: number) {}
 
   async init (): Promise<void> {
     this.basisModule = await msc();
