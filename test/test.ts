@@ -4,26 +4,35 @@ import { ReferenceTranscoder } from './reference';
 
 const WIDTH = process.env.CI ? 4096 : 1024;
 const HEIGHT = process.env.CI ? 4096 : 1024;
-const NUM_BLOCKS = ((WIDTH + 3) >> 2) * ((HEIGHT + 3) >> 2);
 const NUM_MODES = 19;
 
-const compressedByteLength = NUM_BLOCKS * 16;
-const uncompressedByteLength = WIDTH * ((HEIGHT + 3) >> 2) * 4 * 4;
-const totalByteLength = compressedByteLength + uncompressedByteLength;
-const memory = new WebAssembly.Memory({ initial: ((totalByteLength + 65535) >> 16) + 1 });
-const compressedView = new Uint8Array(memory.buffer, 65536, compressedByteLength);
-const uncompressedView = new Uint8Array(memory.buffer, 65536 + compressedByteLength, uncompressedByteLength);
+let numBlocks: number;
+let compressedView: Uint8Array;
+let uncompressedView: Uint8Array;
 
-const generatorModule = new WebAssembly.Module(fs.readFileSync('build/uastc_generator.wasm'));
-const generator = new WebAssembly.Instance(generatorModule, { env: { memory: memory } }).exports as unknown as IGenerator;
-
+let generator: IGenerator;
 let reference: ReferenceTranscoder;
 
-async function setup<T>(wasmPath: string): Promise<T> {
-  if (!reference) {
-    reference = new ReferenceTranscoder(WIDTH, HEIGHT);
-    await reference.init();
-  }
+async function setup<T>(wasmPath: string, width = WIDTH, height = HEIGHT): Promise<T> {
+  numBlocks = ((width + 3) >> 2) * ((height + 3) >> 2);
+
+  const compressedByteLength = numBlocks * 16;
+  const uncompressedByteLength = WIDTH * ((HEIGHT + 3) >> 2) * 4 * 4;
+  const totalByteLength = compressedByteLength + uncompressedByteLength;
+  const memory = new WebAssembly.Memory({ initial: ((totalByteLength + 65535) >> 16) + 1 });
+
+  compressedView = new Uint8Array(memory.buffer, 65536, compressedByteLength);
+  uncompressedView = new Uint8Array(memory.buffer, 65536 + compressedByteLength, uncompressedByteLength);
+
+  // Generator.
+  const generatorModule = new WebAssembly.Module(fs.readFileSync('build/uastc_generator.wasm'));
+  generator = new WebAssembly.Instance(generatorModule, { env: { memory: memory } }).exports as unknown as IGenerator;
+
+  // Reference transcoder.
+  reference = new ReferenceTranscoder(WIDTH, HEIGHT);
+  await reference.init();
+
+  // Source transcoder.
   const module = new WebAssembly.Module(fs.readFileSync(wasmPath));
   return new WebAssembly.Instance(module, {env: { memory: memory }}).exports as unknown as T;
 }
@@ -32,9 +41,9 @@ test('ASTC4x4', async (t) => {
   const transcoder = await setup<ITranscoder>('build/uastc_astc.wasm');
 
   for (let m = 0; m < NUM_MODES; m++) {
-    generator.generate(m, NUM_BLOCKS);
+    generator.generate(m, numBlocks);
     const expected = reference.transcode(compressedView.slice(), reference.TranscodeTarget.ASTC_4x4_RGBA);
-    t.equals(transcoder.transcode(NUM_BLOCKS), 0, `mode ${m}: ok`);
+    t.equals(transcoder.transcode(numBlocks), 0, `mode ${m}: ok`);
     t.ok(arrayEquals(compressedView, expected), `mode ${m}: data`);
   }
 
@@ -45,9 +54,9 @@ test('BC7', async (t) => {
   const transcoder = await setup<ITranscoder>('build/uastc_bc7.wasm');
 
   for (let m = 0; m < NUM_MODES; m++) {
-    generator.generate(m, NUM_BLOCKS);
+    generator.generate(m, numBlocks);
     const expected = reference.transcode(compressedView.slice(), reference.TranscodeTarget.BC7_RGBA);
-    t.equals(transcoder.transcode(NUM_BLOCKS), 0, `mode ${m}: ok`);
+    t.equals(transcoder.transcode(numBlocks), 0, `mode ${m}: ok`);
     t.ok(arrayEquals(compressedView, expected), `mode ${m}: data`);
   }
 
@@ -58,9 +67,22 @@ test('RGBA32', async (t) => {
   const decoder = await setup<IDecoder>('build/uastc_rgba32_unorm.wasm');
 
   for (let m = 0; m < NUM_MODES; m++) {
-    generator.generate(m, NUM_BLOCKS);
+    generator.generate(m, numBlocks);
     const expected = reference.transcode(compressedView.slice(), reference.TranscodeTarget.RGBA32);
     t.equals(decoder.decodeRGBA32(WIDTH, HEIGHT), 0, `mode ${m}: ok`);
+    t.ok(arrayEquals(uncompressedView, expected), `mode ${m}: data`);
+  }
+
+  t.end();
+});
+
+test('RGBA32 - npot', async (t) => {
+  const decoder = await setup<IDecoder>('build/uastc_rgba32_unorm.wasm', WIDTH - 1, HEIGHT - 1);
+
+  for (let m = 0; m < NUM_MODES; m++) {
+    generator.generate(m, numBlocks);
+    const expected = reference.transcode(compressedView.slice(), reference.TranscodeTarget.RGBA32);
+    t.equals(decoder.decodeRGBA32(WIDTH, HEIGHT), 0, `mode ${m}: ok`); // TODO: Why DIM, not DIM - 1?
     t.ok(arrayEquals(uncompressedView, expected), `mode ${m}: data`);
   }
 
