@@ -17,7 +17,7 @@ async function setup<T>(wasmPath: string, width = WIDTH, height = HEIGHT): Promi
   numBlocks = ((width + 3) >> 2) * ((height + 3) >> 2);
 
   const compressedByteLength = numBlocks * 16;
-  const uncompressedByteLength = WIDTH * ((HEIGHT + 3) >> 2) * 4 * 4;
+  const uncompressedByteLength = width * ((height + 3) >> 2) * 4 * 4;
   const totalByteLength = compressedByteLength + uncompressedByteLength;
   const memory = new WebAssembly.Memory({ initial: ((totalByteLength + 65535) >> 16) + 1 });
 
@@ -29,7 +29,7 @@ async function setup<T>(wasmPath: string, width = WIDTH, height = HEIGHT): Promi
   generator = new WebAssembly.Instance(generatorModule, { env: { memory: memory } }).exports as unknown as IGenerator;
 
   // Reference transcoder.
-  reference = new ReferenceTranscoder(WIDTH, HEIGHT);
+  reference = new ReferenceTranscoder(width, height);
   await reference.init();
 
   // Source transcoder.
@@ -82,7 +82,7 @@ test('RGBA32 - npot', async (t) => {
   for (let m = 0; m < NUM_MODES; m++) {
     generator.generate(m, numBlocks);
     const expected = reference.transcode(compressedView.slice(), reference.TranscodeTarget.RGBA32);
-    t.equals(decoder.decodeRGBA32(WIDTH, HEIGHT), 0, `mode ${m}: ok`); // TODO: Why DIM, not DIM - 1?
+    t.equals(decoder.decodeRGBA32(WIDTH - 1, HEIGHT - 1), 0, `mode ${m}: ok`);
     t.ok(arrayEquals(uncompressedView, expected), `mode ${m}: data`);
   }
 
