@@ -14,7 +14,7 @@ export class ReferenceTranscoder {
   private transcoder;
   private imageInfo;
 
-  constructor (private readonly nBlocks: number) {}
+  constructor (private width: number, private height: number) {}
 
   async init (): Promise<void> {
     this.basisModule = await msc();
@@ -25,13 +25,13 @@ export class ReferenceTranscoder {
 
     this.imageInfo = new this.basisModule.ImageInfo(
       this.basisModule.TextureFormat.UASTC4x4,
-      4,
-      4 * this.nBlocks,
+      this.width,
+      this.height,
       0
     );
     this.imageInfo.flags = 0;
     this.imageInfo.rgbByteOffset = 0;
-    this.imageInfo.rgbByteLength = this.nBlocks * 16;
+    this.imageInfo.rgbByteLength = this.width * this.height * 4;
     this.imageInfo.alphaByteOffset = 0;
     this.imageInfo.alphaByteLength = 0;
   }
