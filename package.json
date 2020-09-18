@@ -34,7 +34,7 @@
     "asbuild:transcoders": "npm run asbuild:uastc-bc7 && npm run asbuild:uastc-astc && npm run asbuild:uastc-rgba32-unorm && npm run asbuild:uastc-rgba32-srgb",
     "asbuild": "npm run asbuild:generator && npm run asbuild:transcoders",
     "test": "ts-node node_modules/tape/bin/tape test/test.ts | tap-spec",
-    "test:ci": "GEN_SIZE=1024 npm test"
+    "test:ci": "CI=1 npm test"
   },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
