@@ -1,7 +1,7 @@
 # Universal Texture Transcoders
 
 ![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
-![CI](https://github.com/KhronosGroup/Universal-Texture-Transcoders/workflows/CI/badge.svg)
+[![CI](https://github.com/KhronosGroup/Universal-Texture-Transcoders/workflows/CI/badge.svg?branch=main&event=push)](https://github.com/KhronosGroup/Universal-Texture-Transcoders/actions?query=workflow%3ACI)
 
 A collection of optimized WebAssembly transcoders for [Basis Universal](https://github.com/BinomialLLC/basis_universal/) compressed GPU texture formats.
 
@@ -97,10 +97,10 @@ Since UASTC is a strict subset of ASTC and the latter has several decode modes, 
 
 Currently supported modes are:
 - `uastc_rgba32_unorm.wasm` matches the `decode_unorm8` ASTC decode mode.
-  > **OpenGL Note:** Sampling UASTC data decoded with this mode and uploaded as `GL_RGBA8` should exactly match sampling UASTC data transcoded to ASTC and uploaded as `GL_COMPRESSED_RGBA_ASTC_4x4_KHR` with the `GL_TEXTURE_ASTC_DECODE_PRECISION_EXT` texture parameter set to `GL_RGBA8`. 
+  > **OpenGL Note:** Sampling UASTC data decoded with this mode and uploaded as `GL_RGBA8` should exactly match sampling UASTC data transcoded to ASTC and uploaded as `GL_COMPRESSED_RGBA_ASTC_4x4_KHR` with the `GL_TEXTURE_ASTC_DECODE_PRECISION_EXT` texture parameter set to `GL_RGBA8`.
 
 - `uastc_rgba32_srgb.wasm` matches the sRGB ASTC decode mode.
-  > **OpenGL Note:** Sampling UASTC data decoded with this mode and uploaded as `GL_SRGB_ALPHA8` should exactly match sampling UASTC data transcoded to ASTC and uploaded as `GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR`. 
+  > **OpenGL Note:** Sampling UASTC data decoded with this mode and uploaded as `GL_SRGB_ALPHA8` should exactly match sampling UASTC data transcoded to ASTC and uploaded as `GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR`.
 
 Regardless of the decode mode, these decoders share the same API and memory requirements.
 
