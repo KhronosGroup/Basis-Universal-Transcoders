@@ -85,15 +85,15 @@ export function decodeRGBA32(width: i32, height: i32): i32 {
       decodeBlock(readOffset, 4096, 16);
       for (let x = 0; x < extraByteLength; x += 4) {
         let s = writeOffset;
-        store<i32>(s + x, load<i32>(x, 4096));
+        store<u32>(s + x, load<u32>(x, 4096 +  0));
         s += uncompressedLineByteStride;
-        store<i32>(s + x, load<i32>(x, 4096 + 16));
+        store<u32>(s + x, load<u32>(x, 4096 + 16));
         s += uncompressedLineByteStride;
-        store<i32>(s + x, load<i32>(x, 4096 + 32));
+        store<u32>(s + x, load<u32>(x, 4096 + 32));
         s += uncompressedLineByteStride;
-        store<i32>(s + x, load<i32>(x, 4096 + 48));
+        store<u32>(s + x, load<u32>(x, 4096 + 48));
       }
-      readOffset += compressedBlockLineByteStride;
+      readOffset  += compressedBlockLineByteStride;
       writeOffset += uncompressedBlockLineByteStride;
     }
   }
@@ -101,30 +101,30 @@ export function decodeRGBA32(width: i32, height: i32): i32 {
 }
 
 function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
-  const q0 = load<i64>(readOffset);
-  const q1 = load<i64>(readOffset, 8);
+  const q0 = load<u64>(readOffset, 0);
+  const q1 = load<u64>(readOffset, 8);
 
-  let modeIndex = getModeIndex(<i32>q0 & 0x7F);
+  let modeIndex = getModeIndex(<u32>q0 & 0x7F);
 
   // Mode Indices 4 and 7 share a lot of transcoding steps but merging them
   // in a switch-case causes unoptimal compiler output.
   const mode4 = modeIndex == 4;
-  modeIndex = (modeIndex == 4) ? 7 : modeIndex;
+  modeIndex = mode4 ? 7 : modeIndex;
 
   switch (modeIndex) {
     case 0:
       {
         // Two trits (6 values), 8 + 2 bits
-        const et0 = unpackTrits(<i32>(q0 >> 19) & 0xFF);
-        const et1 = unpackTrits(<i32>(q0 >> 27) & 0x3);
+        const et0 = unpackTrits(<u32>(q0 >> 19) & 0xFF);
+        const et1 = unpackTrits(<u32>(q0 >> 27) & 0x3);
 
         // 6-bit endpoints
-        let rl0 = <i32>(q0 >> 29) & 0x3F;
-        let rh0 = <i32>(q0 >> 35) & 0x3F;
-        let gl0 = <i32>(q0 >> 41) & 0x3F;
-        let gh0 = <i32>(q0 >> 47) & 0x3F;
-        let bl0 = <i32>(q0 >> 53) & 0x3F;
-        let bh0 = (<i32>(q0 >> 59) & 0x1F) | (<i32>(q1 << 5) & 0x20);
+        let rl0 = <u32>(q0 >> 29) & 0x3F;
+        let rh0 = <u32>(q0 >> 35) & 0x3F;
+        let gl0 = <u32>(q0 >> 41) & 0x3F;
+        let gh0 = <u32>(q0 >> 47) & 0x3F;
+        let bl0 = <u32>(q0 >> 53) & 0x3F;
+        let bh0 = (<u32>(q0 >> 59) & 0x1F) | (<u32>(q1 << 5) & 0x20);
 
         rl0 = unq191(rl0, et0 & 3);
         rh0 = unq191(rh0, (et0 >> 2) & 3);
@@ -144,12 +144,12 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
     case 1:
       {
         // 8-bit endpoints
-        const rl0 = <i32>(q0 >> 21) & 0xFF;
-        const rh0 = <i32>(q0 >> 29) & 0xFF;
-        const gl0 = <i32>(q0 >> 37) & 0xFF;
-        const gh0 = <i32>(q0 >> 45) & 0xFF;
-        const bl0 = <i32>(q0 >> 53) & 0xFF;
-        const bh0 = (<i32>(q0 >> 61) & 0x07) | (<i32>(q1 << 3) & 0xF8);
+        const rl0 = <u32>(q0 >> 21) & 0xFF;
+        const rh0 = <u32>(q0 >> 29) & 0xFF;
+        const gl0 = <u32>(q0 >> 37) & 0xFF;
+        const gh0 = <u32>(q0 >> 45) & 0xFF;
+        const bl0 = <u32>(q0 >> 53) & 0xFF;
+        const bh0 = (<u32>(q0 >> 61) & 0x07) | (<u32>(q1 << 3) & 0xF8);
 
         // 2-bit weights, start at 69
         const weights = ((q1 >> 4) & 0xFFFFFFFC) | ((q1 >> 5) & 1);
@@ -160,7 +160,7 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
       break;
     case 2:
       {
-        const pat = <i32>(q0 >> 20) & 0x1F;
+        const pat = <u32>(q0 >> 20) & 0x1F;
         if (pat > 29) {
           writeErrorBlock(offset, stride);
           return;
@@ -186,8 +186,8 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
 
         // Anchor bits location depends on the pattern index
         const anchor = getTwoSubsetAnchor(pat);
-        const loMask: i64 = (0xFFFFFFFFFFFFFFFF << ((anchor * 3) + 2)) ^ 0xFFFFFFFFFFFFFFF8;
-        const hiMask: i64 = (0xFFFFFFFFFFFFFFFF << ((anchor * 3) + 3));
+        const loMask: u64 = (0xFFFFFFFFFFFFFFFF << ((anchor * 3) + 2)) ^ 0xFFFFFFFFFFFFFFF8;
+        const hiMask: u64 = (0xFFFFFFFFFFFFFFFF << ((anchor * 3) + 3));
 
         // 3-bit weights, start at 73
         const weights = ((q1 >> 7) & hiMask) | ((q1 >> 8) & loMask) | ((q1 >> 9) & 3);
@@ -196,42 +196,43 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
           rl0, rh0, gl0, gh0, bl0, bh0,
           rl1, rh1, gl1, gh1, bl1, bh1,
           weights, 3, getTwoSubsetPattern(pat),
-          offset, stride);
+          offset, stride
+        );
       }
       break;
     case 3:
       {
-        const pat = <i32>(q0 >> 20) & 0xF;
+        const pat = <u32>(q0 >> 20) & 0xF;
         if (pat > 10) {
           writeErrorBlock(offset, stride);
           return;
         }
 
         // Four trits (18 values), 3 * 8 + 5 bits
-        const et0 = unpackTrits(<i32>(q0 >> 24) & 0xFF);
-        const et1 = unpackTrits(<i32>(q0 >> 32) & 0xFF);
-        const et2 = unpackTrits(<i32>(q0 >> 40) & 0xFF);
-        const et3 = unpackTrits(<i32>(q0 >> 48) & 0x1F);
+        const et0 = unpackTrits(<u32>(q0 >> 24) & 0xFF);
+        const et1 = unpackTrits(<u32>(q0 >> 32) & 0xFF);
+        const et2 = unpackTrits(<u32>(q0 >> 40) & 0xFF);
+        const et3 = unpackTrits(<u32>(q0 >> 48) & 0x1F);
 
         // 2-bit endpoints
-        let rl0 = <i32>(q0 >> 53) & 0x3;
-        let rh0 = <i32>(q0 >> 55) & 0x3;
-        let gl0 = <i32>(q0 >> 57) & 0x3;
-        let gh0 = <i32>(q0 >> 59) & 0x3;
-        let bl0 = <i32>(q0 >> 61) & 0x3;
-        let bh0 = (<i32>(q0 >> 63) & 0x1) | (<i32>(q1 << 1) & 0x2);
-        let rl1 = <i32>(q1 >> 1) & 0x3;
-        let rh1 = <i32>(q1 >> 3) & 0x3;
-        let gl1 = <i32>(q1 >> 5) & 0x3;
-        let gh1 = <i32>(q1 >> 7) & 0x3;
-        let bl1 = <i32>(q1 >> 9) & 0x3;
-        let bh1 = <i32>(q1 >> 11) & 0x3;
-        let rl2 = <i32>(q1 >> 13) & 0x3;
-        let rh2 = <i32>(q1 >> 15) & 0x3;
-        let gl2 = <i32>(q1 >> 17) & 0x3;
-        let gh2 = <i32>(q1 >> 19) & 0x3;
-        let bl2 = <i32>(q1 >> 21) & 0x3;
-        let bh2 = <i32>(q1 >> 23) & 0x3;
+        let rl0 = <u32>(q0 >> 53) & 0x3;
+        let rh0 = <u32>(q0 >> 55) & 0x3;
+        let gl0 = <u32>(q0 >> 57) & 0x3;
+        let gh0 = <u32>(q0 >> 59) & 0x3;
+        let bl0 = <u32>(q0 >> 61) & 0x3;
+        let bh0 = (<u32>(q0 >> 63) & 0x1) | (<u32>(q1 << 1) & 0x2);
+        let rl1 = <u32>(q1 >>  1) & 0x3;
+        let rh1 = <u32>(q1 >>  3) & 0x3;
+        let gl1 = <u32>(q1 >>  5) & 0x3;
+        let gh1 = <u32>(q1 >>  7) & 0x3;
+        let bl1 = <u32>(q1 >>  9) & 0x3;
+        let bh1 = <u32>(q1 >> 11) & 0x3;
+        let rl2 = <u32>(q1 >> 13) & 0x3;
+        let rh2 = <u32>(q1 >> 15) & 0x3;
+        let gl2 = <u32>(q1 >> 17) & 0x3;
+        let gh2 = <u32>(q1 >> 19) & 0x3;
+        let bl2 = <u32>(q1 >> 21) & 0x3;
+        let bh2 = <u32>(q1 >> 23) & 0x3;
 
         rl0 = unq11(rl0, et0 & 3);
         rh0 = unq11(rh0, (et0 >> 2) & 3);
@@ -260,45 +261,50 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         const hMask = 0xFFFFFFFF << ((anchorH << 1) + 2);
 
         // 2-bit weights, start at 89
-        const weights = (<i32>(q1 >> 22) & hMask) | (<i32>(q1 >> 23) & mMask) |
-          (<i32>(q1 >> 24) & lMask) | (<i32>(q1 >> 25) & 1);
+        const weights = (
+          (<u32>(q1 >> 22) & hMask) | (<u32>(q1 >> 23) & mMask) |
+          (<u32>(q1 >> 24) & lMask) | (<u32>(q1 >> 25) & 1)
+        );
 
         const pattern = getThreeSubsetPattern(pat);
         writeTripleSubsetColorBlock(
           rl0, rh0, gl0, gh0, bl0, bh0,
           rl1, rh1, gl1, gh1, bl1, bh1,
           rl2, rh2, gl2, gh2, bl2, bh2,
-          weights, pattern & 0xFFFF, pattern >>> 16,
-          offset, stride);
+          weights,
+          pattern & 0xFFFF,
+          pattern >>> 16,
+          offset, stride
+        );
       }
       break;
     case 7:
       {
-        const pat = <i32>(q0 >> 20) & 0x1F;
+        const pat = <u32>(q0 >> 20) & 0x1F;
         if (pat > (mode4 ? 29 : 18)) {
           writeErrorBlock(offset, stride);
           return;
         }
 
         // Four quints (12 values), 4 * 7 bits
-        const eq0 = unpackQuints(<i32>(q0 >> 25) & 0x7F);
-        const eq1 = unpackQuints(<i32>(q0 >> 32) & 0x7F);
-        const eq2 = unpackQuints(<i32>(q0 >> 39) & 0x7F);
-        const eq3 = unpackQuints(<i32>(q0 >> 46) & 0x7F);
+        const eq0 = unpackQuints(<u32>(q0 >> 25) & 0x7F);
+        const eq1 = unpackQuints(<u32>(q0 >> 32) & 0x7F);
+        const eq2 = unpackQuints(<u32>(q0 >> 39) & 0x7F);
+        const eq3 = unpackQuints(<u32>(q0 >> 46) & 0x7F);
 
         // 3-bit endpoints
-        let rl0 = <i32>(q0 >> 53) & 0x7;
-        let rh0 = <i32>(q0 >> 56) & 0x7;
-        let gl0 = <i32>(q0 >> 59) & 0x7;
-        let gh0 = (<i32>(q0 >> 62) & 0x3) | (<i32>(q1 << 2) & 0x4);
-        let bl0 = <i32>(q1 >> 1) & 0x7;
-        let bh0 = <i32>(q1 >> 4) & 0x7;
-        let rl1 = <i32>(q1 >> 7) & 0x7;
-        let rh1 = <i32>(q1 >> 10) & 0x7;
-        let gl1 = <i32>(q1 >> 13) & 0x7;
-        let gh1 = <i32>(q1 >> 16) & 0x7;
-        let bl1 = <i32>(q1 >> 19) & 0x7;
-        let bh1 = <i32>(q1 >> 22) & 0x7;
+        let rl0 = <u32>(q0 >> 53) & 0x7;
+        let rh0 = <u32>(q0 >> 56) & 0x7;
+        let gl0 = <u32>(q0 >> 59) & 0x7;
+        let gh0 = (<u32>(q0 >> 62) & 0x3) | (<u32>(q1 << 2) & 0x4);
+        let bl0 = <u32>(q1 >>  1) & 0x7;
+        let bh0 = <u32>(q1 >>  4) & 0x7;
+        let rl1 = <u32>(q1 >>  7) & 0x7;
+        let rh1 = <u32>(q1 >> 10) & 0x7;
+        let gl1 = <u32>(q1 >> 13) & 0x7;
+        let gh1 = <u32>(q1 >> 16) & 0x7;
+        let bl1 = <u32>(q1 >> 19) & 0x7;
+        let bh1 = <u32>(q1 >> 22) & 0x7;
 
         rl0 = unq39(rl0, eq0 & 7);
         rh0 = unq39(rh0, (eq0 >> 4) & 7);
@@ -313,7 +319,7 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         bl1 = unq39(bl1, (eq3 >> 4) & 7);
         bh1 = unq39(bh1, eq3 >> 8);
 
-        // anchor bits location depends on the pattern index 
+        // anchor bits location depends on the pattern index
         const anchor = mode4 ? getTwoSubsetAnchor(pat) : getTwoSubsetAnchorForModeIndex7(pat);
         const loMask = (0xFFFFFFFF << ((anchor << 1) | 1)) ^ 0xFFFFFFFC;
         const hiMask = 0xFFFFFFFF << ((anchor << 1) + 2);
@@ -324,43 +330,47 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         writeDualSubsetColorBlock(
           rl0, rh0, gl0, gh0, bl0, bh0,
           rl1, rh1, gl1, gh1, bl1, bh1,
-          weights, 2, mode4 ? getTwoSubsetPattern(pat) : getTwoSubsetPatternForModeIndex7(pat),
+          weights, 2,
+          mode4
+            ? getTwoSubsetPattern(pat)
+            : getTwoSubsetPatternForModeIndex7(pat),
           offset, stride);
       }
       break;
     case 5:
       {
         // 8-bit endpoints
-        const rl0 = <i32>(q0 >> 20) & 0xFF;
-        const rh0 = <i32>(q0 >> 28) & 0xFF;
-        const gl0 = <i32>(q0 >> 36) & 0xFF;
-        const gh0 = <i32>(q0 >> 44) & 0xFF;
-        const bl0 = <i32>(q0 >> 52) & 0xFF;
-        const bh0 = (<i32>(q0 >> 60) & 0x0F) | (<i32>(q1 << 4) & 0xF0);
+        const rl0 = <u32>(q0 >> 20) & 0xFF;
+        const rh0 = <u32>(q0 >> 28) & 0xFF;
+        const gl0 = <u32>(q0 >> 36) & 0xFF;
+        const gh0 = <u32>(q0 >> 44) & 0xFF;
+        const bl0 = <u32>(q0 >> 52) & 0xFF;
+        const bh0 = (<u32>(q0 >> 60) & 0x0F) | (<u32>(q1 << 4) & 0xF0);
 
         // 3-bit endpoints, start at 68
         const weights = ((q1 >> 3) & 0xFFFFFFFFFFF8) | ((q1 >> 4) & 3);
 
         writeSingleSubsetColorBlock(
           rl0, rh0, gl0, gh0, bl0, bh0, 255, 255,
-          weights, 3, offset, stride);
+          weights, 3, offset, stride
+        );
       }
       break;
     case 6:
       {
-        const compSel = <i32>(q0 >> 20) & 0x3;
+        const compSel = <u32>(q0 >> 20) & 0x3;
 
         // Two quints (6 values), 2 * 7 bits
-        const eq0 = unpackQuints(<i32>(q0 >> 22) & 0x7F);
-        const eq1 = unpackQuints(<i32>(q0 >> 29) & 0x7F);
+        const eq0 = unpackQuints(<u32>(q0 >> 22) & 0x7F);
+        const eq1 = unpackQuints(<u32>(q0 >> 29) & 0x7F);
 
         // 5-bit endpoints
-        let rl0 = <i32>(q0 >> 36) & 0x1F;
-        let rh0 = <i32>(q0 >> 41) & 0x1F;
-        let gl0 = <i32>(q0 >> 46) & 0x1F;
-        let gh0 = <i32>(q0 >> 51) & 0x1F;
-        let bl0 = <i32>(q0 >> 56) & 0x1F;
-        let bh0 = (<i32>(q0 >> 61) & 0x7) | (<i32>(q1 << 3) & 0x18);
+        let rl0 = <u32>(q0 >> 36) & 0x1F;
+        let rh0 = <u32>(q0 >> 41) & 0x1F;
+        let gl0 = <u32>(q0 >> 46) & 0x1F;
+        let gh0 = <u32>(q0 >> 51) & 0x1F;
+        let bl0 = <u32>(q0 >> 56) & 0x1F;
+        let bh0 = (<u32>(q0 >> 61) & 0x7) | (<u32>(q1 << 3) & 0x18);
 
         rl0 = unq159(rl0, eq0 & 7);
         rh0 = unq159(rh0, (eq0 >> 4) & 7);
@@ -380,17 +390,17 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
       break;
     case 8:
       {
-        const r = <i32>(q0 >> 5) & 0xFF;
-        const g = <i32>(q0 >> 13) & 0xFF;
-        const b = <i32>(q0 >> 21) & 0xFF;
-        const a = <i32>(q0 >> 29) & 0xFF;
+        const r = <u32>(q0 >>  5) & 0xFF;
+        const g = <u32>(q0 >> 13) & 0xFF;
+        const b = <u32>(q0 >> 21) & 0xFF;
+        const a = <u32>(q0 >> 29) & 0xFF;
 
         writeSolidBlock(packRGBA64(r, g, b, a), offset, stride);
       }
       break;
     case 9:
       {
-        const pat = <i32>(q0 >> 28) & 0x1F;
+        const pat = <u32>(q0 >> 28) & 0x1F;
         if (pat > 29) {
           writeErrorBlock(offset, stride);
           return;
@@ -401,10 +411,10 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         let hi = ((q1 << 27) | (q0 >>> 37)) & 0x0F0F0F0F0F0F0F0F;
         lo |= lo << 4;
         hi |= hi << 4;
-        const rl0 = (lo >> 0) & 0xFF;
-        const rh0 = (hi >> 0) & 0xFF;
-        const gl0 = (lo >> 8) & 0xFF;
-        const gh0 = (hi >> 8) & 0xFF;
+        const rl0 = (lo >>  0) & 0xFF;
+        const rh0 = (hi >>  0) & 0xFF;
+        const gl0 = (lo >>  8) & 0xFF;
+        const gh0 = (hi >>  8) & 0xFF;
         const bl0 = (lo >> 16) & 0xFF;
         const bh0 = (hi >> 16) & 0xFF;
         const al0 = (lo >> 24) & 0xFF;
@@ -418,7 +428,7 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         const al1 = (lo >> 56) & 0xFF;
         const ah1 = (hi >> 56) & 0xFF;
 
-        // anchor bits location depends on the pattern index 
+        // anchor bits location depends on the pattern index
         const anchor = getTwoSubsetAnchor(pat);
         const loMask = (0xFFFFFFFF << ((anchor << 1) | 1)) ^ 0xFFFFFFFC;
         const hiMask = 0xFFFFFFFF << ((anchor << 1) + 2);
@@ -429,25 +439,27 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         writeDualSubsetColorAlphaBlockW2(
           rl0, rh0, gl0, gh0, bl0, bh0, al0, ah0,
           rl1, rh1, gl1, gh1, bl1, bh1, al1, ah1,
-          weights, 2, getTwoSubsetPattern(pat),
-          offset, stride);
+          weights, 2,
+          getTwoSubsetPattern(pat),
+          offset, stride
+        );
       }
       break;
     case 10:
       {
         // Two trits (8 values), 8 + 5 bits
-        const et0 = unpackTrits(<i32>(q0 >> 20) & 0xFF);
-        const et1 = unpackTrits(<i32>(q0 >> 28) & 0x1F);
+        const et0 = unpackTrits(<u32>(q0 >> 20) & 0xFF);
+        const et1 = unpackTrits(<u32>(q0 >> 28) & 0x1F);
 
         // 4-bit endpoints
-        let rl0 = <i32>(q0 >> 33) & 0xF;
-        let rh0 = <i32>(q0 >> 37) & 0xF;
-        let gl0 = <i32>(q0 >> 41) & 0xF;
-        let gh0 = <i32>(q0 >> 45) & 0xF;
-        let bl0 = <i32>(q0 >> 49) & 0xF;
-        let bh0 = <i32>(q0 >> 53) & 0xF;
-        let al0 = <i32>(q0 >> 57) & 0xF;
-        let ah0 = (<i32>(q0 >> 61) & 0x7) | (<i32>(q1 << 3) & 0x8);
+        let rl0 = <u32>(q0 >> 33) & 0xF;
+        let rh0 = <u32>(q0 >> 37) & 0xF;
+        let gl0 = <u32>(q0 >> 41) & 0xF;
+        let gh0 = <u32>(q0 >> 45) & 0xF;
+        let bl0 = <u32>(q0 >> 49) & 0xF;
+        let bh0 = <u32>(q0 >> 53) & 0xF;
+        let al0 = <u32>(q0 >> 57) & 0xF;
+        let ah0 = (<u32>(q0 >> 61) & 0x7) | (<u32>(q1 << 3) & 0x8);
 
         rl0 = unq47(rl0, et0 & 3);
         rh0 = unq47(rh0, (et0 >> 2) & 3);
@@ -464,26 +476,27 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         // Use non-unrolled loop here as it doesn't seem to affect the performance
         writeLoopSingleSubsetColorBlock(
           rl0, rh0, gl0, gh0, bl0, bh0, al0, ah0,
-          weights, 4, offset, stride);
+          weights, 4, offset, stride
+        );
       }
       break;
     case 11:
       {
-        const compSel = <i32>(q0 >> 19) & 0x3;
+        const compSel = <u32>(q0 >> 19) & 0x3;
 
         // Two trits (8 values), 8 + 5 bits
-        const et0 = unpackTrits(<i32>(q0 >> 21) & 0xFF);
-        const et1 = unpackTrits(<i32>(q0 >> 29) & 0x1F);
+        const et0 = unpackTrits(<u32>(q0 >> 21) & 0xFF);
+        const et1 = unpackTrits(<u32>(q0 >> 29) & 0x1F);
 
         // 4-bit endpoints
-        let rl0 = <i32>(q0 >> 34) & 0xF;
-        let rh0 = <i32>(q0 >> 38) & 0xF;
-        let gl0 = <i32>(q0 >> 42) & 0xF;
-        let gh0 = <i32>(q0 >> 46) & 0xF;
-        let bl0 = <i32>(q0 >> 50) & 0xF;
-        let bh0 = <i32>(q0 >> 54) & 0xF;
-        let al0 = <i32>(q0 >> 58) & 0xF;
-        let ah0 = (<i32>(q0 >> 62) & 0x3) | (<i32>(q1 << 2) & 0xC);
+        let rl0 = <u32>(q0 >> 34) & 0xF;
+        let rh0 = <u32>(q0 >> 38) & 0xF;
+        let gl0 = <u32>(q0 >> 42) & 0xF;
+        let gh0 = <u32>(q0 >> 46) & 0xF;
+        let bl0 = <u32>(q0 >> 50) & 0xF;
+        let bh0 = <u32>(q0 >> 54) & 0xF;
+        let al0 = <u32>(q0 >> 58) & 0xF;
+        let ah0 = (<u32>(q0 >> 62) & 0x3) | (<u32>(q1 << 2) & 0xC);
 
         rl0 = unq47(rl0, et0 & 3);
         rh0 = unq47(rh0, (et0 >> 2) & 3);
@@ -500,24 +513,25 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         writeDualPlaneColorAlphaBlockW2(
           rl0, rh0, gl0, gh0, bl0, bh0, al0, ah0,
           weights, compSel,
-          offset, stride);
+          offset, stride
+        );
       }
       break;
     case 12:
       {
         // Two trits (8 values), 8 + 5 bits
-        const et0 = unpackTrits(<i32>(q0 >> 20) & 0xFF);
-        const et1 = unpackTrits(<i32>(q0 >> 28) & 0x1F);
+        const et0 = unpackTrits(<u32>(q0 >> 20) & 0xFF);
+        const et1 = unpackTrits(<u32>(q0 >> 28) & 0x1F);
 
         // 6-bit endpoints
-        let rl0 = <i32>(q0 >> 33) & 0x3F;
-        let rh0 = <i32>(q0 >> 39) & 0x3F;
-        let gl0 = <i32>(q0 >> 45) & 0x3F;
-        let gh0 = <i32>(q0 >> 51) & 0x3F;
-        let bl0 = <i32>(q0 >> 57) & 0x3F;
-        let bh0 = (<i32>(q0 >> 63) & 0x1) | (<i32>(q1 << 1) & 0x3E);
-        let al0 = <i32>(q1 >> 5) & 0x3F;
-        let ah0 = <i32>(q1 >> 11) & 0x3F;
+        let rl0 = <u32>(q0 >> 33) & 0x3F;
+        let rh0 = <u32>(q0 >> 39) & 0x3F;
+        let gl0 = <u32>(q0 >> 45) & 0x3F;
+        let gh0 = <u32>(q0 >> 51) & 0x3F;
+        let bl0 = <u32>(q0 >> 57) & 0x3F;
+        let bh0 = (<u32>(q0 >> 63) & 0x1) | (<u32>(q1 << 1) & 0x3E);
+        let al0 = <u32>(q1 >>  5) & 0x3F;
+        let ah0 = <u32>(q1 >> 11) & 0x3F;
 
         rl0 = unq191(rl0, et0 & 3);
         rh0 = unq191(rh0, (et0 >> 2) & 3);
@@ -533,22 +547,23 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
 
         writeSingleSubsetColorBlock(
           rl0, rh0, gl0, gh0, bl0, bh0, al0, ah0,
-          weights, 3, offset, stride);
+          weights, 3, offset, stride
+        );
       }
       break;
     case 13:
       {
-        const compSel = <i32>(q0 >> 28) & 0x3;
+        const compSel = <u32>(q0 >> 28) & 0x3;
 
         // 8-bit endpoints
-        const rl0 = <i32>(q0 >> 30) & 0xFF;
-        const rh0 = <i32>(q0 >> 38) & 0xFF;
-        const gl0 = <i32>(q0 >> 46) & 0xFF;
-        const gh0 = <i32>(q0 >> 54) & 0xFF;
-        const bl0 = (<i32>(q0 >> 62) & 0x03) | (<i32>(q1 << 2) & 0xFC);
-        const bh0 = <i32>(q1 >> 6) & 0xFF;
-        const al0 = <i32>(q1 >> 14) & 0xFF;
-        const ah0 = <i32>(q1 >> 22) & 0xFF;
+        const rl0 = <u32>(q0 >> 30) & 0xFF;
+        const rh0 = <u32>(q0 >> 38) & 0xFF;
+        const gl0 = <u32>(q0 >> 46) & 0xFF;
+        const gh0 = <u32>(q0 >> 54) & 0xFF;
+        const bl0 = (<u32>(q0 >> 62) & 0x03) | (<u32>(q1 << 2) & 0xFC);
+        const bh0 = <u32>(q1 >>  6) & 0xFF;
+        const al0 = <u32>(q1 >> 14) & 0xFF;
+        const ah0 = <u32>(q1 >> 22) & 0xFF;
 
         // 1-bit weights, start at 94
         const weights = (q1 >> 28) & 0xFFFFFFFC;
@@ -562,58 +577,60 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
     case 14:
       {
         // 8-bit endpoints
-        const rl0 = <i32>(q0 >> 28) & 0xFF;
-        const rh0 = <i32>(q0 >> 36) & 0xFF;
-        const gl0 = <i32>(q0 >> 44) & 0xFF;
-        const gh0 = <i32>(q0 >> 52) & 0xFF;
-        const bl0 = (<i32>(q0 >> 60) & 0xF) | (<i32>(q1 << 4) & 0xF0);
-        const bh0 = <i32>(q1 >> 4) & 0xFF;
-        const al0 = <i32>(q1 >> 12) & 0xFF;
-        const ah0 = <i32>(q1 >> 20) & 0xFF;
+        const rl0 = <u32>(q0 >> 28) & 0xFF;
+        const rh0 = <u32>(q0 >> 36) & 0xFF;
+        const gl0 = <u32>(q0 >> 44) & 0xFF;
+        const gh0 = <u32>(q0 >> 52) & 0xFF;
+        const bl0 = (<u32>(q0 >> 60) & 0xF) | (<u32>(q1 << 4) & 0xF0);
+        const bh0 = <u32>(q1 >>  4) & 0xFF;
+        const al0 = <u32>(q1 >> 12) & 0xFF;
+        const ah0 = <u32>(q1 >> 20) & 0xFF;
 
         // 2-bit weights, start at 92
         const weights = ((q1 >> 27) & 0xFFFFFFFC) | ((q1 >> 28) & 1);
 
         writeSingleSubsetColorBlock(
           rl0, rh0, gl0, gh0, bl0, bh0, al0, ah0,
-          weights, 2, offset, stride);
+          weights, 2, offset, stride
+        );
       }
       break;
     case 15:
       {
         // 8-bit endpoints
-        const ll0 = <i32>(q0 >> 30) & 0xFF;
-        const lh0 = <i32>(q0 >> 38) & 0xFF;
-        const al0 = <i32>(q0 >> 46) & 0xFF;
-        const ah0 = <i32>(q0 >> 54) & 0xFF;
+        const ll0 = <u32>(q0 >> 30) & 0xFF;
+        const lh0 = <u32>(q0 >> 38) & 0xFF;
+        const al0 = <u32>(q0 >> 46) & 0xFF;
+        const ah0 = <u32>(q0 >> 54) & 0xFF;
 
         // 4-bit weights, start at 62
         const weights = ((q1 << 3) & 0xFFFFFFFFFFFFFFF0) | ((q1 << 2) & 4) | ((q0 >> 62) & 3);
 
         writeSingleSubsetLumaBlock(
           ll0, lh0, al0, ah0,
-          weights, offset, stride);
+          weights, offset, stride
+        );
       }
       break;
     case 16:
       {
-        const pat = <i32>(q0 >> 29) & 0x1F;
+        const pat = <u32>(q0 >> 29) & 0x1F;
         if (pat > 29) {
           writeErrorBlock(offset, stride);
           return;
         }
 
         // 8-bit endpoints
-        const ll0 = <i32>(q0 >> 34) & 0xFF;
-        const lh0 = <i32>(q0 >> 42) & 0xFF;
-        const al0 = <i32>(q0 >> 50) & 0xFF;
-        const ah0 = (<i32>(q0 >> 58) & 0x3F) | (<i32>(q1 << 6) & 0xC0);
-        const ll1 = <i32>(q1 >> 2) & 0xFF;
-        const lh1 = <i32>(q1 >> 10) & 0xFF;
-        const al1 = <i32>(q1 >> 18) & 0xFF;
-        const ah1 = <i32>(q1 >> 26) & 0xFF;
+        const ll0 = <u32>(q0 >> 34) & 0xFF;
+        const lh0 = <u32>(q0 >> 42) & 0xFF;
+        const al0 = <u32>(q0 >> 50) & 0xFF;
+        const ah0 = (<u32>(q0 >> 58) & 0x3F) | (<u32>(q1 << 6) & 0xC0);
+        const ll1 = <u32>(q1 >> 2) & 0xFF;
+        const lh1 = <u32>(q1 >> 10) & 0xFF;
+        const al1 = <u32>(q1 >> 18) & 0xFF;
+        const ah1 = <u32>(q1 >> 26) & 0xFF;
 
-        // anchor bits location depends on the pattern index 
+        // anchor bits location depends on the pattern index
         const anchor = getTwoSubsetAnchor(pat);
         const loMask = (0xFFFFFFFF << ((anchor << 1) | 1)) ^ 0xFFFFFFFC;
         const hiMask = 0xFFFFFFFF << ((anchor << 1) + 2);
@@ -624,17 +641,19 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         writeDualSubsetLumaAlphaBlock(
           ll0, lh0, al0, ah0,
           ll1, lh1, al1, ah1,
-          weights, getTwoSubsetPattern(pat),
-          offset, stride);
+          weights,
+          getTwoSubsetPattern(pat),
+          offset, stride
+        );
       }
       break;
     case 17:
       {
         // 8-bit endpoints
-        const ll0 = <i32>(q0 >> 29) & 0xFF;
-        const lh0 = <i32>(q0 >> 37) & 0xFF;
-        const al0 = <i32>(q0 >> 45) & 0xFF;
-        const ah0 = <i32>(q0 >> 53) & 0xFF;
+        const ll0 = <u32>(q0 >> 29) & 0xFF;
+        const lh0 = <u32>(q0 >> 37) & 0xFF;
+        const al0 = <u32>(q0 >> 45) & 0xFF;
+        const ah0 = <u32>(q0 >> 53) & 0xFF;
 
         // 2-bit weights, start at 61
         const weights = (q1 << 5) | ((q0 >> 59) & 16) | ((q0 >> 60) & 4) | ((q0 >> 61) & 1);
@@ -642,14 +661,15 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         writeDualPlaneLumaAlphaBlockW2(
           ll0, lh0, al0, ah0,
           weights,
-          offset, stride);
+          offset, stride
+        );
       }
       break;
     case 18:
       {
         // 5-bit endpoints, unquantize in-place
-        let lo = <i32>(q0 >> 16) & 0xF83E0F8;
-        let hi = <i32>(q0 >> 21) & 0xF83E0F8;
+        let lo = <u32>(q0 >> 16) & 0xF83E0F8;
+        let hi = <u32>(q0 >> 21) & 0xF83E0F8;
         lo |= lo >> 5;
         hi |= hi >> 5;
         const rl0 = lo & 0xFF;
@@ -667,7 +687,8 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
 
         writeSingleSubsetColorBlockW5(
           rl0, rh0, gl0, gh0, bl0, bh0,
-          weights0, weights1, offset, stride);
+          weights0, weights1, offset, stride
+        );
       }
       break;
     default:
@@ -678,21 +699,21 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
 
 // @ts-ignore: 1206
 @inline
-function writeSolidBlock(color: i64, offset: i32, stride: i32): void {
-  store<i64>(offset, color, 0);
-  store<i64>(offset, color, 8);
+function writeSolidBlock(color: u64, offset: i32, stride: i32): void {
+  store<u64>(offset, color, 0);
+  store<u64>(offset, color, 8);
   offset += stride;
 
-  store<i64>(offset, color, 0);
-  store<i64>(offset, color, 8);
+  store<u64>(offset, color, 0);
+  store<u64>(offset, color, 8);
   offset += stride;
 
-  store<i64>(offset, color, 0);
-  store<i64>(offset, color, 8);
+  store<u64>(offset, color, 0);
+  store<u64>(offset, color, 8);
   offset += stride;
 
-  store<i64>(offset, color, 0);
-  store<i64>(offset, color, 8);
+  store<u64>(offset, color, 0);
+  store<u64>(offset, color, 8);
 }
 
 function writeErrorBlock(offset: i32, stride: i32): void {
@@ -701,50 +722,52 @@ function writeErrorBlock(offset: i32, stride: i32): void {
 
 // @ts-ignore: 1206
 @inline
-function packRGBA64(r: i32, g: i32, b: i32, a: i32): i64 {
-  const c: u32 = r | (g << 8) | (b << 16) | (a << 24);
-  return (<i64>c << 32) | c;
+function packRGBA64(r: u32, g: u32, b: u32, a: u32): u64 {
+  const c = r | (g << 8) | (b << 16) | (a << 24);
+  return (<u64>c << 32) | c;
 }
 
 // @ts-ignore: 1206
 @inline
 function writeSingleSubsetColorBlock(
-  rl0: i64, rh0: i64,
-  gl0: i64, gh0: i64,
-  bl0: i64, bh0: i64,
-  al0: i64, ah0: i64,
-  weights0: i64, wBits: i32,
-  offset: i32, stride: i32): void {
+  rl0: u64, rh0: u64,
+  gl0: u64, gh0: u64,
+  bl0: u64, bh0: u64,
+  al0: u64, ah0: u64,
+  weights0: u64,
+  wBits:  i32,
+  offset: i32,
+  stride: i32
+): void {
+  const rs = rl0 * 0x40004000400040;
+  const gs = gl0 * 0x40004000400040;
+  const bs = bl0 * 0x40004000400040;
+  const as = al0 * 0x40004000400040;
 
-  const rs: i64 = rl0 * 0x40004000400040;
-  const gs: i64 = gl0 * 0x40004000400040;
-  const bs: i64 = bl0 * 0x40004000400040;
-  const as: i64 = al0 * 0x40004000400040;
+  const rd = rh0 - rl0;
+  const gd = gh0 - gl0;
+  const bd = bh0 - bl0;
+  const ad = ah0 - al0;
 
-  const rd: i64 = rh0 - rl0;
-  const gd: i64 = gh0 - gl0;
-  const bd: i64 = bh0 - bl0;
-  const ad: i64 = ah0 - al0;
-
-  let w0: i64 = 0;
-  let w1: i64 = 0;
-  let w2: i64 = 0;
-  let w3: i64 = 0;
+  let w0: u64 = 0;
+  let w1: u64 = 0;
+  let w2: u64 = 0;
+  let w3: u64 = 0;
   switch (wBits) {
     case 2:
-      w0 = unqWx4(2, weights0 & 0xFF);
-      w1 = unqWx4(2, (weights0 >> 8) & 0xFF);
+      w0 = unqWx4(2, (weights0 >>  0) & 0xFF);
+      w1 = unqWx4(2, (weights0 >>  8) & 0xFF);
       w2 = unqWx4(2, (weights0 >> 16) & 0xFF);
       w3 = unqWx4(2, (weights0 >> 24) & 0xFF);
       break;
     case 3:
-      w0 = unqWx4(3, weights0 & 0xFFF);
+      w0 = unqWx4(3, (weights0 >>  0) & 0xFFF);
       w1 = unqWx4(3, (weights0 >> 12) & 0xFFF);
       w2 = unqWx4(3, (weights0 >> 24) & 0xFFF);
       w3 = unqWx4(3, (weights0 >> 36) & 0xFFF);
       break;
     case 4:
-      w0 = unqWx4(4, weights0 & 0xFFFF);
+      w0 = unqWx4(4, (weights0 >>  0) & 0xFFFF);
       w1 = unqWx4(4, (weights0 >> 16) & 0xFFFF);
       w2 = unqWx4(4, (weights0 >> 32) & 0xFFFF);
       w3 = unqWx4(4, (weights0 >> 48) & 0xFFFF);
@@ -807,30 +830,31 @@ function writeSingleSubsetColorBlock(
   a2 = lerpFinal(a2) << 8;
   a3 = lerpFinal(a3) << 8;
 
-  store<i64>(offset, packRGBA01(r0 | g0, a0 | b0));
-  store<i64>(offset, packRGBA23(r0 | g0, a0 | b0), 8);
+  store<u64>(offset, packRGBA01(r0 | g0, a0 | b0), 0);
+  store<u64>(offset, packRGBA23(r0 | g0, a0 | b0), 8);
   offset += stride;
 
-  store<i64>(offset, packRGBA01(r1 | g1, a1 | b1));
-  store<i64>(offset, packRGBA23(r1 | g1, a1 | b1), 8);
+  store<u64>(offset, packRGBA01(r1 | g1, a1 | b1), 0);
+  store<u64>(offset, packRGBA23(r1 | g1, a1 | b1), 8);
   offset += stride;
 
-  store<i64>(offset, packRGBA01(r2 | g2, a2 | b2));
-  store<i64>(offset, packRGBA23(r2 | g2, a2 | b2), 8);
+  store<u64>(offset, packRGBA01(r2 | g2, a2 | b2), 0);
+  store<u64>(offset, packRGBA23(r2 | g2, a2 | b2), 8);
   offset += stride;
 
-  store<i64>(offset, packRGBA01(r3 | g3, a3 | b3));
-  store<i64>(offset, packRGBA23(r3 | g3, a3 | b3), 8);
+  store<u64>(offset, packRGBA01(r3 | g3, a3 | b3), 0);
+  store<u64>(offset, packRGBA23(r3 | g3, a3 | b3), 8);
 }
 
 // @ts-ignore: 1206
 @inline
 function writeSingleSubsetLumaBlock(
-  ll0: i64, lh0: i64, al0: i64, ah0: i64,
-  weights0: i64,
-  offset: i32, stride: i32): void {
-
-  const w0 = unqWx4(4, weights0 & 0xFFFF);
+  ll0: u64, lh0: u64, al0: u64, ah0: u64,
+  weights0: u64,
+  offset: i32,
+  stride: i32
+): void {
+  const w0 = unqWx4(4, (weights0 >>  0) & 0xFFFF);
   const w1 = unqWx4(4, (weights0 >> 16) & 0xFFFF);
   const w2 = unqWx4(4, (weights0 >> 32) & 0xFFFF);
   const w3 = unqWx4(4, (weights0 >> 48) & 0xFFFF);
@@ -867,32 +891,34 @@ function writeSingleSubsetLumaBlock(
   a2 = lerpFinal(a2) << 8;
   a3 = lerpFinal(a3) << 8;
 
-  store<i64>(offset, packLA01(l0, a0));
-  store<i64>(offset, packLA23(l0, a0), 8);
+  store<u64>(offset, packLA01(l0, a0), 0);
+  store<u64>(offset, packLA23(l0, a0), 8);
   offset += stride;
 
-  store<i64>(offset, packLA01(l1, a1));
-  store<i64>(offset, packLA23(l1, a1), 8);
+  store<u64>(offset, packLA01(l1, a1), 0);
+  store<u64>(offset, packLA23(l1, a1), 8);
   offset += stride;
 
-  store<i64>(offset, packLA01(l2, a2));
-  store<i64>(offset, packLA23(l2, a2), 8);
+  store<u64>(offset, packLA01(l2, a2), 0);
+  store<u64>(offset, packLA23(l2, a2), 8);
   offset += stride;
 
-  store<i64>(offset, packLA01(l3, a3));
-  store<i64>(offset, packLA23(l3, a3), 8);
+  store<u64>(offset, packLA01(l3, a3), 0);
+  store<u64>(offset, packLA23(l3, a3), 8);
 }
 
 // @ts-ignore: 1206
 @inline
 function writeLoopSingleSubsetColorBlock(
-  rl0: i64, rh0: i64,
-  gl0: i64, gh0: i64,
-  bl0: i64, bh0: i64,
-  al0: i64, ah0: i64,
-  weights0: i64, wBits: i32,
-  offset: i32, stride: i32): void {
-
+  rl0: u64, rh0: u64,
+  gl0: u64, gh0: u64,
+  bl0: u64, bh0: u64,
+  al0: u64, ah0: u64,
+  weights0: u64,
+  wBits:  i32,
+  offset: i32,
+  stride: i32
+): void {
   rh0 -= rl0;
   gh0 -= gl0;
   bh0 -= bl0;
@@ -905,15 +931,15 @@ function writeLoopSingleSubsetColorBlock(
 
   const lastOffset = offset + stride * 4;
   while (offset < lastOffset) {
-    const w0: i64 = unqWx4(wBits, weights0 & ((1 << (wBits * 4)) - 1));
+    const w0: u64 = unqWx4(wBits, weights0 & ((1 << (wBits * 4)) - 1));
 
     const r0 = rl0 + rh0 * w0;
     const g0 = gl0 + gh0 * w0;
     const b0 = bl0 + bh0 * w0;
     const a0 = al0 + ah0 * w0;
 
-    let rg: i64 = 0;
-    let ba: i64 = 0;
+    let rg: u64 = 0;
+    let ba: u64 = 0;
     if (srgb) {
       rg = lerpFinalSrgb(r0) | (lerpFinalSrgb(g0) << 8);
       ba = lerpFinalSrgb(b0) | (lerpFinal(a0) << 8);
@@ -922,8 +948,8 @@ function writeLoopSingleSubsetColorBlock(
       ba = lerpFinal(b0) | (lerpFinal(a0) << 8);
     }
 
-    store<i64>(offset, packRGBA01(rg, ba));
-    store<i64>(offset, packRGBA23(rg, ba), 8);
+    store<u64>(offset, packRGBA01(rg, ba), 0);
+    store<u64>(offset, packRGBA23(rg, ba), 8);
 
     offset += stride;
     weights0 >>= wBits * 4;
@@ -933,22 +959,24 @@ function writeLoopSingleSubsetColorBlock(
 // @ts-ignore: 1206
 @inline
 function writeSingleSubsetColorBlockW5(
-  rl0: i32, rh0: i32, gl0: i32, gh0: i32, bl0: i32, bh0: i32,
-  weights0: i64, weights1: i64,
-  offset: i32, stride: i32): void {
+  rl0: u64, rh0: u64, gl0: u64, gh0: u64, bl0: u64, bh0: u64,
+  weights0: u64,
+  weights1: u64,
+  offset:   i32,
+  stride:   i32
+): void {
+  const rs = rl0 * 0x40004000400040;
+  const gs = gl0 * 0x40004000400040;
+  const bs = bl0 * 0x40004000400040;
 
-  const rs: i64 = rl0 * 0x40004000400040;
-  const gs: i64 = gl0 * 0x40004000400040;
-  const bs: i64 = bl0 * 0x40004000400040;
+  const rd = rh0 - rl0;
+  const gd = gh0 - gl0;
+  const bd = bh0 - bl0;
 
-  const rd: i64 = rh0 - rl0;
-  const gd: i64 = gh0 - gl0;
-  const bd: i64 = bh0 - bl0;
-
-  const w0: i64 = unqWx4(5, weights0 & 0xFFFFF);
-  const w1: i64 = unqWx4(5, (weights0 >> 20) & 0xFFFFF);
-  const w2: i64 = unqWx4(5, weights1 & 0xFFFFF);
-  const w3: i64 = unqWx4(5, (weights1 >> 20) & 0xFFFFF);
+  const w0 = unqWx4(5, (weights0 >>  0) & 0xFFFFF);
+  const w1 = unqWx4(5, (weights0 >> 20) & 0xFFFFF);
+  const w2 = unqWx4(5, (weights1 >>  0) & 0xFFFFF);
+  const w3 = unqWx4(5, (weights1 >> 20) & 0xFFFFF);
 
   let r0 = rs + rd * w0;
   let r1 = rs + rd * w1;
@@ -997,36 +1025,39 @@ function writeSingleSubsetColorBlockW5(
     b3 = lerpFinal(b3);
   }
 
-  store<i64>(offset, packRGBA01(r0 | g0, 0xFF00FF00FF00FF00 | b0));
-  store<i64>(offset, packRGBA23(r0 | g0, 0xFF00FF00FF00FF00 | b0), 8);
+  store<u64>(offset, packRGBA01(r0 | g0, 0xFF00FF00FF00FF00 | b0), 0);
+  store<u64>(offset, packRGBA23(r0 | g0, 0xFF00FF00FF00FF00 | b0), 8);
   offset += stride;
 
-  store<i64>(offset, packRGBA01(r1 | g1, 0xFF00FF00FF00FF00 | b1));
-  store<i64>(offset, packRGBA23(r1 | g1, 0xFF00FF00FF00FF00 | b1), 8);
+  store<u64>(offset, packRGBA01(r1 | g1, 0xFF00FF00FF00FF00 | b1), 0);
+  store<u64>(offset, packRGBA23(r1 | g1, 0xFF00FF00FF00FF00 | b1), 8);
   offset += stride;
 
-  store<i64>(offset, packRGBA01(r2 | g2, 0xFF00FF00FF00FF00 | b2));
-  store<i64>(offset, packRGBA23(r2 | g2, 0xFF00FF00FF00FF00 | b2), 8);
+  store<u64>(offset, packRGBA01(r2 | g2, 0xFF00FF00FF00FF00 | b2), 0);
+  store<u64>(offset, packRGBA23(r2 | g2, 0xFF00FF00FF00FF00 | b2), 8);
   offset += stride;
 
-  store<i64>(offset, packRGBA01(r3 | g3, 0xFF00FF00FF00FF00 | b3));
-  store<i64>(offset, packRGBA23(r3 | g3, 0xFF00FF00FF00FF00 | b3), 8);
+  store<u64>(offset, packRGBA01(r3 | g3, 0xFF00FF00FF00FF00 | b3), 0);
+  store<u64>(offset, packRGBA23(r3 | g3, 0xFF00FF00FF00FF00 | b3), 8);
 }
 
 // @ts-ignore: 1206
 @inline
 function writeDualPlaneColorAlphaBlockW1(
-  rl0: i64, rh0: i64,
-  gl0: i64, gh0: i64,
-  bl0: i64, bh0: i64,
-  al0: i64, ah0: i64,
-  weights: i64, compSel: i32,
-  offset: i32, stride: i32): void {
+  rl0: u64, rh0: u64,
+  gl0: u64, gh0: u64,
+  bl0: u64, bh0: u64,
+  al0: u64, ah0: u64,
+  weights: u64,
+  compSel: i32,
+  offset:  i32,
+  stride:  i32
+): void {
 
-  const w00 = unqWx2x4(1, weights & 0x55);
-  const w01 = unqWx2x4(1, (weights >> 1) & 0x55);
-  const w10 = unqWx2x4(1, (weights >> 8) & 0x55);
-  const w11 = unqWx2x4(1, (weights >> 9) & 0x55);
+  const w00 = unqWx2x4(1, (weights >>  0) & 0x55);
+  const w01 = unqWx2x4(1, (weights >>  1) & 0x55);
+  const w10 = unqWx2x4(1, (weights >>  8) & 0x55);
+  const w11 = unqWx2x4(1, (weights >>  9) & 0x55);
   const w20 = unqWx2x4(1, (weights >> 16) & 0x55);
   const w21 = unqWx2x4(1, (weights >> 17) & 0x55);
   const w30 = unqWx2x4(1, (weights >> 24) & 0x55);
@@ -1066,40 +1097,42 @@ function writeDualPlaneColorAlphaBlockW1(
   const a2 = al0 ^ (ah0 & ((compSel == 3) ? w21 : w20));
   const a3 = al0 ^ (ah0 & ((compSel == 3) ? w31 : w30));
 
-  store<i64>(offset, packRGBA01(r0 | g0, a0 | b0));
-  store<i64>(offset, packRGBA23(r0 | g0, a0 | b0), 8);
+  store<u64>(offset, packRGBA01(r0 | g0, a0 | b0), 0);
+  store<u64>(offset, packRGBA23(r0 | g0, a0 | b0), 8);
   offset += stride;
 
-  store<i64>(offset, packRGBA01(r1 | g1, a1 | b1));
-  store<i64>(offset, packRGBA23(r1 | g1, a1 | b1), 8);
+  store<u64>(offset, packRGBA01(r1 | g1, a1 | b1), 0);
+  store<u64>(offset, packRGBA23(r1 | g1, a1 | b1), 8);
   offset += stride;
 
-  store<i64>(offset, packRGBA01(r2 | g2, a2 | b2));
-  store<i64>(offset, packRGBA23(r2 | g2, a2 | b2), 8);
+  store<u64>(offset, packRGBA01(r2 | g2, a2 | b2), 0);
+  store<u64>(offset, packRGBA23(r2 | g2, a2 | b2), 8);
   offset += stride;
 
-  store<i64>(offset, packRGBA01(r3 | g3, a3 | b3));
-  store<i64>(offset, packRGBA23(r3 | g3, a3 | b3), 8);
+  store<u64>(offset, packRGBA01(r3 | g3, a3 | b3), 0);
+  store<u64>(offset, packRGBA23(r3 | g3, a3 | b3), 8);
 }
 
 // @ts-ignore: 1206
 @inline
 function writeDualPlaneColorAlphaBlockW2(
-  rl0: i64, rh0: i64,
-  gl0: i64, gh0: i64,
-  bl0: i64, bh0: i64,
-  al0: i64, ah0: i64,
-  weights: i64, compSel: i32,
-  offset: i32, stride: i32): void {
-
-  const w00: i64 = unqWx2x4(2, weights & 0x3333);
-  const w01: i64 = unqWx2x4(2, (weights >> 2) & 0x3333);
-  const w10: i64 = unqWx2x4(2, (weights >> 16) & 0x3333);
-  const w11: i64 = unqWx2x4(2, (weights >> 18) & 0x3333);
-  const w20: i64 = unqWx2x4(2, (weights >> 32) & 0x3333);
-  const w21: i64 = unqWx2x4(2, (weights >> 34) & 0x3333);
-  const w30: i64 = unqWx2x4(2, (weights >> 48) & 0x3333);
-  const w31: i64 = unqWx2x4(2, (weights >> 50) & 0x3333);
+  rl0: u64, rh0: u64,
+  gl0: u64, gh0: u64,
+  bl0: u64, bh0: u64,
+  al0: u64, ah0: u64,
+  weights: u64,
+  compSel: i32,
+  offset:  i32,
+  stride:  i32
+): void {
+  const w00: u64 = unqWx2x4(2, (weights >>  0) & 0x3333);
+  const w01: u64 = unqWx2x4(2, (weights >>  2) & 0x3333);
+  const w10: u64 = unqWx2x4(2, (weights >> 16) & 0x3333);
+  const w11: u64 = unqWx2x4(2, (weights >> 18) & 0x3333);
+  const w20: u64 = unqWx2x4(2, (weights >> 32) & 0x3333);
+  const w21: u64 = unqWx2x4(2, (weights >> 34) & 0x3333);
+  const w30: u64 = unqWx2x4(2, (weights >> 48) & 0x3333);
+  const w31: u64 = unqWx2x4(2, (weights >> 50) & 0x3333);
 
   rh0 -= rl0;
   gh0 -= gl0;
@@ -1167,32 +1200,33 @@ function writeDualPlaneColorAlphaBlockW2(
   a2 = lerpFinal(a2) << 8;
   a3 = lerpFinal(a3) << 8;
 
-  store<i64>(offset, packRGBA01(r0 | g0, a0 | b0));
-  store<i64>(offset, packRGBA23(r0 | g0, a0 | b0), 8);
+  store<u64>(offset, packRGBA01(r0 | g0, a0 | b0), 0);
+  store<u64>(offset, packRGBA23(r0 | g0, a0 | b0), 8);
   offset += stride;
 
-  store<i64>(offset, packRGBA01(r1 | g1, a1 | b1));
-  store<i64>(offset, packRGBA23(r1 | g1, a1 | b1), 8);
+  store<u64>(offset, packRGBA01(r1 | g1, a1 | b1), 0);
+  store<u64>(offset, packRGBA23(r1 | g1, a1 | b1), 8);
   offset += stride;
 
-  store<i64>(offset, packRGBA01(r2 | g2, a2 | b2));
-  store<i64>(offset, packRGBA23(r2 | g2, a2 | b2), 8);
+  store<u64>(offset, packRGBA01(r2 | g2, a2 | b2), 0);
+  store<u64>(offset, packRGBA23(r2 | g2, a2 | b2), 8);
   offset += stride;
 
-  store<i64>(offset, packRGBA01(r3 | g3, a3 | b3));
-  store<i64>(offset, packRGBA23(r3 | g3, a3 | b3), 8);
+  store<u64>(offset, packRGBA01(r3 | g3, a3 | b3), 0);
+  store<u64>(offset, packRGBA23(r3 | g3, a3 | b3), 8);
 }
 
 // @ts-ignore: 1206
 @inline
 function writeDualPlaneLumaAlphaBlockW2(
-  ll0: i64, lh0: i64,
-  al0: i64, ah0: i64,
-  weights: i64,
-  offset: i32, stride: i32): void {
-
-  const w00 = unqWx2x4(2, weights & 0x3333);
-  const w01 = unqWx2x4(2, (weights >> 2) & 0x3333);
+  ll0: u64, lh0: u64,
+  al0: u64, ah0: u64,
+  weights: u64,
+  offset:  i32,
+  stride:  i32
+): void {
+  const w00 = unqWx2x4(2, (weights >>  0) & 0x3333);
+  const w01 = unqWx2x4(2, (weights >>  2) & 0x3333);
   const w10 = unqWx2x4(2, (weights >> 16) & 0x3333);
   const w11 = unqWx2x4(2, (weights >> 18) & 0x3333);
   const w20 = unqWx2x4(2, (weights >> 32) & 0x3333);
@@ -1232,29 +1266,35 @@ function writeDualPlaneLumaAlphaBlockW2(
   a2 = lerpFinal(a2) << 8;
   a3 = lerpFinal(a3) << 8;
 
-  store<i64>(offset, packLA01(l0, a0));
-  store<i64>(offset, packLA23(l0, a0), 8);
+  store<u64>(offset, packLA01(l0, a0), 0);
+  store<u64>(offset, packLA23(l0, a0), 8);
   offset += stride;
 
-  store<i64>(offset, packLA01(l1, a1));
-  store<i64>(offset, packLA23(l1, a1), 8);
+  store<u64>(offset, packLA01(l1, a1), 0);
+  store<u64>(offset, packLA23(l1, a1), 8);
   offset += stride;
 
-  store<i64>(offset, packLA01(l2, a2));
-  store<i64>(offset, packLA23(l2, a2), 8);
+  store<u64>(offset, packLA01(l2, a2), 0);
+  store<u64>(offset, packLA23(l2, a2), 8);
   offset += stride;
 
-  store<i64>(offset, packLA01(l3, a3));
-  store<i64>(offset, packLA23(l3, a3), 8);
+  store<u64>(offset, packLA01(l3, a3), 0);
+  store<u64>(offset, packLA23(l3, a3), 8);
 }
 
 // @ts-ignore: 1206
 @inline
 function writeDualSubsetColorBlock(
-  rl0: i64, rh0: i64, gl0: i64, gh0: i64, bl0: i64, bh0: i64,
-  rl1: i64, rh1: i64, gl1: i64, gh1: i64, bl1: i64, bh1: i64,
-  weights: i64, wBits: i32, pattern: i32,
-  offset: i32, stride: i32): void {
+  rl0: u64, rh0: u64, gl0: u64,
+  gh0: u64, bl0: u64, bh0: u64,
+  rl1: u64, rh1: u64, gl1: u64,
+  gh1: u64, bl1: u64, bh1: u64,
+  weights: u64,
+  wBits:   i32,
+  pattern: u32,
+  offset:  i32,
+  stride:  i32
+): void {
 
   rh0 -= rl0;
   rh1 -= rl1;
@@ -1296,8 +1336,8 @@ function writeDualSubsetColorBlock(
       b0 = lerpFinal(b0);
     }
 
-    store<i64>(offset, packRGBA01(r0 | g0, 0xFF00FF00FF00FF00 | b0));
-    store<i64>(offset, packRGBA23(r0 | g0, 0xFF00FF00FF00FF00 | b0), 8);
+    store<u64>(offset, packRGBA01(r0 | g0, 0xFF00FF00FF00FF00 | b0), 0);
+    store<u64>(offset, packRGBA23(r0 | g0, 0xFF00FF00FF00FF00 | b0), 8);
 
     offset += stride;
     weights >>= wBits * 4;
@@ -1308,10 +1348,16 @@ function writeDualSubsetColorBlock(
 // @ts-ignore: 1206
 @inline
 function writeDualSubsetColorAlphaBlockW2(
-  rl0: i64, rh0: i64, gl0: i64, gh0: i64, bl0: i64, bh0: i64, al0: i64, ah0: i64,
-  rl1: i64, rh1: i64, gl1: i64, gh1: i64, bl1: i64, bh1: i64, al1: i64, ah1: i64,
-  weights: i64, wBits: i32, pattern: i32,
-  offset: i32, stride: i32): void {
+  rl0: u64, rh0: u64, gl0: u64, gh0: u64,
+  bl0: u64, bh0: u64, al0: u64, ah0: u64,
+  rl1: u64, rh1: u64, gl1: u64, gh1: u64,
+  bl1: u64, bh1: u64, al1: u64, ah1: u64,
+  weights: u64,
+  wBits:   i32,
+  pattern: u32,
+  offset:  i32,
+  stride:  i32
+): void {
 
   rh0 -= rl0;
   rh1 -= rl1;
@@ -1361,8 +1407,8 @@ function writeDualSubsetColorAlphaBlockW2(
     }
     a0 = lerpFinal(a0) << 8;
 
-    store<i64>(offset, packRGBA01(r0 | g0, a0 | b0));
-    store<i64>(offset, packRGBA23(r0 | g0, a0 | b0), 8);
+    store<u64>(offset, packRGBA01(r0 | g0, a0 | b0), 0);
+    store<u64>(offset, packRGBA23(r0 | g0, a0 | b0), 8);
 
     offset += stride;
     weights >>= wBits * 4;
@@ -1373,11 +1419,13 @@ function writeDualSubsetColorAlphaBlockW2(
 // @ts-ignore: 1206
 @inline
 function writeDualSubsetLumaAlphaBlock(
-  ll0: i64, lh0: i64, al0: i64, ah0: i64,
-  ll1: i64, lh1: i64, al1: i64, ah1: i64,
-  weights: i64, pattern: i32,
-  offset: i32, stride: i32): void {
-
+  ll0: u64, lh0: u64, al0: u64, ah0: u64,
+  ll1: u64, lh1: u64, al1: u64, ah1: u64,
+  weights: u64,
+  pattern: u32,
+  offset: i32,
+  stride: i32
+): void {
   lh0 -= ll0;
   lh1 -= ll1;
   ah0 -= al0;
@@ -1408,8 +1456,8 @@ function writeDualSubsetLumaAlphaBlock(
     }
     a0 = lerpFinal(a0) << 8;
 
-    store<i64>(offset, packLA01(l0, a0));
-    store<i64>(offset, packLA23(l0, a0), 8);
+    store<u64>(offset, packLA01(l0, a0), 0);
+    store<u64>(offset, packLA23(l0, a0), 8);
 
     offset += stride;
     weights >>= 8;
@@ -1420,18 +1468,21 @@ function writeDualSubsetLumaAlphaBlock(
 // @ts-ignore: 1206
 @inline
 function writeTripleSubsetColorBlock(
-  rl0: i64, rh0: i64,
-  gl0: i64, gh0: i64,
-  bl0: i64, bh0: i64,
-  rl1: i64, rh1: i64,
-  gl1: i64, gh1: i64,
-  bl1: i64, bh1: i64,
-  rl2: i64, rh2: i64,
-  gl2: i64, gh2: i64,
-  bl2: i64, bh2: i64,
-  weights: i64, pattern1: i32, pattern2: i32,
-  offset: i32, stride: i32): void {
-
+  rl0: u64, rh0: u64,
+  gl0: u64, gh0: u64,
+  bl0: u64, bh0: u64,
+  rl1: u64, rh1: u64,
+  gl1: u64, gh1: u64,
+  bl1: u64, bh1: u64,
+  rl2: u64, rh2: u64,
+  gl2: u64, gh2: u64,
+  bl2: u64, bh2: u64,
+  weights: u64,
+  pattern1: u32,
+  pattern2: u32,
+  offset: i32,
+  stride: i32
+): void {
   rh0 -= rl0;
   rh1 -= rl1;
   rh2 -= rl2;
@@ -1485,8 +1536,8 @@ function writeTripleSubsetColorBlock(
       b0 = lerpFinal(b0);
     }
 
-    store<i64>(offset, packRGBA01(r0 | g0, 0xFF00FF00FF00FF00 | b0));
-    store<i64>(offset, packRGBA23(r0 | g0, 0xFF00FF00FF00FF00 | b0), 8);
+    store<u64>(offset, packRGBA01(r0 | g0, 0xFF00FF00FF00FF00 | b0), 0);
+    store<u64>(offset, packRGBA23(r0 | g0, 0xFF00FF00FF00FF00 | b0), 8);
 
     offset += stride;
     weights >>= 8;
@@ -1497,7 +1548,7 @@ function writeTripleSubsetColorBlock(
 
 // @ts-ignore: 1206
 @inline
-function lerpFinal(c: i64): i64 {
+function lerpFinal(c: u64): u64 {
   let x = 0x1000100010001;
   x += ((c >> 5) & 0x1FF01FF01FF01FF) + ((c << 3) & 0x1F801F801F801F8);
   x = (x >> 9) & 0x1000100010001;
@@ -1506,13 +1557,13 @@ function lerpFinal(c: i64): i64 {
 
 // @ts-ignore: 1206
 @inline
-function lerpFinalSrgb(c: i64): i64 {
+function lerpFinalSrgb(c: u64): u64 {
   return ((c + 0x20002000200020) >> 6) & 0xFF00FF00FF00FF;
 }
 
 // @ts-ignore: 1206
 @inline
-function packRGBA01(rg: i64, ba: i64): i64 {
+function packRGBA01(rg: u64, ba: u64): u64 {
   let c = (rg & 0xFFFF) | ((ba & 0xFFFF0000) << 32);
   c |= ((rg & 0xFFFF0000) | (ba & 0xFFFF)) << 16;
   return c;
@@ -1520,7 +1571,7 @@ function packRGBA01(rg: i64, ba: i64): i64 {
 
 // @ts-ignore: 1206
 @inline
-function packRGBA23(rg: i64, ba: i64): i64 {
+function packRGBA23(rg: u64, ba: u64): u64 {
   let c = ((rg >> 32) & 0xFFFF) | (ba & 0xFFFF000000000000);
   c |= ((rg & 0xFFFF000000000000) | (ba & 0xFFFF00000000)) >>> 16;
   return c;
@@ -1528,7 +1579,7 @@ function packRGBA23(rg: i64, ba: i64): i64 {
 
 // @ts-ignore: 1206
 @inline
-function packLA01(l: i64, a: i64): i64 {
+function packLA01(l: u64, a: u64): u64 {
   let c = ((l & 0xFF) | ((l & 0xFF0000) << 16)) * 0x010101;
   c |= ((a & 0xFF00) << 16) | ((a & 0xFF000000) << 32);
   return c;
@@ -1536,7 +1587,7 @@ function packLA01(l: i64, a: i64): i64 {
 
 // @ts-ignore: 1206
 @inline
-function packLA23(l: i64, a: i64): i64 {
+function packLA23(l: u64, a: u64): u64 {
   let c = (((l & 0xFF00000000) >> 32) | ((l & 0xFF000000000000) >> 16)) * 0x010101;
   c |= ((a & 0xFF0000000000) >> 16) | (a & 0xFF00000000000000);
   return c;
@@ -1544,7 +1595,7 @@ function packLA23(l: i64, a: i64): i64 {
 
 // @ts-ignore: 1206
 @inline
-function unqWx4(bits: i32, w: i64): i64 {
+function unqWx4(bits: i32, w: u64): u64 {
   switch (bits) {
     case 2:
       // ab * 4 -> 00000000000000ab * 4
@@ -1586,7 +1637,7 @@ function unqWx4(bits: i32, w: i64): i64 {
 
 // @ts-ignore: 1206
 @inline
-function unqWx2x4(bits: i32, w: i64): i64 {
+function unqWx2x4(bits: i32, w: u64): u64 {
   switch (bits) {
     case 1:
       // 0a * 4 -> 000000000000000a * 4
@@ -1612,7 +1663,7 @@ function unqWx2x4(bits: i32, w: i64): i64 {
 
 // @ts-ignore: 1206
 @inline
-function replicate4to64(v: i64): i64 {
+function replicate4to64(v: u64): u64 {
   v = (v | (v << 30)) & 0x0000000300000003;
   v = (v | (v << 15)) & 0x0001000100010001;
   return v * 65535;
