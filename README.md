@@ -1,5 +1,8 @@
 # Universal Texture Transcoders
 
+![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
+![CI](https://github.com/KhronosGroup/Universal-Texture-Transcoders/workflows/CI/badge.svg)
+
 A collection of optimized WebAssembly transcoders for [Basis Universal](https://github.com/BinomialLLC/basis_universal/) compressed GPU texture formats.
 
 These transcoders accept only low-level compressed payloads. Containers such as `.basis` or `.ktx2` ([KTX](https://github.khronos.org/KTX-Specification/)) should first be parsed by other means, then transcoded to the target format with this library.
