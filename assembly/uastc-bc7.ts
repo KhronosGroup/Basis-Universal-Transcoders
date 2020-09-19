@@ -348,7 +348,7 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
         );
 
         const packedEndpoints1 = (
-          (<i64>(swap2 ? bc7bl2 : bc7bh2) << 30) |
+          (<u64>(swap2 ? bc7bl2 : bc7bh2) << 30) |
           ((swap2 ? bc7bh2 : bc7bl2) << 25) |
           ((swap1 ? bc7bl1 : bc7bh1) << 20) |
           ((swap1 ? bc7bh1 : bc7bl1) << 15) |
@@ -1289,21 +1289,21 @@ function mode1(rl: u32, rh: u32, gl: u32, gh: u32, bl: u32, bh: u32): u64 {
 
   const packed0 = (
     (<u64>(bhq0 >> 1) << 30) |
-    (<u64>(blq0 >> 1) << 24) |
-    (<u64>(ghq0 >> 1) << 18) |
-    (<u64>(glq0 >> 1) << 12) |
-    (<u64>(rhq0 >> 1) <<  6) |
-    (<u64>(rlq0 >> 1) <<  0)
+    ((blq0 >> 1) << 24) |
+    ((ghq0 >> 1) << 18) |
+    ((glq0 >> 1) << 12) |
+    ((rhq0 >> 1) <<  6) |
+    ((rlq0 >> 1) <<  0)
   );
 
   const packed1 = (
     (<u64>1           << 36) |
     (<u64>(bhq1 >> 1) << 30) |
-    (<u64>(blq1 >> 1) << 24) |
-    (<u64>(ghq1 >> 1) << 18) |
-    (<u64>(glq1 >> 1) << 12) |
-    (<u64>(rhq1 >> 1) <<  6) |
-    (<u64>(rlq1 >> 1) <<  0)
+    ((blq1 >> 1) << 24) |
+    ((ghq1 >> 1) << 18) |
+    ((glq1 >> 1) << 12) |
+    ((rhq1 >> 1) <<  6) |
+    ((rlq1 >> 1) <<  0)
   );
 
   return error >= 0 ? packed0 : packed1;
@@ -1364,29 +1364,29 @@ function mode6(
   const packedLo0 = (
     (<u64>(alq0 >> 1) << 42) |
     (<u64>(blq0 >> 1) << 28) |
-    (<u64>(glq0 >> 1) << 14) |
-    (<u64>(rlq0 >> 1) <<  0)
+    ((glq0 >> 1) << 14) |
+    ((rlq0 >> 1) <<  0)
   );
   const packedHi0 = (
     (<u64>(ahq0 >> 1) << 49) |
     (<u64>(bhq0 >> 1) << 35) |
-    (<u64>(ghq0 >> 1) << 21) |
-    (<u64>(rhq0 >> 1) << 7)
+    ((ghq0 >> 1) << 21) |
+    ((rhq0 >> 1) << 7)
   );
 
   const packedLo1 = (
     (<u64>1         << 56) |
     (<u64>(al >> 1) << 42) |
     (<u64>(bl >> 1) << 28) |
-    (<u64>(gl >> 1) << 14) |
-    (<u64>(rl >> 1) <<  0)
+    ((gl >> 1) << 14) |
+    ((rl >> 1) <<  0)
   );
   const packedHi1 = (
     (<u64>1         << 57) |
     (<u64>(ah >> 1) << 49) |
     (<u64>(bh >> 1) << 35) |
-    (<u64>(gh >> 1) << 21) |
-    (<u64>(rh >> 1) <<  7)
+    ((gh >> 1) << 21) |
+    ((rh >> 1) <<  7)
   );
 
   const packedLo = errorLo0 <= errorLo1 ? packedLo0 : packedLo1;
@@ -1490,29 +1490,29 @@ function mode7(
   const packedLo0 = (
     (<u64>(alq0 >> 1) << 30) |
     (<u64>(blq0 >> 1) << 20) |
-    (<u64>(glq0 >> 1) << 10) |
-    (<u64>(rlq0 >> 1) <<  0)
+    ((glq0 >> 1) << 10) |
+    ((rlq0 >> 1) <<  0)
   );
   const packedHi0 = (
     (<u64>(ahq0 >> 1) << 35) |
     (<u64>(bhq0 >> 1) << 25) |
-    (<u64>(ghq0 >> 1) << 15) |
-    (<u64>(rhq0 >> 1) <<  5)
+    ((ghq0 >> 1) << 15) |
+    ((rhq0 >> 1) <<  5)
   );
 
   const packedLo1 = (
     (<u64>1           << 40) |
     (<u64>(alq1 >> 1) << 30) |
     (<u64>(blq1 >> 1) << 20) |
-    (<u64>(glq1 >> 1) << 10) |
-    (<u64>(rlq1 >> 1) <<  0)
+    ((glq1 >> 1) << 10) |
+    ((rlq1 >> 1) <<  0)
   );
   const packedHi1 = (
     (<u64>1           << 41) |
     (<u64>(ahq1 >> 1) << 35) |
     (<u64>(bhq1 >> 1) << 25) |
-    (<u64>(ghq1 >> 1) << 15) |
-    (<u64>(rhq1 >> 1) <<  5)
+    ((ghq1 >> 1) << 15) |
+    ((rhq1 >> 1) <<  5)
   );
 
   const packedLo = errorLo >= 0 ? packedLo0 : packedLo1;
