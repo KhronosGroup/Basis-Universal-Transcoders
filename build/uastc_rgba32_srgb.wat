@@ -287,8 +287,6 @@
                       i64.const 59
                       i64.shr_u
                       i32.wrap_i64
-                      i32.const 31
-                      i32.and
                       local.get $3
                       i64.const 5
                       i64.shl
@@ -839,8 +837,6 @@
                      i64.const 61
                      i64.shr_u
                      i32.wrap_i64
-                     i32.const 7
-                     i32.and
                      local.get $3
                      i64.const 3
                      i64.shl
@@ -1955,8 +1951,6 @@
                    i64.const 63
                    i64.shr_u
                    i32.wrap_i64
-                   i32.const 1
-                   i32.and
                    local.get $3
                    i64.const 1
                    i64.shl
@@ -2401,8 +2395,6 @@
                   i64.const 62
                   i64.shr_u
                   i32.wrap_i64
-                  i32.const 3
-                  i32.and
                   local.get $3
                   i64.const 2
                   i64.shl
@@ -3003,8 +2995,6 @@
                  i64.const 60
                  i64.shr_u
                  i32.wrap_i64
-                 i32.const 15
-                 i32.and
                  local.get $3
                  i64.const 4
                  i64.shl
@@ -3635,8 +3625,6 @@
                 i64.const 61
                 i64.shr_u
                 i32.wrap_i64
-                i32.const 7
-                i32.and
                 local.get $3
                 i64.const 3
                 i64.shl
@@ -4812,8 +4800,6 @@
              i64.const 61
              i64.shr_u
              i32.wrap_i64
-             i32.const 7
-             i32.and
              local.get $3
              i64.const 3
              i64.shl
@@ -5067,8 +5053,6 @@
             i64.const 62
             i64.shr_u
             i32.wrap_i64
-            i32.const 3
-            i32.and
             local.get $3
             i64.const 2
             i64.shl
@@ -6179,8 +6163,6 @@
            i64.const 63
            i64.shr_u
            i32.wrap_i64
-           i32.const 1
-           i32.and
            local.get $3
            i64.const 1
            i64.shl
@@ -6828,8 +6810,6 @@
           i64.const 62
           i64.shr_u
           i32.wrap_i64
-          i32.const 3
-          i32.and
           local.get $3
           i64.const 2
           i64.shl
@@ -7432,8 +7412,6 @@
          i64.const 60
          i64.shr_u
          i32.wrap_i64
-         i32.const 15
-         i32.and
          local.get $3
          i64.const 4
          i64.shl
@@ -8627,8 +8605,6 @@
        i64.const 58
        i64.shr_u
        i32.wrap_i64
-       i32.const 63
-       i32.and
        local.get $3
        i64.const 6
        i64.shl
