@@ -42,7 +42,7 @@ export function storePatterns(): void {
  */
 // @ts-ignore: 1206
 @inline
-export function getTwoSubsetPattern(i: u32): u32 {
+export function getTwoSubsetPattern(i: i32): u32 {
   return load<u16>(i << 1, twoSubsetsPatternsOffset);
 }
 
@@ -51,7 +51,7 @@ export function getTwoSubsetPattern(i: u32): u32 {
  */
 // @ts-ignore: 1206
 @inline
-export function getTwoSubsetPatternForModeIndex7(i: u32): u32 {
+export function getTwoSubsetPatternForModeIndex7(i: i32): u32 {
   return load<u16>(i << 1, modeIndex7PatternsOffset);
 }
 
@@ -60,7 +60,7 @@ export function getTwoSubsetPatternForModeIndex7(i: u32): u32 {
  */
 // @ts-ignore: 1206
 @inline
-export function getThreeSubsetPattern(i: u32): u32 {
+export function getThreeSubsetPattern(i: i32): u32 {
   return load<u32>(i << 2, modeIndex3PatternsOffset);
 }
 
@@ -73,9 +73,9 @@ export function getThreeSubsetPattern(i: u32): u32 {
 @inline
 export function triplicate16(v: u64): u64 {
   v = (v | (v << 16)) & 0x0000FF0000FF;
-  v = (v | (v << 8)) & 0x00F00F00F00F;
-  v = (v | (v << 4)) & 0x0C30C30C30C3;
-  v = (v | (v << 2)) & 0x249249249249;
+  v = (v | (v <<  8)) & 0x00F00F00F00F;
+  v = (v | (v <<  4)) & 0x0C30C30C30C3;
+  v = (v | (v <<  2)) & 0x249249249249;
   return v * 7;
 }
 
@@ -103,9 +103,9 @@ export function duplicate16(v: u32): u32 {
 @inline
 export function duplicate32(v: u64): u64 {
   v = (v | (v << 16)) & 0x0000FFFF0000FFFF;
-  v = (v | (v << 8)) & 0x00FF00FF00FF00FF;
-  v = (v | (v << 4)) & 0x0F0F0F0F0F0F0F0F;
-  v = (v | (v << 2)) & 0x3333333333333333;
-  v = (v | (v << 1)) & 0x5555555555555555;
+  v = (v | (v <<  8)) & 0x00FF00FF00FF00FF;
+  v = (v | (v <<  4)) & 0x0F0F0F0F0F0F0F0F;
+  v = (v | (v <<  2)) & 0x3333333333333333;
+  v = (v | (v <<  1)) & 0x5555555555555555;
   return v * 3;
 }
