@@ -1306,7 +1306,7 @@ function mode1(rl: u32, rh: u32, gl: u32, gh: u32, bl: u32, bh: u32): u64 {
     ((rlq1 >> 1) <<  0)
   );
 
-  return error >= 0 ? packed0 : packed1;
+  return select(packed0, packed1, error >= 0);
 }
 
 /**
@@ -1389,8 +1389,8 @@ function mode6(
     ((rh >> 1) <<  7)
   );
 
-  const packedLo = errorLo0 <= errorLo1 ? packedLo0 : packedLo1;
-  const packedHi = errorHi0 <= errorHi1 ? packedHi0 : packedHi1;
+  const packedLo = select(packedLo0, packedLo1, errorLo0 <= errorLo1);
+  const packedHi = select(packedHi0, packedHi1, errorHi0 <= errorHi1);
 
   return packedLo | packedHi;
 }
@@ -1416,8 +1416,8 @@ function mode6LA(ll: u32, lh: u32, al: u32, ah: u32): u64 {
   const packedLo1 = (<u64>1 << 56) | (<u64>(al >> 1) << 42) | (<u64>(ll >> 1) * 0x10004001);
   const packedHi1 = (<u64>1 << 57) | (<u64>(ah >> 1) << 49) | (<u64>(lh >> 1) * 0x800200080);
 
-  const packedLo = errorLo0 <= errorLo1 ? packedLo0 : packedLo1;
-  const packedHi = errorHi0 <= errorHi1 ? packedHi0 : packedHi1;
+  const packedLo = select(packedLo0, packedLo1, errorLo0 <= errorLo1);
+  const packedHi = select(packedHi0, packedHi1, errorHi0 <= errorHi1);
 
   return packedLo | packedHi;
 }
@@ -1515,8 +1515,8 @@ function mode7(
     ((rhq1 >> 1) <<  5)
   );
 
-  const packedLo = errorLo >= 0 ? packedLo0 : packedLo1;
-  const packedHi = errorHi >= 0 ? packedHi0 : packedHi1;
+  const packedLo = select(packedLo0, packedLo1, errorLo >= 0);
+  const packedHi = select(packedHi0, packedHi1, errorHi >= 0);
 
   return packedLo | packedHi;
 }
@@ -1549,8 +1549,8 @@ function mode7LA(ll: u32, lh: u32, al: u32, ah: u32): u32 {
   const packedLo1 = (1 << 20) | ((alq1 >> 1) << 10) | ((llq1 >> 1) << 0);
   const packedHi1 = (1 << 21) | ((ahq1 >> 1) << 15) | ((lhq1 >> 1) << 5);
 
-  const packedLo = errorLo >= 0 ? packedLo0 : packedLo1;
-  const packedHi = errorHi >= 0 ? packedHi0 : packedHi1;
+  const packedLo = select(packedLo0, packedLo1, errorLo >= 0);
+  const packedHi = select(packedHi0, packedHi1, errorHi >= 0);
 
   return packedLo | packedHi;
 }

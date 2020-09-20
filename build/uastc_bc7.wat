@@ -684,8 +684,6 @@
   i64.or
  )
  (func $assembly/uastc-bc7/mode1 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32) (result i64)
-  (local $6 i64)
-  (local $7 i64)
   local.get $0
   i32.const 2
   i32.shl
@@ -761,7 +759,6 @@
   i64.or
   i64.or
   i64.or
-  local.set $6
   local.get $0
   i32.load8_u offset=1
   i32.const 1
@@ -809,7 +806,6 @@
   i64.or
   i64.or
   i64.or
-  local.set $7
   local.get $5
   i32.load8_s offset=2
   local.get $3
@@ -828,49 +824,10 @@
   i32.add
   i32.add
   i32.const 0
-  i32.lt_s
-  if (result i64)
-   local.get $7
-  else
-   local.get $6
-  end
+  i32.ge_s
+  select
  )
  (func $assembly/uastc-bc7/mode7 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32) (param $6 i32) (param $7 i32) (result i64)
-  (local $8 i64)
-  (local $9 i64)
-  (local $10 i32)
-  local.get $7
-  i32.const 2
-  i32.shl
-  i32.const 4096
-  i32.add
-  local.tee $7
-  i32.load8_s offset=2
-  local.get $5
-  i32.const 2
-  i32.shl
-  i32.const 4096
-  i32.add
-  local.tee $5
-  i32.load8_s offset=2
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.const 4096
-  i32.add
-  local.tee $1
-  i32.load8_s offset=2
-  local.get $3
-  i32.const 2
-  i32.shl
-  i32.const 4096
-  i32.add
-  local.tee $3
-  i32.load8_s offset=2
-  i32.add
-  i32.add
-  i32.add
-  local.set $10
   local.get $0
   i32.const 2
   i32.shl
@@ -920,7 +877,6 @@
   i64.or
   i64.or
   i64.or
-  local.set $8
   local.get $0
   i32.load8_u offset=1
   i32.const 1
@@ -952,7 +908,6 @@
   i64.or
   i64.or
   i64.or
-  local.set $9
   local.get $6
   i32.load8_s offset=2
   local.get $4
@@ -965,13 +920,14 @@
   i32.add
   i32.add
   i32.const 0
-  i32.lt_s
-  if (result i64)
-   local.get $9
-  else
-   local.get $8
-  end
+  i32.ge_s
+  select
   local.get $1
+  i32.const 2
+  i32.shl
+  i32.const 4096
+  i32.add
+  local.tee $0
   i32.load8_u
   i32.const 1
   i32.shr_u
@@ -979,6 +935,11 @@
   i32.shl
   i64.extend_i32_u
   local.get $3
+  i32.const 2
+  i32.shl
+  i32.const 4096
+  i32.add
+  local.tee $1
   i32.load8_u
   i32.const 1
   i32.shr_u
@@ -986,6 +947,11 @@
   i32.shl
   i64.extend_i32_u
   local.get $7
+  i32.const 2
+  i32.shl
+  i32.const 4096
+  i32.add
+  local.tee $2
   i32.load8_u
   i32.const 1
   i32.shr_u
@@ -993,6 +959,11 @@
   i64.const 35
   i64.shl
   local.get $5
+  i32.const 2
+  i32.shl
+  i32.const 4096
+  i32.add
+  local.tee $3
   i32.load8_u
   i32.const 1
   i32.shr_u
@@ -1002,21 +973,21 @@
   i64.or
   i64.or
   i64.or
-  local.get $1
+  local.get $0
   i32.load8_u offset=1
   i32.const 1
   i32.shr_u
   i32.const 5
   i32.shl
   i64.extend_i32_u
-  local.get $3
+  local.get $1
   i32.load8_u offset=1
   i32.const 1
   i32.shr_u
   i32.const 15
   i32.shl
   i64.extend_i32_u
-  local.get $7
+  local.get $2
   i32.load8_u offset=1
   i32.const 1
   i32.shr_u
@@ -1025,7 +996,7 @@
   i64.shl
   i64.const 2199023255552
   i64.or
-  local.get $5
+  local.get $3
   i32.load8_u offset=1
   i32.const 1
   i32.shr_u
@@ -1035,7 +1006,17 @@
   i64.or
   i64.or
   i64.or
-  local.get $10
+  local.get $2
+  i32.load8_s offset=2
+  local.get $3
+  i32.load8_s offset=2
+  local.get $0
+  i32.load8_s offset=2
+  local.get $1
+  i32.load8_s offset=2
+  i32.add
+  i32.add
+  i32.add
   i32.const 0
   i32.ge_s
   select
@@ -1177,27 +1158,6 @@
   i64.or
  )
  (func $assembly/uastc-bc7/mode7LA (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  local.get $3
-  i32.const 2
-  i32.shl
-  i32.const 4096
-  i32.add
-  local.tee $3
-  i32.load8_s offset=2
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.const 4096
-  i32.add
-  local.tee $4
-  i32.load8_s offset=2
-  i32.const 3
-  i32.mul
-  i32.add
-  local.set $6
   local.get $2
   i32.const 2
   i32.shl
@@ -1214,12 +1174,11 @@
   i32.shl
   i32.const 4096
   i32.add
-  local.tee $5
+  local.tee $0
   i32.load8_u
   i32.const 1
   i32.shr_u
   i32.or
-  local.set $0
   local.get $2
   i32.load8_u offset=1
   i32.const 1
@@ -1228,40 +1187,45 @@
   i32.shl
   i32.const 1048576
   i32.or
-  local.get $5
+  local.get $0
   i32.load8_u offset=1
   i32.const 1
   i32.shr_u
   i32.or
-  local.set $1
   local.get $2
   i32.load8_s offset=2
-  local.get $5
+  local.get $0
   i32.load8_s offset=2
   i32.const 3
   i32.mul
   i32.add
   i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $1
-  else
-   local.get $0
-  end
+  i32.ge_s
+  select
   local.get $3
+  i32.const 2
+  i32.shl
+  i32.const 4096
+  i32.add
+  local.tee $0
   i32.load8_u
   i32.const 1
   i32.shr_u
   i32.const 15
   i32.shl
-  local.get $4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.const 4096
+  i32.add
+  local.tee $1
   i32.load8_u
   i32.const 1
   i32.shr_u
   i32.const 5
   i32.shl
   i32.or
-  local.get $3
+  local.get $0
   i32.load8_u offset=1
   i32.const 1
   i32.shr_u
@@ -1269,14 +1233,20 @@
   i32.shl
   i32.const 2097152
   i32.or
-  local.get $4
+  local.get $1
   i32.load8_u offset=1
   i32.const 1
   i32.shr_u
   i32.const 5
   i32.shl
   i32.or
-  local.get $6
+  local.get $0
+  i32.load8_s offset=2
+  local.get $1
+  i32.load8_s offset=2
+  i32.const 3
+  i32.mul
+  i32.add
   i32.const 0
   i32.ge_s
   select
