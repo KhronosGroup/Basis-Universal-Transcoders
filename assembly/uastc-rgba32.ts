@@ -730,10 +730,10 @@ function packRGBA64(r: u32, g: u32, b: u32, a: u32): u64 {
 // @ts-ignore: 1206
 @inline
 function writeSingleSubsetColorBlock(
-  rl0: u64, rh0: u64,
-  gl0: u64, gh0: u64,
-  bl0: u64, bh0: u64,
-  al0: u64, ah0: u64,
+  rl0: i64, rh0: i64,
+  gl0: i64, gh0: i64,
+  bl0: i64, bh0: i64,
+  al0: i64, ah0: i64,
   weights0: u64,
   wBits:  i32,
   offset: i32,
@@ -910,10 +910,10 @@ function writeSingleSubsetLumaBlock(
 // @ts-ignore: 1206
 @inline
 function writeLoopSingleSubsetColorBlock(
-  rl0: u64, rh0: u64,
-  gl0: u64, gh0: u64,
-  bl0: u64, bh0: u64,
-  al0: u64, ah0: u64,
+  rl0: i64, rh0: i64,
+  gl0: i64, gh0: i64,
+  bl0: i64, bh0: i64,
+  al0: i64, ah0: i64,
   weights0: u64,
   wBits:  i32,
   offset: i32,
@@ -959,7 +959,7 @@ function writeLoopSingleSubsetColorBlock(
 // @ts-ignore: 1206
 @inline
 function writeSingleSubsetColorBlockW5(
-  rl0: u64, rh0: u64, gl0: u64, gh0: u64, bl0: u64, bh0: u64,
+  rl0: i64, rh0: i64, gl0: i64, gh0: i64, bl0: i64, bh0: i64,
   weights0: u64,
   weights1: u64,
   offset:   i32,
@@ -1116,10 +1116,10 @@ function writeDualPlaneColorAlphaBlockW1(
 // @ts-ignore: 1206
 @inline
 function writeDualPlaneColorAlphaBlockW2(
-  rl0: u64, rh0: u64,
-  gl0: u64, gh0: u64,
-  bl0: u64, bh0: u64,
-  al0: u64, ah0: u64,
+  rl0: i64, rh0: i64,
+  gl0: i64, gh0: i64,
+  bl0: i64, bh0: i64,
+  al0: i64, ah0: i64,
   weights: u64,
   compSel: i32,
   offset:  i32,
@@ -1219,8 +1219,8 @@ function writeDualPlaneColorAlphaBlockW2(
 // @ts-ignore: 1206
 @inline
 function writeDualPlaneLumaAlphaBlockW2(
-  ll0: u64, lh0: u64,
-  al0: u64, ah0: u64,
+  ll0: i64, lh0: i64,
+  al0: i64, ah0: i64,
   weights: u64,
   offset:  i32,
   stride:  i32
@@ -1285,10 +1285,10 @@ function writeDualPlaneLumaAlphaBlockW2(
 // @ts-ignore: 1206
 @inline
 function writeDualSubsetColorBlock(
-  rl0: u64, rh0: u64, gl0: u64,
-  gh0: u64, bl0: u64, bh0: u64,
-  rl1: u64, rh1: u64, gl1: u64,
-  gh1: u64, bl1: u64, bh1: u64,
+  rl0: i64, rh0: i64, gl0: i64,
+  gh0: i64, bl0: i64, bh0: i64,
+  rl1: i64, rh1: i64, gl1: i64,
+  gh1: i64, bl1: i64, bh1: i64,
   weights: u64,
   wBits:   i32,
   pattern: u32,
@@ -1348,10 +1348,10 @@ function writeDualSubsetColorBlock(
 // @ts-ignore: 1206
 @inline
 function writeDualSubsetColorAlphaBlockW2(
-  rl0: u64, rh0: u64, gl0: u64, gh0: u64,
-  bl0: u64, bh0: u64, al0: u64, ah0: u64,
-  rl1: u64, rh1: u64, gl1: u64, gh1: u64,
-  bl1: u64, bh1: u64, al1: u64, ah1: u64,
+  rl0: i64, rh0: i64, gl0: i64, gh0: i64,
+  bl0: i64, bh0: i64, al0: i64, ah0: i64,
+  rl1: i64, rh1: i64, gl1: i64, gh1: i64,
+  bl1: i64, bh1: i64, al1: i64, ah1: i64,
   weights: u64,
   wBits:   i32,
   pattern: u32,
@@ -1419,8 +1419,8 @@ function writeDualSubsetColorAlphaBlockW2(
 // @ts-ignore: 1206
 @inline
 function writeDualSubsetLumaAlphaBlock(
-  ll0: u64, lh0: u64, al0: u64, ah0: u64,
-  ll1: u64, lh1: u64, al1: u64, ah1: u64,
+  ll0: i64, lh0: i64, al0: i64, ah0: i64,
+  ll1: i64, lh1: i64, al1: i64, ah1: i64,
   weights: u64,
   pattern: u32,
   offset: i32,
@@ -1468,15 +1468,15 @@ function writeDualSubsetLumaAlphaBlock(
 // @ts-ignore: 1206
 @inline
 function writeTripleSubsetColorBlock(
-  rl0: u64, rh0: u64,
-  gl0: u64, gh0: u64,
-  bl0: u64, bh0: u64,
-  rl1: u64, rh1: u64,
-  gl1: u64, gh1: u64,
-  bl1: u64, bh1: u64,
-  rl2: u64, rh2: u64,
-  gl2: u64, gh2: u64,
-  bl2: u64, bh2: u64,
+  rl0: i64, rh0: i64,
+  gl0: i64, gh0: i64,
+  bl0: i64, bh0: i64,
+  rl1: i64, rh1: i64,
+  gl1: i64, gh1: i64,
+  bl1: i64, bh1: i64,
+  rl2: i64, rh2: i64,
+  gl2: i64, gh2: i64,
+  bl2: i64, bh2: i64,
   weights: u64,
   pattern1: u32,
   pattern2: u32,
