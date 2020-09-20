@@ -40,7 +40,7 @@ export function storeCommonData(): void {
  */
 // @ts-ignore: 1206
 @inline
-export function getModeIndex(m: u32): u32 {
+export function getModeIndex(m: i32): u32 {
   return load<u8>(m, modesOffset);
 }
 
@@ -83,7 +83,7 @@ function storeQuints(): void {
  */
 // @ts-ignore: 1206
 @inline
-export function unpackQuints(q: u32): u32 {
+export function unpackQuints(q: i32): u32 {
   return load<u16>(q * 2, quintOffset);
 }
 
@@ -107,7 +107,7 @@ function storeTrits(): void {
  * @param t - 8-bit packed trit value
  * @returns Five trit values 2 bits each packed as 10 bits
  */
-export function unpackTrits(t: u32): u32 {
+export function unpackTrits(t: i32): u32 {
   return load<u16>(t * 2, tritOffset);
 }
 
@@ -134,7 +134,7 @@ function storeUnq11(): void {
  */
 // @ts-ignore
 @inline
-export function unq11(bits: u32, trit: u32): u32 {
+export function unq11(bits: i32, trit: i32): u32 {
   const i = (trit << 2) | bits;
   return load<u8>(i, unq11Offset);
 }
@@ -190,7 +190,7 @@ function storeUnq47(): void {
  */
 // @ts-ignore
 @inline
-export function unq47(bits: u32, trit: u32): u32 {
+export function unq47(bits: i32, trit: i32): u32 {
   const i = (trit << 4) | bits;
   return load<u8>(i, unq47Offset);
 }
@@ -218,7 +218,7 @@ function storeUnq159(): void {
  */
 // @ts-ignore: 1206
 @inline
-export function unq159(bits: u32, quint: u32): u32 {
+export function unq159(bits: i32, quint: i32): u32 {
   const i = (quint << 5) | bits;
   return load<u8>(i, unq159Offset);
 }
@@ -246,7 +246,7 @@ function storeUnq191(): void {
  */
 // @ts-ignore: 1206
 @inline
-export function unq191(bits: u32, trit: u32): u32 {
+export function unq191(bits: i32, trit: i32): u32 {
   const i = (trit << 6) | bits;
   return load<u8>(i, unq191Offset);
 }
