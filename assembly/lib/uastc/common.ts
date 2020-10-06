@@ -115,12 +115,12 @@ export function unpackTrits(t: i32): u32 {
  * Precompute unquantized 0..11 range: 1 trit, 2 bits
  */
 function storeUnq11(): void {
-  for (let bits = 0; bits < 4; bits++) {
-    const a = bits & 1 ? 0x1FF : 0;
-    const b = bits & 2 ? 0x116 : 0;
-    for (let trit = 0; trit < 3; trit++) {
+  for (let bits: u32 = 0; bits < 4; bits++) {
+    const a = (bits & 1) ? 0x1FF : 0;
+    const b = (bits & 2) ? 0x116 : 0;
+    for (let trit: u32 = 0; trit < 3; trit++) {
       const i = (trit << 2) | bits;
-      const u = (a & 0x80) | (((trit * 93 + b) ^ a) >>> 2);
+      const u = (a & 0x80) | (((trit * 93 + b) ^ a) >> 2);
       store<u8>(i, u, unq11Offset);
     }
   }
@@ -143,12 +143,12 @@ export function unq11(bits: i32, trit: i32): u32 {
  * Precompute unquantized 0..39 range: 1 quint, 3 bits
  */
 function storeUnq39(): void {
-  for (let bits = 0; bits < 8; bits++) {
+  for (let bits: u32 = 0; bits < 8; bits++) {
     const a = (bits & 1) ? 0x1FF : 0;
-    const b = ((bits & 0x6) * 65) | (bits >>> 2);
-    for (let quint = 0; quint < 5; quint++) {
+    const b = ((bits & 0x6) * 65) | (bits >> 2);
+    for (let quint: u32 = 0; quint < 5; quint++) {
       const i = (quint << 3) | bits;
-      const u = (a & 0x80) | (((quint * 26 + b) ^ a) >>> 2);
+      const u = (a & 0x80) | (((quint * 26 + b) ^ a) >> 2);
       store<u8>(i, u, unq39Offset);
     }
   }
@@ -162,7 +162,7 @@ function storeUnq39(): void {
  */
 // @ts-ignore: 1206
 @inline
-export function unq39(bits: i32, quint: i32): i32 {
+export function unq39(bits: i32, quint: i32): u32 {
   const i = (quint << 3) | bits;
   return load<u8>(i, unq39Offset);
 }
@@ -171,12 +171,12 @@ export function unq39(bits: i32, quint: i32): i32 {
  * Precompute unquantized 0..47 range: 1 trit, 4 bits
  */
 function storeUnq47(): void {
-  for (let bits = 0; bits < 16; bits++) {
+  for (let bits: u32 = 0; bits < 16; bits++) {
     const a = (bits & 1) ? 0x1FF : 0;
     const b = (bits >> 1) * 65;
-    for (let trit = 0; trit < 3; trit++) {
+    for (let trit: u32 = 0; trit < 3; trit++) {
       const i = (trit << 4) | bits;
-      const u = (a & 0x80) | (((trit * 22 + b) ^ a) >>> 2);
+      const u = (a & 0x80) | (((trit * 22 + b) ^ a) >> 2);
       store<u8>(i, u, unq47Offset);
     }
   }
@@ -199,12 +199,12 @@ export function unq47(bits: i32, trit: i32): u32 {
  * Precompute unquantized 0..159 range: 1 quint, 5 bits
  */
 function storeUnq159(): void {
-  for (let bits = 0; bits < 32; bits++) {
+  for (let bits: u32 = 0; bits < 32; bits++) {
     const a = (bits & 1) ? 0x1FF : 0;
-    const b = ((bits & 0x1E) << 4) | (bits >>> 4);
-    for (let quint = 0; quint < 5; quint++) {
+    const b = ((bits & 0x1E) << 4) | (bits >> 4);
+    for (let quint: u32 = 0; quint < 5; quint++) {
       const i = (quint << 5) | bits;
-      const u = (a & 0x80) | (((quint * 6 + b) ^ a) >>> 2);
+      const u = (a & 0x80) | (((quint * 6 + b) ^ a) >> 2);
       store<u8>(i, u, unq159Offset);
     }
   }
@@ -227,12 +227,12 @@ export function unq159(bits: i32, quint: i32): u32 {
  * Precompute unquantized 0..191 range: 1 trit, 6 bits
  */
 function storeUnq191(): void {
-  for (let bits = 0; bits < 64; bits++) {
+  for (let bits: u32 = 0; bits < 64; bits++) {
     const a = (bits & 1) ? 0x1FF : 0;
-    const b = ((bits & 0x3E) << 3) | (bits >>> 5);
-    for (let trit = 0; trit < 3; trit++) {
+    const b = ((bits & 0x3E) << 3) | (bits >> 5);
+    for (let trit: u32 = 0; trit < 3; trit++) {
       const i = (trit << 6) | bits;
-      const u = (a & 0x80) | (((trit * 5 + b) ^ a) >>> 2);
+      const u = (a & 0x80) | (((trit * 5 + b) ^ a) >> 2);
       store<u8>(i, u, unq191Offset);
     }
   }
@@ -262,7 +262,7 @@ export function getThreeSubsetAnchorL(i: u32): u32 {
   /**
    * Values are [8, 8, 4, 4, 2, 1, 1, 1, 1, 4, 2]
    */
-  return ((0x580016FF >>> (i * 3)) & 7) + 1;
+  return ((<u32>0x580016FF >> (i * 3)) & 7) + 1;
 }
 
 /**
@@ -274,7 +274,7 @@ export function getThreeSubsetAnchorH(i: u32): u32 {
   /**
    * Values are [10, 12, 12, 8, 3, 3, 2, 9, 2, 8, 6]
    */
-  return <u32>(0x68292338CCA >>> (i << 2)) & 0xF;
+  return <u32>(<u64>0x68292338CCA >> (i << 2)) & 0xF;
 }
 
 /**
@@ -286,7 +286,7 @@ export function getTwoSubsetAnchorForModeIndex7(i: u32): u32 {
   /**
    * Values are [4, 2, 2, 7, 8, 1, 3, 1, 2, 1, 8, 2, 1, 7, 12, 2, 9, 2, 4]
    */
-  return <u32>(((i > 15) ? 0x429 : 0x2C71281213187224) >>> ((i & 0xF) << 2)) & 0xF;
+  return <u32>(((i > 15) ? <u64>0x429 : <u64>0x2C71281213187224) >> ((i & 0xF) << 2)) & 0xF;
 }
 
 /**
@@ -295,5 +295,5 @@ export function getTwoSubsetAnchorForModeIndex7(i: u32): u32 {
 // @ts-ignore: 1206
 @inline
 export function getTwoSubsetAnchor(i: u32): u32 {
-  return <u32>(((i > 15) ? 0x0014141421842181 : 0xC483B72B73273132) >>> ((i & 0xF) << 2)) & 0xF;
+  return <u32>(((i > 15) ? <u64>0x0014141421842181 : <u64>0xC483B72B73273132) >> ((i & 0xF) << 2)) & 0xF;
 }

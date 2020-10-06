@@ -88,7 +88,7 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
         const packedEndpoints = mode6(rl0, rh0, gl0, gh0, bl0, bh0, 255, 255);
 
         r0 = (packedEndpoints << 7) | 0x40;
-        r1 = weights | (packedEndpoints >>> 57);
+        r1 = weights | (packedEndpoints >> 57);
       }
       break;
     case 1:
@@ -106,7 +106,7 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
 
         // UASTC mode 1 maps to BC7 mode 3 with the same endpoints used for both subsets
         const packedEndpoints0 = mode3(rl0, rh0, gl0, gh0, bl0, bh0);
-        const ru0: u64 = packedEndpoints0 & 0x3FFF;
+        const ru0: u64 = (packedEndpoints0 >>  0) & 0x3FFF;
         const gu0: u64 = (packedEndpoints0 >> 14) & 0x3FFF;
         const bu0: u64 = (packedEndpoints0 >> 28) & 0x3FFF;
         const pu0: u64 = (packedEndpoints0 >> 42) & 3;
@@ -142,8 +142,8 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
         }
 
         // 4-bit endpoints, unquantize in-place
-        let lo = ((q1 << 39) | (q0 >>> 25)) & 0x0F0F0F0F0F0F0F0F;
-        let hi = ((q1 << 35) | (q0 >>> 29)) & 0x0F0F0F0F0F0F0F0F;
+        let lo = ((q1 << 39) | (q0 >> 25)) & 0x0F0F0F0F0F0F0F0F;
+        let hi = ((q1 << 35) | (q0 >> 29)) & 0x0F0F0F0F0F0F0F0F;
         lo |= lo << 4;
         hi |= hi << 4;
         const rl0 = <u32>(lo >>  0) & 0xFF;
@@ -334,27 +334,33 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
 
         // UASTC mode 3 maps to BC7 mode 2, copy prequantized endpoints
         const packedEndpoints0 = (
-          (<u64>(swap2 ? bc7gh2 : bc7gl2) << 50) |
-          (<u64>(swap1 ? bc7gl1 : bc7gh1) << 45) |
-          (<u64>(swap1 ? bc7gh1 : bc7gl1) << 40) |
-          (<u64>bc7gh0 << 35) |
-          (<u64>bc7gl0 << 30) |
-          ((swap2 ? bc7rl2 : bc7rh2) << 25) |
-          ((swap2 ? bc7rh2 : bc7rl2) << 20) |
-          ((swap1 ? bc7rl1 : bc7rh1) << 15) |
-          ((swap1 ? bc7rh1 : bc7rl1) << 10) |
-          (bc7rh0 << 5) |
-          (bc7rl0 << 0)
+          (<u64>(
+            ((swap2 ? bc7gh2 : bc7gl2) << 20) |
+            ((swap1 ? bc7gl1 : bc7gh1) << 15) |
+            ((swap1 ? bc7gh1 : bc7gl1) << 10) |
+            ((bc7gh0                 ) <<  5) |
+            ((bc7gl0                 ) <<  0)
+          ) << 30) |
+          (<u64>(
+            ((swap2 ? bc7rl2 : bc7rh2) << 25) |
+            ((swap2 ? bc7rh2 : bc7rl2) << 20) |
+            ((swap1 ? bc7rl1 : bc7rh1) << 15) |
+            ((swap1 ? bc7rh1 : bc7rl1) << 10) |
+            ((bc7rh0                 ) <<  5) |
+            ((bc7rl0                 ) <<  0)
+          ))
         );
 
         const packedEndpoints1 = (
           (<u64>(swap2 ? bc7bl2 : bc7bh2) << 30) |
-          ((swap2 ? bc7bh2 : bc7bl2) << 25) |
-          ((swap1 ? bc7bl1 : bc7bh1) << 20) |
-          ((swap1 ? bc7bh1 : bc7bl1) << 15) |
-          (bc7bh0 << 10) |
-          (bc7bl0 <<  5) |
-          (swap2 ? bc7gl2 : bc7gh2)
+          (<u64>(
+            ((swap2 ? bc7bh2 : bc7bl2) << 25) |
+            ((swap1 ? bc7bl1 : bc7bh1) << 20) |
+            ((swap1 ? bc7bh1 : bc7bl1) << 15) |
+            ((bc7bh0                 ) << 10) |
+            ((bc7bl0                 ) <<  5) |
+            ((swap2 ? bc7gl2 : bc7gh2) <<  0)
+          ))
         );
 
         let packedWeights = weights;
@@ -362,7 +368,7 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
           const pattern = getThreeSubsetPatternForModeIndex3(pat);
           const patternMask = (
             select(pattern & 0xFFFF, 0, swap1) |
-            select(pattern >>> 16, 0, swap2)
+            select(pattern >> 16, 0, swap2)
           );
           packedWeights ^= duplicate16(patternMask);
         }
@@ -371,8 +377,12 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
         const bc7lMask = (0xFFFFFFFF << bc7anchor1) ^ 0xFFFFFFFE;
         const bc7mMask = ~(((1 << bc7anchor1) - 1) | (0xFFFFFFFF << (bc7anchor2 - 1)));
         const bc7hMask = 0xFFFFFFFF << (bc7anchor2 - 1);
-        packedWeights = ((packedWeights >> 3) & bc7hMask) | ((packedWeights >> 2) & bc7mMask) |
-          ((packedWeights >> 1) & bc7lMask) | (packedWeights & 1);
+        packedWeights = (
+          ((packedWeights >> 3) & bc7hMask) |
+          ((packedWeights >> 2) & bc7mMask) |
+          ((packedWeights >> 1) & bc7lMask) |
+          ((packedWeights >> 0) & 1)
+        );
 
         r0 = (packedEndpoints0 << 9) | (bc7patternIndex << 3) | 4;
         r1 = (<u64>packedWeights << 35) | packedEndpoints1;
@@ -501,7 +511,7 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
         const packedWeights = scaleWeights3(weights);
 
         r0 = (packedEndpoints << 7) | 0x40;
-        r1 = (packedWeights & 0xFFFFFFFFFFFFFFF0) | ((packedWeights << 1) & 0xE) | (packedEndpoints >>> 57);
+        r1 = (packedWeights & 0xFFFFFFFFFFFFFFF0) | ((packedWeights << 1) & 0xE) | (packedEndpoints >> 57);
       }
       break;
     case 6:
@@ -534,13 +544,13 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
 
         // UASTC mode 6 maps to BC7 mode 5
         const packedEndpoints = mode5(rl0, rh0, gl0, gh0, bl0, bh0, 255, 255, compSel);
-        r0 = (packedEndpoints << 8) | (((compSel + 1) & 3) << 6) | 0x20;
-        r1 = (
+        const packedWeights = (
           ((weights << 0) & 0xFFFFFFFC00000000) |
           ((weights << 1) & 0x3FFFFFFF8) |
-          ((weights << 2) & 4) |
-          (packedEndpoints >>> 56)
+          ((weights << 2) & 4)
         );
+        r0 = (packedEndpoints << 8) | (((compSel + 1) & 3) << 6) | 0x20;
+        r1 = packedWeights | (packedEndpoints >> 56);
       }
       break;
     case 7:
@@ -630,27 +640,33 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
 
         // UASTC mode 7 maps to BC7 mode 2, copy prequantized endpoints
         const packedEndpoints0 = (
-          (<u64>(swap2 ? bc7gh2 : bc7gl2) << 50) |
-          (<u64>(swap1 ? bc7gl1 : bc7gh1) << 45) |
-          (<u64>(swap1 ? bc7gh1 : bc7gl1) << 40) |
-          (<u64>bc7gh0 << 35) |
-          (<u64>bc7gl0 << 30) |
-          ((swap2 ? bc7rl2 : bc7rh2) << 25) |
-          ((swap2 ? bc7rh2 : bc7rl2) << 20) |
-          ((swap1 ? bc7rl1 : bc7rh1) << 15) |
-          ((swap1 ? bc7rh1 : bc7rl1) << 10) |
-          (bc7rh0 << 5) |
-          (bc7rl0 << 0)
+          (<u64>(
+            ((swap2 ? bc7gh2 : bc7gl2) << 20) |
+            ((swap1 ? bc7gl1 : bc7gh1) << 15) |
+            ((swap1 ? bc7gh1 : bc7gl1) << 10) |
+            ((bc7gh0                 ) <<  5) |
+            ((bc7gl0                 ) <<  0)
+          ) << 30) |
+          (<u64>(
+            ((swap2 ? bc7rl2 : bc7rh2) << 25) |
+            ((swap2 ? bc7rh2 : bc7rl2) << 20) |
+            ((swap1 ? bc7rl1 : bc7rh1) << 15) |
+            ((swap1 ? bc7rh1 : bc7rl1) << 10) |
+            ((bc7rh0                 ) <<  5) |
+            ((bc7rl0                 ) <<  0)
+          ))
         );
 
         const packedEndpoints1 = (
           (<u64>(swap2 ? bc7bl2 : bc7bh2) << 30) |
-          ((swap2 ? bc7bh2 : bc7bl2) << 25) |
-          ((swap1 ? bc7bl1 : bc7bh1) << 20) |
-          ((swap1 ? bc7bh1 : bc7bl1) << 15) |
-          (bc7bh0 << 10) |
-          (bc7bl0 <<  5) |
-          (swap2 ? bc7gl2 : bc7gh2)
+          (<u64>(
+            ((swap2 ? bc7bh2 : bc7bl2) << 25) |
+            ((swap1 ? bc7bl1 : bc7bh1) << 20) |
+            ((swap1 ? bc7bh1 : bc7bl1) << 15) |
+            ((bc7bh0                 ) << 10) |
+            ((bc7bl0                 ) <<  5) |
+            ((swap2 ? bc7gl2 : bc7gh2) <<  0)
+          ))
         );
 
         let packedWeights = weights;
@@ -658,7 +674,7 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
           const pattern = getThreeSubsetPatternForModeIndex7(pat);
           const patternMask = (
             select(pattern & 0xFFFF, 0, swap1) |
-            select(pattern >>> 16,   0, swap2)
+            select(pattern >> 16,    0, swap2)
           );
           packedWeights ^= duplicate16(patternMask);
         }
@@ -695,14 +711,12 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
 
         // UASTC mode 8 maps to BC7 mode 5, write precomputed endpoints
         const packedEndpoints = (
-          (<u64>(a * 257) << 42) |
-          (<u64>bq << 28) |
-          (gq << 14) |
-          (rq <<  0)
+          (<u64>(((a * 257) << 14) | bq) << 28) |
+          (<u64>(((gq     ) << 14) | rq))
         );
 
         r0 = (packedEndpoints << 8) | 0x20;
-        r1 = 0x00000000AAAAAAAC | (packedEndpoints >>> 56);
+        r1 = 0x00000000AAAAAAAC | (packedEndpoints >> 56);
       }
       break;
     case 9:
@@ -714,8 +728,8 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
         }
 
         // 4-bit endpoints, unquantize in-place
-        let lo = ((q1 << 31) | (q0 >>> 33)) & 0x0F0F0F0F0F0F0F0F;
-        let hi = ((q1 << 27) | (q0 >>> 37)) & 0x0F0F0F0F0F0F0F0F;
+        let lo = ((q1 << 31) | (q0 >> 33)) & 0x0F0F0F0F0F0F0F0F;
+        let hi = ((q1 << 27) | (q0 >> 37)) & 0x0F0F0F0F0F0F0F0F;
         lo |= lo << 4;
         hi |= hi << 4;
         const rl0 = <u32>(lo >>  0) & 0xFF;
@@ -847,7 +861,7 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
         const packedEndpoints = mode6(rl0, rh0, gl0, gh0, bl0, bh0, al0, ah0);
 
         r0 = (packedEndpoints << 7) | 0x40;
-        r1 = weights | (packedEndpoints >>> 57);
+        r1 = weights | (packedEndpoints >> 57);
       }
       break;
     case 11:
@@ -882,15 +896,15 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
 
         // UASTC mode 11 maps to BC7 mode 5
         const packedEndpoints = mode5(rl0, rh0, gl0, gh0, bl0, bh0, al0, ah0, compSel);
-        const packedWeights = regroupWeights(weights);
-
-        r0 = (packedEndpoints << 8) | (((compSel + 1) & 3) << 6) | 0x20;
-        r1 = (
+        let packedWeights = regroupWeights(weights);
+        packedWeights = (
           ((packedWeights << 0) & 0xFFFFFFFC00000000) |
           ((packedWeights << 1) & 0x3FFFFFFF8) |
-          ((packedWeights << 2) & 4) |
-          (packedEndpoints >>> 56)
+          ((packedWeights << 2) & 4)
         );
+
+        r0 = (packedEndpoints << 8) | (((compSel + 1) & 3) << 6) | 0x20;
+        r1 = packedWeights | (packedEndpoints >> 56);
       }
       break;
     case 12:
@@ -923,14 +937,14 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
 
         // UASTC mode 12 maps to BC7 mode 6
         const packedEndpoints = mode6(rl0, rh0, gl0, gh0, bl0, bh0, al0, ah0);
-        const packedWeights = scaleWeights3(weights);
+        let packedWeights = scaleWeights3(weights);
+        packedWeights = (
+          ((packedWeights << 0) & 0xFFFFFFFFFFFFFFF0) |
+          ((packedWeights << 1) & 0xE)
+        );
 
         r0 = (packedEndpoints << 7) | 0x40;
-        r1 = (
-          ((packedWeights << 0) & 0xFFFFFFFFFFFFFFF0) |
-          ((packedWeights << 1) & 0xE) |
-          (packedEndpoints >>> 57)
-        );
+        r1 = packedWeights | (packedEndpoints >> 57);
       }
       break;
     case 13:
@@ -952,15 +966,15 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
 
         // UASTC mode 13 maps to BC7 mode 5
         const packedEndpoints = mode5(rl0, rh0, gl0, gh0, bl0, bh0, al0, ah0, compSel);
-        const packedWeights = regroupWeights(duplicate32(weights));
-
-        r0 = (packedEndpoints << 8) | (((compSel + 1) & 3) << 6) | 0x20;
-        r1 = (
+        let packedWeights = regroupWeights(duplicate32(weights));
+        packedWeights = (
           ((packedWeights << 0) & 0xFFFFFFFC00000000) |
           ((packedWeights << 1) & 0x3FFFFFFF8) |
-          ((packedWeights << 2) & 4) |
-          (packedEndpoints >>> 56)
+          ((packedWeights << 2) & 4)
         );
+
+        r0 = (packedEndpoints << 8) | (((compSel + 1) & 3) << 6) | 0x20;
+        r1 = packedWeights | (packedEndpoints >> 56);
       }
       break;
     case 14:
@@ -980,14 +994,14 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
 
         // UASTC mode 14 maps to BC7 mode 6
         const packedEndpoints = mode6(rl0, rh0, gl0, gh0, bl0, bh0, al0, ah0);
-        const packedWeights = scaleWeights2(weights);
+        let packedWeights = scaleWeights2(weights);
+        packedWeights = (
+          ((packedWeights << 0) & 0xFFFFFFFFFFFFFFF0) |
+          ((packedWeights << 1) & 0xE)
+        );
 
         r0 = (packedEndpoints << 7) | 0x40;
-        r1 = (
-          ((packedWeights << 0) & 0xFFFFFFFFFFFFFFF0) |
-          ((packedWeights << 1) & 0xE) |
-          (packedEndpoints >>> 57)
-        );
+        r1 = packedWeights | (packedEndpoints >> 57);
       }
       break;
     case 15:
@@ -1005,7 +1019,7 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
         const packedEndpoints = mode6LA(ll0, lh0, al0, ah0);
 
         r0 = (packedEndpoints << 7) | 0x40;
-        r1 = (weights << 1) | (packedEndpoints >>> 57);
+        r1 = (weights << 1) | (packedEndpoints >> 57);
       }
       break;
     case 16:
@@ -1032,7 +1046,11 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
         const hiMask = 0xFFFFFFFF << ((anchor << 1) + 2);
 
         // 2-bit weights, start at 98
-        const weights = <u32>(((q1 >> 32) & hiMask) | ((q1 >> 33) & loMask) | ((q1 >> 34) & 1));
+        const weights = <u32>(
+          ((q1 >> 32) & hiMask) |
+          ((q1 >> 33) & loMask) |
+          ((q1 >> 34) & 1)
+        );
 
         const subsetSwap = getBC7TwoSubsetSwap(pat);
         const bc7patternIndex = getTwoSubsetPatternIndex(pat);
@@ -1097,15 +1115,15 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
 
         // UASTC mode 16 maps to BC7 mode 5
         const packedEndpoints = mode5LA(ll0, lh0, al0, ah0);
-        const packedWeights = regroupWeights(weights);
-
-        r0 = (packedEndpoints << 8) | 0x20;
-        r1 = (
+        let packedWeights = regroupWeights(weights);
+        packedWeights = (
           ((packedWeights << 0) & 0xFFFFFFFC00000000) |
           ((packedWeights << 1) & 0x3FFFFFFF8) |
-          ((packedWeights << 2) & 4) |
-          (packedEndpoints >>> 56)
+          ((packedWeights << 2) & 4)
         );
+
+        r0 = (packedEndpoints << 8) | 0x20;
+        r1 = packedWeights | (packedEndpoints >> 56);
       }
       break;
     case 18:
@@ -1133,7 +1151,7 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
         const packedWeights = (scaleWeights5(weights1) << 32) | scaleWeights5(weights0);
 
         r0 = (packedEndpoints << 7) | 0x40;
-        r1 = (packedWeights & 0xFFFFFFFFFFFFFFF0) | ((packedWeights << 1) & 0xE) | (packedEndpoints >>> 57);
+        r1 = (packedWeights & 0xFFFFFFFFFFFFFFF0) | ((packedWeights << 1) & 0xE) | (packedEndpoints >> 57);
       }
       break;
     default:
@@ -1200,7 +1218,7 @@ function quant7(v: u32): u32 {
 function mode5LA(ll: u32, lh: u32, al: u32, ah: u32): u64 {
   const llq = <u64>quant7(ll) * 0x10004001;
   const lhq = <u64>quant7(lh) * 0x800200080;
-  return (<u64>ah << 50) | (<u64>al << 42) | lhq | llq;
+  return (<u64>((ah << 8) | al) << 42) | lhq | llq;
 }
 
 /**
@@ -1232,7 +1250,7 @@ function mode5(
 
 // @ts-ignore: 1206
 @inline
-function square(v: u32): u32 {
+function square(v: i32): i32 {
   return v * v;
 }
 
@@ -1246,9 +1264,9 @@ function storeMode1(): void {
     const vq1 = min((((max(v, 1) - 1) >> 2) << 1) + 1, 127);
     const vs0 = (vq0 << 1) | (vq0 >> 6);
     const vs1 = (vq1 << 1) | (vq1 >> 6);
-    const error: i32 = square(v - vs1) - square(v - vs0);
-    store<u8>(v << 2, vq0, mode1EndpointsOffset + 0);
-    store<u8>(v << 2, vq1, mode1EndpointsOffset + 1);
+    const error = square(v - vs1) - square(v - vs0);
+    store<u8>(v << 2,   vq0, mode1EndpointsOffset + 0);
+    store<u8>(v << 2,   vq1, mode1EndpointsOffset + 1);
     store<i8>(v << 2, error, mode1EndpointsOffset + 2);
   }
 }
@@ -1289,21 +1307,24 @@ function mode1(rl: u32, rh: u32, gl: u32, gh: u32, bl: u32, bh: u32): u64 {
 
   const packed0 = (
     (<u64>(bhq0 >> 1) << 30) |
-    ((blq0 >> 1) << 24) |
-    ((ghq0 >> 1) << 18) |
-    ((glq0 >> 1) << 12) |
-    ((rhq0 >> 1) <<  6) |
-    ((rlq0 >> 1) <<  0)
+    (<u64>(
+      ((blq0 >> 1) << 24) |
+      ((ghq0 >> 1) << 18) |
+      ((glq0 >> 1) << 12) |
+      ((rhq0 >> 1) <<  6) |
+      ((rlq0 >> 1) <<  0)
+    ))
   );
 
   const packed1 = (
-    (<u64>1           << 36) |
-    (<u64>(bhq1 >> 1) << 30) |
-    ((blq1 >> 1) << 24) |
-    ((ghq1 >> 1) << 18) |
-    ((glq1 >> 1) << 12) |
-    ((rhq1 >> 1) <<  6) |
-    ((rlq1 >> 1) <<  0)
+    (<u64>(64 | (bhq1 >> 1)) << 30) |
+    (<u64>(
+      ((blq1 >> 1) << 24) |
+      ((ghq1 >> 1) << 18) |
+      ((glq1 >> 1) << 12) |
+      ((rhq1 >> 1) <<  6) |
+      ((rlq1 >> 1) <<  0)
+    ))
   );
 
   return select(packed0, packed1, error >= 0);
@@ -1327,11 +1348,11 @@ function mode3(rl: u32, rh: u32, gl: u32, gh: u32, bl: u32, bh: u32): u64 {
   const errorLo1 = (~rl & 1) + (~gl & 1) + (~bl & 1);
   const errorHi1 = (~rh & 1) + (~gh & 1) + (~bh & 1);
 
-  const packedLo0 = (<u64>(blq0 >> 1) << 28) | ((glq0 >> 1) << 14) | (rlq0 >> 1);
-  const packedHi0 = (<u64>(bhq0 >> 1) << 35) | ((ghq0 >> 1) << 21) | ((rhq0 >> 1) << 7);
+  const packedLo0 = (<u64>(blq0 >> 1) << 28) | <u64>(((glq0 >> 1) << 14) | ((rlq0 >> 1) << 0));
+  const packedHi0 = (<u64>(bhq0 >> 1) << 35) | <u64>(((ghq0 >> 1) << 21) | ((rhq0 >> 1) << 7));
 
-  const packedLo1 = (<u64>1 << 42) | (<u64>(bl >> 1) << 28) | ((gl >> 1) << 14) | (rl >> 1);
-  const packedHi1 = (<u64>1 << 43) | (<u64>(bh >> 1) << 35) | ((gh >> 1) << 21) | ((rh >> 1) << 7);
+  const packedLo1 = (<u64>(0x4000 | (bl >> 1)) << 28) | (<u64>(((gl >> 1) << 14) | (rl >> 1)) << 0);
+  const packedHi1 = (<u64>( 0x100 | (bh >> 1)) << 35) | (<u64>(((gh >> 1) << 14) | (rh >> 1)) << 7);
 
   const packedLo = select(packedLo0, packedLo1, errorLo0 <= errorLo1);
   const packedHi = select(packedHi0, packedHi1, errorHi0 <= errorHi1);
@@ -1346,47 +1367,37 @@ function mode6(
   rl: u32, rh: u32, gl: u32, gh: u32,
   bl: u32, bh: u32, al: u32, ah: u32
 ): u64 {
-  const rlq0 = rl == 255 ? 254 : rl + 1;
-  const rhq0 = rh == 255 ? 254 : rh + 1;
-  const glq0 = gl == 255 ? 254 : gl + 1;
-  const ghq0 = gh == 255 ? 254 : gh + 1;
-  const blq0 = bl == 255 ? 254 : bl + 1;
-  const bhq0 = bh == 255 ? 254 : bh + 1;
-  const alq0 = al == 255 ? 254 : al + 1;
-  const ahq0 = ah == 255 ? 254 : ah + 1;
+  const rlq0 = rl == 255 ? 254 : (rl + 1);
+  const rhq0 = rh == 255 ? 254 : (rh + 1);
+  const glq0 = gl == 255 ? 254 : (gl + 1);
+  const ghq0 = gh == 255 ? 254 : (gh + 1);
+  const blq0 = bl == 255 ? 254 : (bl + 1);
+  const bhq0 = bh == 255 ? 254 : (bh + 1);
+  const alq0 = al == 255 ? 254 : (al + 1);
+  const ahq0 = ah == 255 ? 254 : (ah + 1);
 
-  const errorLo0: i32 = (rl & 1) + (gl & 1) + (bl & 1) + (al & 1);
-  const errorHi0: i32 = (rh & 1) + (gh & 1) + (bh & 1) + (ah & 1);
+  const errorLo0 = (rl & 1) + (gl & 1) + (bl & 1) + (al & 1);
+  const errorHi0 = (rh & 1) + (gh & 1) + (bh & 1) + (ah & 1);
 
-  const errorLo1: i32 = (~rl & 1) + (~gl & 1) + (~bl & 1) + (~al & 1);
-  const errorHi1: i32 = (~rh & 1) + (~gh & 1) + (~bh & 1) + (~ah & 1);
+  const errorLo1 = (~rl & 1) + (~gl & 1) + (~bl & 1) + (~al & 1);
+  const errorHi1 = (~rh & 1) + (~gh & 1) + (~bh & 1) + (~ah & 1);
 
   const packedLo0 = (
-    (<u64>(alq0 >> 1) << 42) |
-    (<u64>(blq0 >> 1) << 28) |
-    ((glq0 >> 1) << 14) |
-    ((rlq0 >> 1) <<  0)
+    (<u64>(((alq0 >> 1) << 14) | (blq0 >> 1)) << 28) |
+    (<u64>(((glq0 >> 1) << 14) | (rlq0 >> 1)) <<  0)
   );
   const packedHi0 = (
-    (<u64>(ahq0 >> 1) << 49) |
-    (<u64>(bhq0 >> 1) << 35) |
-    ((ghq0 >> 1) << 21) |
-    ((rhq0 >> 1) << 7)
+    (<u64>(((ahq0 >> 1) << 14) | (bhq0 >> 1)) << 35) |
+    (<u64>(((ghq0 >> 1) << 14) | (rhq0 >> 1)) <<  7)
   );
 
   const packedLo1 = (
-    (<u64>1         << 56) |
-    (<u64>(al >> 1) << 42) |
-    (<u64>(bl >> 1) << 28) |
-    ((gl >> 1) << 14) |
-    ((rl >> 1) <<  0)
+    (<u64>(0x10000000 | ((al >> 1) << 14) | (bl >> 1)) << 28) |
+    (<u64>(             ((gl >> 1) << 14) | (rl >> 1)) <<  0)
   );
   const packedHi1 = (
-    (<u64>1         << 57) |
-    (<u64>(ah >> 1) << 49) |
-    (<u64>(bh >> 1) << 35) |
-    ((gh >> 1) << 21) |
-    ((rh >> 1) <<  7)
+    (<u64>(0x400000 | ((ah >> 1) << 14) | (bh >> 1)) << 35) |
+    (<u64>(           ((gh >> 1) << 14) | (rh >> 1)) <<  7)
   );
 
   const packedLo = select(packedLo0, packedLo1, errorLo0 <= errorLo1);
@@ -1399,16 +1410,16 @@ function mode6(
  * Quantize 8-bit LA endpoint pair to 7 bits with 2 p-bits and pack for BC7 mode 6.
  */
 function mode6LA(ll: u32, lh: u32, al: u32, ah: u32): u64 {
-  const llq0 = ll == 255 ? 254 : ll + 1;
-  const lhq0 = lh == 255 ? 254 : lh + 1;
-  const alq0 = al == 255 ? 254 : al + 1;
-  const ahq0 = ah == 255 ? 254 : ah + 1;
+  const llq0 = ll == 255 ? 254 : (ll + 1);
+  const lhq0 = lh == 255 ? 254 : (lh + 1);
+  const alq0 = al == 255 ? 254 : (al + 1);
+  const ahq0 = ah == 255 ? 254 : (ah + 1);
 
-  const errorLo0: i32 = 3 * (ll & 1) + (al & 1);
-  const errorHi0: i32 = 3 * (lh & 1) + (ah & 1);
+  const errorLo0 = 3 * (ll & 1) + (al & 1);
+  const errorHi0 = 3 * (lh & 1) + (ah & 1);
 
-  const errorLo1: i32= 3 * (~ll & 1) + (~al & 1);
-  const errorHi1: i32 = 3 * (~lh & 1) + (~ah & 1);
+  const errorLo1 = 3 * (~ll & 1) + (~al & 1);
+  const errorHi1 = 3 * (~lh & 1) + (~ah & 1);
 
   const packedLo0 = (<u64>(alq0 >> 1) << 42) | (<u64>(llq0 >> 1) * 0x10004001);
   const packedHi0 = (<u64>(ahq0 >> 1) << 49) | (<u64>(lhq0 >> 1) * 0x800200080);
@@ -1432,7 +1443,7 @@ function storeMode7(): void {
     const vq1 = min(((((v * 0xFD) >> 10)) & 0x7E) + 1, 63);
     const vs0 = (vq0 << 2) | (vq0 >> 4);
     const vs1 = (vq1 << 2) | (vq1 >> 4);
-    const error: i32 = square(v - vs1) - square(v - vs0);
+    const error = square(v - vs1) - square(v - vs0);
     store<u8>(v << 2,   vq0, mode7EndpointsOffset + 0);
     store<u8>(v << 2,   vq1, mode7EndpointsOffset + 1);
     store<i8>(v << 2, error, mode7EndpointsOffset + 2);
@@ -1444,9 +1455,9 @@ function storeMode7(): void {
  * The result needs to be further repacked for BC7 mode 7.
  */
 function mode7(
-  rl: i32, rh: i32, gl: i32, gh: i32,
-  bl: i32, bh: i32, al: i32, ah: i32
-): i64 {
+  rl: u32, rh: u32, gl: u32, gh: u32,
+  bl: u32, bh: u32, al: u32, ah: u32
+): u64 {
   rl = (rl << 2) + mode7EndpointsOffset;
   rh = (rh << 2) + mode7EndpointsOffset;
   gl = (gl << 2) + mode7EndpointsOffset;
@@ -1600,21 +1611,21 @@ function storePatterns(): void {
 /**
  * Get 3-subset BC7 mode 2 patterns for a given UASTC pattern index (Mode Index 3).
  */
-function getThreeSubsetPatternForModeIndex3(i: i32): u32 {
+function getThreeSubsetPatternForModeIndex3(i: u32): u32 {
   return load<u32>(i << 2, modeIndex3PatternsOffset);
 }
 
 /**
  * Get 3-subset BC7 mode 2 patterns for a given UASTC pattern index (Mode Index 7).
  */
-function getThreeSubsetPatternForModeIndex7(i: i32): u32 {
+function getThreeSubsetPatternForModeIndex7(i: u32): u32 {
   return load<u32>(i << 2, modeIndex7PatternsOffset);
 }
 
 /**
  * Get pattern value for a given UASTC pattern index (Mode Indices 2, 4, 9, 16).
  */
-function getTwoSubsetPattern(i: i32): u32 {
+function getTwoSubsetPattern(i: u32): u32 {
   return load<u16>(i << 1, twoSubsetsPatternsOffset);
 }
 
@@ -1623,7 +1634,7 @@ function getTwoSubsetPattern(i: i32): u32 {
  */
 // @ts-ignore: 1206
 @inline
-function getThreeSubsetPatternIndexForModeIndex3(pat: i32): i32 {
+function getThreeSubsetPatternIndexForModeIndex3(pat: u32): u32 {
   const c00_07: u64 = 0x140D0C0B0A090804;
   const c08_10: u64 = 0x392423;
   const c = pat > 7 ? c08_10 : c00_07;
@@ -1743,8 +1754,8 @@ function scaleWeights5(weights: u64): u64 {
   let x17 = weights ^ (0x842108421 * 17);
 
   // Where a 5-bit region has some bits set, ensure that the MSB is also set.
-  x14 = x14 | ((x14 & 0x7BDEF7BDEF) + 0x7BDEF7BDEF);
-  x17 = x17 | ((x17 & 0x7BDEF7BDEF) + 0x7BDEF7BDEF);
+  x14 |= (x14 & 0x7BDEF7BDEF) + 0x7BDEF7BDEF;
+  x17 |= (x17 & 0x7BDEF7BDEF) + 0x7BDEF7BDEF;
 
   // XOR 2 all 5-bit regions that contain 14 or 17.
   weights ^= (~(x14 & x17) >> 3) & 0x1084210842;
@@ -1767,12 +1778,12 @@ function scaleWeights5(weights: u64): u64 {
 @inline
 function regroupWeights(w: u64): u64 {
   let x: u64 = 0;
-  x = ((w >> 2) ^ (w >> 4)) & 0x0303030303030303;
-  w ^= (x << 2) | (x << 4);
-  x = ((w >> 4) ^ (w >> 8)) & 0x000F000F000F000F;
-  w ^= (x << 4) | (x << 8);
-  x = ((w >> 8) ^ (w >> 16)) & 0x000000FF000000FF;
-  w ^= (x << 8) | (x << 16);
+  x = ((w >>  2) ^ (w >>  4)) & 0x0303030303030303;
+  w ^= (x <<  2) | (x <<  4);
+  x = ((w >>  4) ^ (w >>  8)) & 0x000F000F000F000F;
+  w ^= (x <<  4) | (x <<  8);
+  x = ((w >>  8) ^ (w >> 16)) & 0x000000FF000000FF;
+  w ^= (x <<  8) | (x << 16);
   x = ((w >> 16) ^ (w >> 32)) & 0x000000000000FFFF;
   w ^= (x << 16) | (x << 32);
   return w;

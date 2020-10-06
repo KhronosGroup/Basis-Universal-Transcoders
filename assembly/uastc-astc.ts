@@ -95,9 +95,10 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
         const bl0t = et0 >> 8;
         const bh0t = et1 & 3;
 
-        const swap =
+        const swap = (
           (unq191(rl0, rl0t) + unq191(gl0, gl0t) + unq191(bl0, bl0t)) >
-          (unq191(rh0, rh0t) + unq191(gh0, gh0t) + unq191(bh0, bh0t));
+          (unq191(rh0, rh0t) + unq191(gh0, gh0t) + unq191(bh0, bh0t))
+        );
 
         const t0 = packTrits(
           swap ? rh0t : rl0t, swap ? rl0t : rh0t,
@@ -137,14 +138,16 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
 
         // Check blue contraction and pack endpoints & weights
         const swap = (rl0 + gl0 + bl0) > (rh0 + gh0 + bh0);
-        const packedEndpoints =
-          (packRGBAz8(rh0, gh0, bh0, 0) << (swap ? 0 : 8)) | (packRGBAz8(rl0, gl0, bl0, 0) << (swap ? 8 : 0));
+        const packedEndpoints = (
+          (packRGBAz8(rh0, gh0, bh0, 0) << (swap ? 0 : 8)) |
+          (packRGBAz8(rl0, gl0, bl0, 0) << (swap ? 8 : 0))
+        );
 
         const packedWeights = reverse32(swap ? ~weights : weights);
 
         // ASTC Mode 66, CEM 8, 17-bit header
         r0 = (packedEndpoints << 17) | 0x10042;
-        r1 = (<u64>packedWeights << 32) | (packedEndpoints >>> 47);
+        r1 = (<u64>packedWeights << 32) | (packedEndpoints >> 47);
       }
       break;
     case 2:
@@ -181,11 +184,15 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
         // Check blue contraction and pack endpoints & weights
         const swap0 = (rl0 + gl0 + bl0) > (rh0 + gh0 + bh0);
         const swap1 = (rl1 + gl1 + bl1) > (rh1 + gh1 + bh1);
-        const packedEndpoints0 =
-          (packRGBAz4(rh0, gh0, bh0, 0) << (swap0 ? 0 : 4)) | (packRGBAz4(rl0, gl0, bl0, 0) << (swap0 ? 4 : 0));
-        const packedEndpoints1 =
-          (packRGBAz4(rh1, gh1, bh1, 0) << (swap1 ? 0 : 4)) | (packRGBAz4(rl1, gl1, bl1, 0) << (swap1 ? 4 : 0));
-        const packedEndpoints = (<u64>packedEndpoints1 << 24) | <u64>packedEndpoints0;
+        const packedEndpoints0 = <u64>(
+          (packRGBAz4(rh0, gh0, bh0, 0) << (swap0 ? 0 : 4)) |
+          (packRGBAz4(rl0, gl0, bl0, 0) << (swap0 ? 4 : 0))
+        );
+        const packedEndpoints1 = <u64>(
+          (packRGBAz4(rh1, gh1, bh1, 0) << (swap1 ? 0 : 4)) |
+          (packRGBAz4(rl1, gl1, bl1, 0) << (swap1 ? 4 : 0))
+        );
+        const packedEndpoints = (packedEndpoints1 << 24) | packedEndpoints0;
 
         let packedWeights = weights;
         if (swap0 && swap1) {
@@ -199,7 +206,7 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
 
         // ASTC Mode 83, 2 subsets, CEM 8, 29-bit header
         r0 = (packedEndpoints << 29) | (getTwoSubsetsPatternIndex(pat) << 13) | 0x10000853;
-        r1 = packedWeights | (packedEndpoints >>> 35);
+        r1 = packedWeights | (packedEndpoints >> 35);
       }
       break;
     case 3:
@@ -269,16 +276,18 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
         const bl2t = (et3 >> 2) & 3;
         const bh2t = (et3 >> 4) & 3;
 
-        const swap0 =
+        const swap0 = (
           (unq11(rl0, rl0t) + unq11(gl0, gl0t) + unq11(bl0, bl0t)) >
-          (unq11(rh0, rh0t) + unq11(gh0, gh0t) + unq11(bh0, bh0t));
-        const swap1 =
+          (unq11(rh0, rh0t) + unq11(gh0, gh0t) + unq11(bh0, bh0t))
+        );
+        const swap1 = (
           (unq11(rl1, rl1t) + unq11(gl1, gl1t) + unq11(bl1, bl1t)) >
-          (unq11(rh1, rh1t) + unq11(gh1, gh1t) + unq11(bh1, bh1t));
-        const swap2 =
+          (unq11(rh1, rh1t) + unq11(gh1, gh1t) + unq11(bh1, bh1t))
+        );
+        const swap2 = (
           (unq11(rl2, rl2t) + unq11(gl2, gl2t) + unq11(bl2, bl2t)) >
-          (unq11(rh2, rh2t) + unq11(gh2, gh2t) + unq11(bh2, bh2t));
-
+          (unq11(rh2, rh2t) + unq11(gh2, gh2t) + unq11(bh2, bh2t))
+        );
         const t0 = packTrits(
           swap0 ? rh0t : rl0t, swap0 ? rl0t : rh0t,
           swap0 ? gh0t : gl0t, swap0 ? gl0t : gh0t,
@@ -299,10 +308,10 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
         // Pack endpoints & weights
         // Packed endpoints do not fit into 64 bits, split as 54 + 11
         const packedBits0 =
-          interleaveBits2T(
+          (<u64>interleaveBits2T(
             swap0 ? rh0 : rl0, swap0 ? rl0 : rh0,
             swap0 ? gh0 : gl0, swap0 ? gl0 : gh0,
-            swap0 ? bh0 : bl0) |
+            swap0 ? bh0 : bl0)) |
           (<u64>interleaveBits2T(
             swap0 ? bl0 : bh0,
             swap1 ? rh1 : rl1, swap1 ? rl1 : rh1,
@@ -319,7 +328,7 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
         const packedTrits0 =
           (<u64>interleaveTrits2(t2) << 36) |
           (<u64>interleaveTrits2(t1) << 18) |
-           <u64>interleaveTrits2(t0);
+          (<u64>interleaveTrits2(t0) <<  0);
         const packedTrits1 = interleaveTrits2(t3);
         const packedEndpoints0 = packedBits0 | packedTrits0;
         const packedEndpoints1 = packedBits1 | packedTrits1;
@@ -330,7 +339,7 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
         } else if (swap0 || swap1 || swap2) {
           const pattern = getThreeSubsetPattern(pat);
           const patternMask1 = duplicate16(pattern & 0xFFFF);
-          const patternMask2 = duplicate16(pattern >>> 16);
+          const patternMask2 = duplicate16(pattern >> 16);
           const patternMask0 = 0xFFFFFFFF ^ (patternMask1 | patternMask2);
           packedWeights ^=
             (swap0 ? patternMask0 : 0) |
@@ -342,7 +351,7 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
 
         // ASTC Mode 66, 3 subsets, CEM 8, 29-bit header
         r0 = (packedEndpoints0 << 29) | (getThreeSubsetsPatternIndex(pat) << 13) | 0x10001042;
-        r1 = (<u64>packedWeights << 32) | (packedEndpoints1 << 19) | (packedEndpoints0 >>> 35);
+        r1 = (<u64>packedWeights << 32) | (packedEndpoints1 << 19) | (packedEndpoints0 >> 35);
       }
       break;
     case 7:
@@ -395,13 +404,14 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
         const bl1q = (eq3 >> 4) & 7;
         const bh1q = eq3 >> 8;
 
-        const swap0 =
+        const swap0 = (
           (unq39(rl0, rl0q) + unq39(gl0, gl0q) + unq39(bl0, bl0q)) >
-          (unq39(rh0, rh0q) + unq39(gh0, gh0q) + unq39(bh0, bh0q));
-
-        const swap1 =
+          (unq39(rh0, rh0q) + unq39(gh0, gh0q) + unq39(bh0, bh0q))
+        );
+        const swap1 = (
           (unq39(rl1, rl1q) + unq39(gl1, gl1q) + unq39(bl1, bl1q)) >
-          (unq39(rh1, rh1q) + unq39(gh1, gh1q) + unq39(bh1, bh1q));
+          (unq39(rh1, rh1q) + unq39(gh1, gh1q) + unq39(bh1, bh1q))
+        );
 
         const qu0 = packQuints(
           swap0 ? rh0q : rl0q, swap0 ? rl0q : rh0q, swap0 ? gh0q : gl0q);
@@ -411,14 +421,15 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
           swap1 ? rh1q : rl1q, swap1 ? rl1q : rh1q, swap1 ? gh1q : gl1q);
         const qu3 = packQuints(
           swap1 ? gl1q : gh1q, swap1 ? bh1q : bl1q, swap1 ? bl1q : bh1q);
-        const packedQuints =
-          (<u64>interleaveQuints3(qu3) << 48) | (<u64>interleaveQuints3(qu2) << 32) |
-          (<u32>interleaveQuints3(qu1) << 16) | interleaveQuints3(qu0);
+        const packedQuints = (
+          (<u64>((interleaveQuints3(qu3) << 16) | interleaveQuints3(qu2)) << 32) |
+          (<u64>((interleaveQuints3(qu1) << 16) | interleaveQuints3(qu0)) <<  0)
+        );
         const packedBits =
-          interleaveBits3Qx2(
+          (<u64>interleaveBits3Qx2(
             swap0 ? rh0 : rl0, swap0 ? rl0 : rh0,
             swap0 ? gh0 : gl0, swap0 ? gl0 : gh0,
-            swap0 ? bh0 : bl0, swap0 ? bl0 : bh0) |
+            swap0 ? bh0 : bl0, swap0 ? bl0 : bh0)) |
           (<u64>interleaveBits3Qx2(
             swap1 ? rh1 : rl1, swap1 ? rl1 : rh1,
             swap1 ? gh1 : gl1, swap1 ? gl1 : gh1,
@@ -437,7 +448,7 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
 
         // ASTC Mode 66, 2 subsets, CEM 8, 29-bit header
         r0 = ((mode4 ? getTwoSubsetsPatternIndex(pat) : getTwoSubsetsPatternIndexForModeIndex7(pat)) << 13) | (packedEndpoints << 29) | 0x10000842;
-        r1 = (<u64>packedWeights << 32) | (packedEndpoints >>> 35);
+        r1 = (<u64>packedWeights << 32) | (packedEndpoints >> 35);
       }
       break;
     case 5:
@@ -455,14 +466,16 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
 
         // Check blue contraction and pack endpoints & weights
         const swap = (rl0 + gl0 + bl0) > (rh0 + gh0 + bh0);
-        const packedEndpoints =
-          (packRGBAz8(rh0, gh0, bh0, 0) << (swap ? 0 : 8)) | (packRGBAz8(rl0, gl0, bl0, 0) << (swap ? 8 : 0));
+        const packedEndpoints = (
+          (packRGBAz8(rh0, gh0, bh0, 0) << (swap ? 0 : 8)) |
+          (packRGBAz8(rl0, gl0, bl0, 0) << (swap ? 8 : 0))
+        );
 
         const packedWeights = reverse64(swap ? (~weights & 0xFFFFFFFFFFFF) : weights);
 
         // ASTC Mode 83, CEM 8, 17-bit header
         r0 = (packedEndpoints << 17) | 0x10053;
-        r1 = packedWeights | (packedEndpoints >>> 47);
+        r1 = packedWeights | (packedEndpoints >> 47);
       }
       break;
     case 6:
@@ -491,9 +504,10 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
         const bl0q = (eq1 >> 4) & 7;
         const bh0q = eq1 >> 8;
 
-        const swap =
+        const swap = (
           (unq159(rl0, rl0q) + unq159(gl0, gl0q) + unq159(bl0, bl0q)) >
-          (unq159(rh0, rh0q) + unq159(gh0, gh0q) + unq159(bh0, bh0q));
+          (unq159(rh0, rh0q) + unq159(gh0, gh0q) + unq159(bh0, bh0q))
+        );
 
         const qu0 = packQuints(
           swap ? rh0q : rl0q,
@@ -588,7 +602,7 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
 
         // ASTC Mode 66, 2 subsets, CEM 12, 29-bit header
         r0 = (packedEndpoints << 29) | (getTwoSubsetsPatternIndex(pat) << 13) | 0x18000842;
-        r1 = (<u64>packedWeights << 32) | (packedEndpoints >>> 35);
+        r1 = (<u64>packedWeights << 32) | (packedEndpoints >> 35);
       }
       break;
     case 10:
@@ -619,9 +633,10 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
         const al0t = (et1 >> 2) & 3;
         const ah0t = (et1 >> 4) & 3;
 
-        const swap =
+        const swap = (
           (unq47(rl0, rl0t) + unq47(gl0, gl0t) + unq47(bl0, bl0t)) >
-          (unq47(rh0, rh0t) + unq47(gh0, gh0t) + unq47(bh0, bh0t));
+          (unq47(rh0, rh0t) + unq47(gh0, gh0t) + unq47(bh0, bh0t))
+        );
 
         const t0 = packTrits(
           swap ? rh0t : rl0t, swap ? rl0t : rh0t,
@@ -677,9 +692,10 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
         const al0t = (et1 >> 2) & 3;
         const ah0t = (et1 >> 4) & 3;
 
-        const swap =
+        const swap = (
           (unq47(rl0, rl0t) + unq47(gl0, gl0t) + unq47(bl0, bl0t)) >
-          (unq47(rh0, rh0t) + unq47(gh0, gh0t) + unq47(bh0, bh0t));
+          (unq47(rh0, rh0t) + unq47(gh0, gh0t) + unq47(bh0, bh0t))
+        );
 
         const t0 = packTrits(
           swap ? rh0t : rl0t, swap ? rl0t : rh0t,
@@ -734,9 +750,10 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
         const al0t = (et1 >> 2) & 3;
         const ah0t = (et1 >> 4) & 3;
 
-        const swap =
+        const swap = (
           (unq191(rl0, rl0t) + unq191(gl0, gl0t) + unq191(bl0, bl0t)) >
-          (unq191(rh0, rh0t) + unq191(gh0, gh0t) + unq191(bh0, bh0t));
+          (unq191(rh0, rh0t) + unq191(gh0, gh0t) + unq191(bh0, bh0t))
+        );
 
         const t0 = packTrits(
           swap ? rh0t : rl0t, swap ? rl0t : rh0t,
@@ -759,7 +776,7 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
 
         // ASTC Mode 83, CEM 12, 17-bit header
         r0 = (packedEndpoints << 17) | 0x18053;
-        r1 = packedWeights | (packedEndpoints >>> 47);
+        r1 = packedWeights | (packedEndpoints >> 47);
       }
       break;
     case 13:
@@ -781,14 +798,16 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
 
         // Check blue contraction and pack endpoints & weights
         const swap = (rl0 + gl0 + bl0) > (rh0 + gh0 + bh0);
-        const packedEndpoints =
-          (packRGBAz8(rh0, gh0, bh0, ah0) << (swap ? 0 : 8)) | (packRGBAz8(rl0, gl0, bl0, al0) << (swap ? 8 : 0));
+        const packedEndpoints = (
+          (packRGBAz8(rh0, gh0, bh0, ah0) << (swap ? 0 : 8)) |
+          (packRGBAz8(rl0, gl0, bl0, al0) << (swap ? 8 : 0))
+        );
 
         const packedWeights = reverse32(swap ? ~weights : weights);
 
         // ASTC Mode 1089 (Dp), CEM 12, 17-bit header
         r0 = (packedEndpoints << 17) | 0x18441;
-        r1 = (<u64>packedWeights << 32) | (<u64>compSel << 30) | (packedEndpoints >>> 47);
+        r1 = (<u64>packedWeights << 32) | (<u64>compSel << 30) | (packedEndpoints >> 47);
       }
       break;
     case 14:
@@ -808,14 +827,16 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
 
         // Check blue contraction and pack endpoints & weights
         const swap = (rl0 + gl0 + bl0) > (rh0 + gh0 + bh0);
-        const packedEndpoints =
-          (packRGBAz8(rh0, gh0, bh0, ah0) << (swap ? 0 : 8)) | (packRGBAz8(rl0, gl0, bl0, al0) << (swap ? 8 : 0));
+        const packedEndpoints = (
+          (packRGBAz8(rh0, gh0, bh0, ah0) << (swap ? 0 : 8)) |
+          (packRGBAz8(rl0, gl0, bl0, al0) << (swap ? 8 : 0))
+        );
 
         const packedWeights = reverse32(swap ? ~weights : weights);
 
         // ASTC Mode 66, CEM 12, 17-bit header
         r0 = (packedEndpoints << 17) | 0x18042;
-        r1 = (<u64>packedWeights << 32) | (packedEndpoints >>> 47);
+        r1 = (<u64>packedWeights << 32) | (packedEndpoints >> 47);
       }
       break;
     case 15:
@@ -830,7 +851,10 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
         const weights = ((q1 << 3) & 0xFFFFFFFFFFFFFFF0) | ((q1 << 2) & 4) | ((q0 >> 62) & 3);
 
         // Pack endpoints & weights
-        const packedEndpoints = packRGBAz8(ll0, al0, 0, 0) | (packRGBAz8(lh0, ah0, 0, 0) << 8);
+        const packedEndpoints = (
+          (packRGBAz8(lh0, ah0, 0, 0) << 8) |
+          (packRGBAz8(ll0, al0, 0, 0) << 0)
+        );
         const packedWeights = reverse64(weights);
 
         // ASTC Mode 578, CEM 4, 17-bit header
@@ -866,12 +890,15 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
         const weights = <u32>(((q1 >> 32) & hiMask) | ((q1 >> 33) & loMask) | ((q1 >> 34) & 1));
 
         // Pack endpoints & weights
-        const packedEndpoints = (packRGBAz8(lh0, ah0, lh1, ah1) << 8) | packRGBAz8(ll0, al0, ll1, al1);
+        const packedEndpoints = (
+          (packRGBAz8(lh0, ah0, lh1, ah1) << 8) |
+          (packRGBAz8(ll0, al0, ll1, al1) << 0)
+        );
         const packedWeights = reverse32(weights);
 
         // ASTC Mode 66, CEM 4, 29-bit header
         r0 = (packedEndpoints << 29) | (getTwoSubsetsPatternIndex(pat) << 13) | 0x8000842;
-        r1 = (<u64>packedWeights << 32) | (packedEndpoints >>> 35);
+        r1 = (<u64>packedWeights << 32) | (packedEndpoints >> 35);
       }
       break;
     case 17:
@@ -912,8 +939,10 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
 
         // Check blue contraction and pack endpoints & weights
         const swap = sumUnq31(rl0, gl0, bl0) > sumUnq31(rh0, gh0, bh0);
-        const packedEndpoints =
-          (packRGBz5(rh0, gh0, bh0) << (swap ? 0 : 5)) | (packRGBz5(rl0, gl0, bl0) << (swap ? 5 : 0));
+        const packedEndpoints = (
+          (packRGBz5(rh0, gh0, bh0) << (swap ? 0 : 5)) |
+          (packRGBz5(rl0, gl0, bl0) << (swap ? 5 : 0))
+        );
 
         const packedWeights = reverse64(swap ? ~weights : weights);
         const packedWeightsExtra = reverse16(swap ? (~weightsExtra & 0xFFFF) : weightsExtra);
@@ -975,7 +1004,6 @@ function getTwoSubsetsPatternIndexForModeIndex7(i: u32): u32 {
   return load<u16>(i << 1, twoSubsetsModeIndex7PatternIndicesOffset);
 }
 
-
 /**
  * Get ASTC partition pattern index for a given UASTC pattern index (Mode Index 3)
  */
@@ -1011,7 +1039,10 @@ function packRGBz5(r: u32, g: u32, b: u32): u32 {
 // @ts-ignore: 1206
 @inline
 function packRGBAz8(r: u32, g: u32, b: u32, a: u32): u64 {
-  return (<u64>a << 48) | (<u64>b << 32) | (g << 16) | r;
+  return (
+    (<u64>((a << 16) | b) << 32) |
+    (<u64>((g << 16) | r) <<  0)
+  );
 }
 
 // @ts-ignore: 1206
@@ -1130,18 +1161,18 @@ function interleaveTrits4(t: u32): u32 {
 // @ts-ignore
 @inline
 function interleaveBits4Tx2(
-  v0: u32, v1: u32, v2: u32, v3: u32,
-  v4: u32, v5: u32, v6: u32, v7: u32
+  v0: u64, v1: u64, v2: u64, v3: u64,
+  v4: u64, v5: u64, v6: u64, v7: u64
 ): u64 {
   return (
-    (<u64>v7 << 40) |
-    (<u64>v6 << 34) |
-    (<u64>v5 << 28) |
-    (<u64>v4 << 23) |
-    (<u64>v3 << 17) |
-    (<u64>v2 << 12) |
-    (<u64>v1 <<  6) |
-    (<u64>v0 <<  0)
+    (v7 << 40) |
+    (v6 << 34) |
+    (v5 << 28) |
+    (v4 << 23) |
+    (v3 << 17) |
+    (v2 << 12) |
+    (v1 <<  6) |
+    (v0 <<  0)
   );
 }
 
@@ -1151,13 +1182,13 @@ function interleaveBits4Tx2(
  */
 // @ts-ignore
 @inline
-function interleaveTrits6(t: u32): u64 {
+function interleaveTrits6(t: u64): u64 {
   return (
-    (<u64>(t & 0x80) << 30) |
-    (<u64>(t & 0x60) << 24) |
-    (<u64>(t & 0x10) << 18) |
-    (<u64>(t & 0x0C) << 12) |
-    (<u64>(t & 0x03) <<  6)
+    ((t & 0x80) << 30) |
+    ((t & 0x60) << 24) |
+    ((t & 0x10) << 18) |
+    ((t & 0x0C) << 12) |
+    ((t & 0x03) <<  6)
   );
 }
 
@@ -1169,18 +1200,18 @@ function interleaveTrits6(t: u32): u64 {
 // @ts-ignore
 @inline
 function interleaveBits6Tx2(
-  v0: u32, v1: u32, v2: u32, v3: u32,
-  v4: u32, v5: u32, v6: u32, v7: u32
+  v0: u64, v1: u64, v2: u64, v3: u64,
+  v4: u64, v5: u64, v6: u64, v7: u64
 ): u64 {
   return (
-    (<u64>v7 << 54) |
-    (<u64>v6 << 46) |
-    (<u64>v5 << 38) |
-    (<u64>v4 << 31) |
-    (<u64>v3 << 23) |
-    (<u64>v2 << 16) |
-    (<u64>v1 <<  8) |
-    (<u64>v0 <<  0)
+    (v7 << 54) |
+    (v6 << 46) |
+    (v5 << 38) |
+    (v4 << 31) |
+    (v3 << 23) |
+    (v2 << 16) |
+    (v1 <<  8) |
+    (v0 <<  0)
   );
 }
 
@@ -1273,16 +1304,15 @@ function interleaveQuints5(q: u32): u32 {
 // @ts-ignore
 @inline
 function interleaveBits5Qx2(
-  v0: u32, v1: u32, v2: u32,
-  v3: u32, v4: u32, v5: u32
-): u64 {
+  v0: u64, v1: u64, v2: u64,
+  v3: u64, v4: u64, v5: u64): u64 {
   return (
-    (<u64>v5 << 37) |
-    (<u64>v4 << 30) |
-    (<u64>v3 << 22) |
-    (<u64>v2 << 15) |
-    (<u64>v1 <<  8) |
-    (<u64>v0 <<  0)
+    (v5 << 37) |
+    (v4 << 30) |
+    (v3 << 22) |
+    (v2 << 15) |
+    (v1 <<  8) |
+    (v0 <<  0)
   );
 }
 
@@ -1297,10 +1327,10 @@ function interleaveBits5Qx2(
 // @ts-ignore: 1206
 @inline
 function reverse16(v: u32): u32 {
-  v = ((v >>> 1) & 0x5555) | ((v & 0x5555) << 1);
-  v = ((v >>> 2) & 0x3333) | ((v & 0x3333) << 2);
-  v = ((v >>> 4) & 0x0F0F) | ((v & 0x0F0F) << 4);
-  v = ((v >>> 8) & 0x00FF) | ((v & 0x00FF) << 8);
+  v = ((v >> 1) & 0x5555) | ((v & 0x5555) << 1);
+  v = ((v >> 2) & 0x3333) | ((v & 0x3333) << 2);
+  v = ((v >> 4) & 0x0F0F) | ((v & 0x0F0F) << 4);
+  v = ((v >> 8) & 0x00FF) | ((v & 0x00FF) << 8);
   return v;
 }
 
@@ -1310,10 +1340,10 @@ function reverse16(v: u32): u32 {
 // @ts-ignore: 1206
 @inline
 function reverse32(v: u32): u32 {
-  v = ((v >>> 1) & 0x55555555) | ((v & 0x55555555) << 1);
-  v = ((v >>> 2) & 0x33333333) | ((v & 0x33333333) << 2);
-  v = ((v >>> 4) & 0x0F0F0F0F) | ((v & 0x0F0F0F0F) << 4);
-  v = ((v >>> 8) & 0x00FF00FF) | ((v & 0x00FF00FF) << 8);
+  v = ((v >> 1) & 0x55555555) | ((v & 0x55555555) << 1);
+  v = ((v >> 2) & 0x33333333) | ((v & 0x33333333) << 2);
+  v = ((v >> 4) & 0x0F0F0F0F) | ((v & 0x0F0F0F0F) << 4);
+  v = ((v >> 8) & 0x00FF00FF) | ((v & 0x00FF00FF) << 8);
   v = rotr(v, 16);
   return v;
 }
@@ -1324,11 +1354,11 @@ function reverse32(v: u32): u32 {
 // @ts-ignore: 1206
 @inline
 function reverse64(v: u64): u64 {
-  v = ((v >>>  1) & 0x5555555555555555) | ((v & 0x5555555555555555) << 1);
-  v = ((v >>>  2) & 0x3333333333333333) | ((v & 0x3333333333333333) << 2);
-  v = ((v >>>  4) & 0x0F0F0F0F0F0F0F0F) | ((v & 0x0F0F0F0F0F0F0F0F) << 4);
-  v = ((v >>>  8) & 0x00FF00FF00FF00FF) | ((v & 0x00FF00FF00FF00FF) << 8);
-  v = ((v >>> 16) & 0x0000FFFF0000FFFF) | ((v & 0x0000FFFF0000FFFF) << 16);
+  v = ((v >>  1) & 0x5555555555555555) | ((v & 0x5555555555555555) <<  1);
+  v = ((v >>  2) & 0x3333333333333333) | ((v & 0x3333333333333333) <<  2);
+  v = ((v >>  4) & 0x0F0F0F0F0F0F0F0F) | ((v & 0x0F0F0F0F0F0F0F0F) <<  4);
+  v = ((v >>  8) & 0x00FF00FF00FF00FF) | ((v & 0x00FF00FF00FF00FF) <<  8);
+  v = ((v >> 16) & 0x0000FFFF0000FFFF) | ((v & 0x0000FFFF0000FFFF) << 16);
   v = rotr(v, 32);
   return v;
 }

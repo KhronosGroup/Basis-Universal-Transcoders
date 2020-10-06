@@ -138,7 +138,8 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
 
         writeSingleSubsetColorBlock(
           rl0, rh0, gl0, gh0, bl0, bh0, 255, 255,
-          weights, 4, offset, stride);
+          weights, 4, offset, stride
+        );
       }
       break;
     case 1:
@@ -155,7 +156,8 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         const weights = ((q1 >> 4) & 0xFFFFFFFC) | ((q1 >> 5) & 1);
         writeSingleSubsetColorBlock(
           rl0, rh0, gl0, gh0, bl0, bh0, 255, 255,
-          weights, 2, offset, stride);
+          weights, 2, offset, stride
+        );
       }
       break;
     case 2:
@@ -167,8 +169,8 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         }
 
         // 4-bit endpoints, unquantize in-place
-        let lo = ((q1 << 39) | (q0 >>> 25)) & 0x0F0F0F0F0F0F0F0F;
-        let hi = ((q1 << 35) | (q0 >>> 29)) & 0x0F0F0F0F0F0F0F0F;
+        let lo = ((q1 << 39) | (q0 >> 25)) & 0x0F0F0F0F0F0F0F0F;
+        let hi = ((q1 << 35) | (q0 >> 29)) & 0x0F0F0F0F0F0F0F0F;
         lo |= lo << 4;
         hi |= hi << 4;
         const rl0 = (lo >> 0) & 0xFF;
@@ -262,8 +264,10 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
 
         // 2-bit weights, start at 89
         const weights = (
-          (<u32>(q1 >> 22) & hMask) | (<u32>(q1 >> 23) & mMask) |
-          (<u32>(q1 >> 24) & lMask) | (<u32>(q1 >> 25) & 1)
+          (<u32>(q1 >> 22) & hMask) |
+          (<u32>(q1 >> 23) & mMask) |
+          (<u32>(q1 >> 24) & lMask) |
+          (<u32>(q1 >> 25) & 1)
         );
 
         const pattern = getThreeSubsetPattern(pat);
@@ -273,7 +277,7 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
           rl2, rh2, gl2, gh2, bl2, bh2,
           weights,
           pattern & 0xFFFF,
-          pattern >>> 16,
+          pattern >> 16,
           offset, stride
         );
       }
@@ -319,7 +323,7 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         bl1 = unq39(bl1, (eq3 >> 4) & 7);
         bh1 = unq39(bh1, eq3 >> 8);
 
-        // anchor bits location depends on the pattern index
+        // Anchor bits location depends on the pattern index
         const anchor = mode4 ? getTwoSubsetAnchor(pat) : getTwoSubsetAnchorForModeIndex7(pat);
         const loMask = (0xFFFFFFFF << ((anchor << 1) | 1)) ^ 0xFFFFFFFC;
         const hiMask = 0xFFFFFFFF << ((anchor << 1) + 2);
@@ -385,7 +389,8 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         writeDualPlaneColorAlphaBlockW2(
           rl0, rh0, gl0, gh0, bl0, bh0, 255, 255,
           weights, compSel,
-          offset, stride);
+          offset, stride
+        );
       }
       break;
     case 8:
@@ -407,8 +412,8 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         }
 
         // 4-bit endpoints, unquantize in-place
-        let lo = ((q1 << 31) | (q0 >>> 33)) & 0x0F0F0F0F0F0F0F0F;
-        let hi = ((q1 << 27) | (q0 >>> 37)) & 0x0F0F0F0F0F0F0F0F;
+        let lo = ((q1 << 31) | (q0 >> 33)) & 0x0F0F0F0F0F0F0F0F;
+        let hi = ((q1 << 27) | (q0 >> 37)) & 0x0F0F0F0F0F0F0F0F;
         lo |= lo << 4;
         hi |= hi << 4;
         const rl0 = (lo >>  0) & 0xFF;
@@ -428,7 +433,7 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         const al1 = (lo >> 56) & 0xFF;
         const ah1 = (hi >> 56) & 0xFF;
 
-        // anchor bits location depends on the pattern index
+        // Anchor bits location depends on the pattern index
         const anchor = getTwoSubsetAnchor(pat);
         const loMask = (0xFFFFFFFF << ((anchor << 1) | 1)) ^ 0xFFFFFFFC;
         const hiMask = 0xFFFFFFFF << ((anchor << 1) + 2);
@@ -571,7 +576,8 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         writeDualPlaneColorAlphaBlockW1(
           rl0, rh0, gl0, gh0, bl0, bh0, al0, ah0,
           weights, compSel,
-          offset, stride);
+          offset, stride
+        );
       }
       break;
     case 14:
@@ -630,7 +636,7 @@ function decodeBlock(readOffset: i32, offset: i32, stride: i32): void {
         const al1 = <u32>(q1 >> 18) & 0xFF;
         const ah1 = <u32>(q1 >> 26) & 0xFF;
 
-        // anchor bits location depends on the pattern index
+        // Anchor bits location depends on the pattern index
         const anchor = getTwoSubsetAnchor(pat);
         const loMask = (0xFFFFFFFF << ((anchor << 1) | 1)) ^ 0xFFFFFFFC;
         const hiMask = 0xFFFFFFFF << ((anchor << 1) + 2);
@@ -1053,7 +1059,6 @@ function writeDualPlaneColorAlphaBlockW1(
   offset:  i32,
   stride:  i32
 ): void {
-
   const w00 = unqWx2x4(1, (weights >>  0) & 0x55);
   const w01 = unqWx2x4(1, (weights >>  1) & 0x55);
   const w10 = unqWx2x4(1, (weights >>  8) & 0x55);
@@ -1125,14 +1130,14 @@ function writeDualPlaneColorAlphaBlockW2(
   offset:  i32,
   stride:  i32
 ): void {
-  const w00: u64 = unqWx2x4(2, (weights >>  0) & 0x3333);
-  const w01: u64 = unqWx2x4(2, (weights >>  2) & 0x3333);
-  const w10: u64 = unqWx2x4(2, (weights >> 16) & 0x3333);
-  const w11: u64 = unqWx2x4(2, (weights >> 18) & 0x3333);
-  const w20: u64 = unqWx2x4(2, (weights >> 32) & 0x3333);
-  const w21: u64 = unqWx2x4(2, (weights >> 34) & 0x3333);
-  const w30: u64 = unqWx2x4(2, (weights >> 48) & 0x3333);
-  const w31: u64 = unqWx2x4(2, (weights >> 50) & 0x3333);
+  const w00 = unqWx2x4(2, (weights >>  0) & 0x3333);
+  const w01 = unqWx2x4(2, (weights >>  2) & 0x3333);
+  const w10 = unqWx2x4(2, (weights >> 16) & 0x3333);
+  const w11 = unqWx2x4(2, (weights >> 18) & 0x3333);
+  const w20 = unqWx2x4(2, (weights >> 32) & 0x3333);
+  const w21 = unqWx2x4(2, (weights >> 34) & 0x3333);
+  const w30 = unqWx2x4(2, (weights >> 48) & 0x3333);
+  const w31 = unqWx2x4(2, (weights >> 50) & 0x3333);
 
   rh0 -= rl0;
   gh0 -= gl0;
@@ -1285,17 +1290,15 @@ function writeDualPlaneLumaAlphaBlockW2(
 // @ts-ignore: 1206
 @inline
 function writeDualSubsetColorBlock(
-  rl0: i64, rh0: i64, gl0: i64,
-  gh0: i64, bl0: i64, bh0: i64,
-  rl1: i64, rh1: i64, gl1: i64,
-  gh1: i64, bl1: i64, bh1: i64,
+  rl0: i64, rh0: i64, gl0: i64, gh0: i64,
+  bl0: i64, bh0: i64, rl1: i64, rh1: i64,
+  gl1: i64, gh1: i64, bl1: i64, bh1: i64,
   weights: u64,
   wBits:   i32,
   pattern: u32,
   offset:  i32,
   stride:  i32
 ): void {
-
   rh0 -= rl0;
   rh1 -= rl1;
   gh0 -= gl0;
@@ -1358,7 +1361,6 @@ function writeDualSubsetColorAlphaBlockW2(
   offset:  i32,
   stride:  i32
 ): void {
-
   rh0 -= rl0;
   rh1 -= rl1;
   gh0 -= gl0;
@@ -1573,7 +1575,7 @@ function packRGBA01(rg: u64, ba: u64): u64 {
 @inline
 function packRGBA23(rg: u64, ba: u64): u64 {
   let c = ((rg >> 32) & 0xFFFF) | (ba & 0xFFFF000000000000);
-  c |= ((rg & 0xFFFF000000000000) | (ba & 0xFFFF00000000)) >>> 16;
+  c |= ((rg & 0xFFFF000000000000) | (ba & 0xFFFF00000000)) >> 16;
   return c;
 }
 

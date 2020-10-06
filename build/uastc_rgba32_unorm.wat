@@ -219,7 +219,7 @@
                       i64.const 281479271743489
                       i64.add
                       i64.const 9
-                      i64.shr_s
+                      i64.shr_u
                       i64.const 281479271743489
                       i64.and
                       local.get $5
@@ -287,7 +287,7 @@
                       i64.const 281479271743489
                       i64.add
                       i64.const 9
-                      i64.shr_s
+                      i64.shr_u
                       i64.const 281479271743489
                       i64.and
                       i64.add
@@ -367,7 +367,7 @@
                       i64.const 281479271743489
                       i64.add
                       i64.const 9
-                      i64.shr_s
+                      i64.shr_u
                       i64.const 281479271743489
                       i64.and
                       i64.add
@@ -474,7 +474,7 @@
                       i64.const 281479271743489
                       i64.add
                       i64.const 9
-                      i64.shr_s
+                      i64.shr_u
                       i64.const 281479271743489
                       i64.and
                       i64.add
@@ -502,7 +502,7 @@
                       i64.const 281479271743489
                       i64.add
                       i64.const 9
-                      i64.shr_s
+                      i64.shr_u
                       i64.const 281479271743489
                       i64.and
                       i64.add
@@ -536,7 +536,7 @@
                       i64.const 281479271743489
                       i64.add
                       i64.const 9
-                      i64.shr_s
+                      i64.shr_u
                       i64.const 281479271743489
                       i64.and
                       i64.add
@@ -643,7 +643,7 @@
                       i64.const 281479271743489
                       i64.add
                       i64.const 9
-                      i64.shr_s
+                      i64.shr_u
                       i64.const 281479271743489
                       i64.and
                       i64.add
@@ -671,7 +671,7 @@
                       i64.const 281479271743489
                       i64.add
                       i64.const 9
-                      i64.shr_s
+                      i64.shr_u
                       i64.const 281479271743489
                       i64.and
                       i64.add
@@ -705,7 +705,7 @@
                       i64.const 281479271743489
                       i64.add
                       i64.const 9
-                      i64.shr_s
+                      i64.shr_u
                       i64.const 281479271743489
                       i64.and
                       i64.add
@@ -812,7 +812,7 @@
                       i64.const 281479271743489
                       i64.add
                       i64.const 9
-                      i64.shr_s
+                      i64.shr_u
                       i64.const 281479271743489
                       i64.and
                       i64.add
@@ -840,7 +840,7 @@
                       i64.const 281479271743489
                       i64.add
                       i64.const 9
-                      i64.shr_s
+                      i64.shr_u
                       i64.const 281479271743489
                       i64.and
                       i64.add
@@ -874,7 +874,7 @@
                       i64.const 281479271743489
                       i64.add
                       i64.const 9
-                      i64.shr_s
+                      i64.shr_u
                       i64.const 281479271743489
                       i64.and
                       i64.add
@@ -1001,7 +1001,7 @@
                      i64.const 281479271743489
                      i64.add
                      i64.const 9
-                     i64.shr_s
+                     i64.shr_u
                      i64.const 281479271743489
                      i64.and
                      i64.add
@@ -1048,7 +1048,7 @@
                      i64.const 281479271743489
                      i64.add
                      i64.const 9
-                     i64.shr_s
+                     i64.shr_u
                      i64.const 281479271743489
                      i64.and
                      i64.add
@@ -1106,7 +1106,7 @@
                      i64.const 281479271743489
                      i64.add
                      i64.const 9
-                     i64.shr_s
+                     i64.shr_u
                      i64.const 281479271743489
                      i64.and
                      i64.add
@@ -1206,7 +1206,7 @@
                      i64.const 281479271743489
                      i64.add
                      i64.const 9
-                     i64.shr_s
+                     i64.shr_u
                      i64.const 281479271743489
                      i64.and
                      i64.add
@@ -1234,7 +1234,7 @@
                      i64.const 281479271743489
                      i64.add
                      i64.const 9
-                     i64.shr_s
+                     i64.shr_u
                      i64.const 281479271743489
                      i64.and
                      i64.add
@@ -1268,7 +1268,7 @@
                      i64.const 281479271743489
                      i64.add
                      i64.const 9
-                     i64.shr_s
+                     i64.shr_u
                      i64.const 281479271743489
                      i64.and
                      i64.add
@@ -1368,7 +1368,7 @@
                      i64.const 281479271743489
                      i64.add
                      i64.const 9
-                     i64.shr_s
+                     i64.shr_u
                      i64.const 281479271743489
                      i64.and
                      i64.add
@@ -1396,7 +1396,7 @@
                      i64.const 281479271743489
                      i64.add
                      i64.const 9
-                     i64.shr_s
+                     i64.shr_u
                      i64.const 281479271743489
                      i64.and
                      i64.add
@@ -1430,7 +1430,7 @@
                      i64.const 281479271743489
                      i64.add
                      i64.const 9
-                     i64.shr_s
+                     i64.shr_u
                      i64.const 281479271743489
                      i64.and
                      i64.add
@@ -1530,7 +1530,7 @@
                      i64.const 281479271743489
                      i64.add
                      i64.const 9
-                     i64.shr_s
+                     i64.shr_u
                      i64.const 281479271743489
                      i64.and
                      i64.add
@@ -1558,7 +1558,7 @@
                      i64.const 281479271743489
                      i64.add
                      i64.const 9
-                     i64.shr_s
+                     i64.shr_u
                      i64.const 281479271743489
                      i64.and
                      i64.add
@@ -1592,7 +1592,7 @@
                      i64.const 281479271743489
                      i64.add
                      i64.const 9
-                     i64.shr_s
+                     i64.shr_u
                      i64.const 281479271743489
                      i64.and
                      i64.add
@@ -1917,7 +1917,7 @@
                       i64.const 281479271743489
                       i64.add
                       i64.const 9
-                      i64.shr_s
+                      i64.shr_u
                       i64.const 281479271743489
                       i64.and
                       i64.add
@@ -1956,7 +1956,7 @@
                       i64.const 281479271743489
                       i64.add
                       i64.const 9
-                      i64.shr_s
+                      i64.shr_u
                       i64.const 281479271743489
                       i64.and
                       i64.add
@@ -2001,7 +2001,7 @@
                       i64.const 281479271743489
                       i64.add
                       i64.const 9
-                      i64.shr_s
+                      i64.shr_u
                       i64.const 281479271743489
                       i64.and
                       i64.add
@@ -2656,7 +2656,7 @@
                      i64.const 281479271743489
                      i64.add
                      i64.const 9
-                     i64.shr_s
+                     i64.shr_u
                      i64.const 281479271743489
                      i64.and
                      i64.add
@@ -2706,7 +2706,7 @@
                      i64.const 281479271743489
                      i64.add
                      i64.const 9
-                     i64.shr_s
+                     i64.shr_u
                      i64.const 281479271743489
                      i64.and
                      i64.add
@@ -2762,7 +2762,7 @@
                      i64.const 281479271743489
                      i64.add
                      i64.const 9
-                     i64.shr_s
+                     i64.shr_u
                      i64.const 281479271743489
                      i64.and
                      i64.add
@@ -3283,7 +3283,7 @@
                     i64.const 281479271743489
                     i64.add
                     i64.const 9
-                    i64.shr_s
+                    i64.shr_u
                     i64.const 281479271743489
                     i64.and
                     i64.add
@@ -3322,7 +3322,7 @@
                     i64.const 281479271743489
                     i64.add
                     i64.const 9
-                    i64.shr_s
+                    i64.shr_u
                     i64.const 281479271743489
                     i64.and
                     i64.add
@@ -3367,7 +3367,7 @@
                     i64.const 281479271743489
                     i64.add
                     i64.const 9
-                    i64.shr_s
+                    i64.shr_u
                     i64.const 281479271743489
                     i64.and
                     i64.add
@@ -3516,7 +3516,7 @@
                  i64.const 281479271743489
                  i64.add
                  i64.const 9
-                 i64.shr_s
+                 i64.shr_u
                  i64.const 281479271743489
                  i64.and
                  i64.add
@@ -3563,7 +3563,7 @@
                  i64.const 281479271743489
                  i64.add
                  i64.const 9
-                 i64.shr_s
+                 i64.shr_u
                  i64.const 281479271743489
                  i64.and
                  i64.add
@@ -3621,7 +3621,7 @@
                  i64.const 281479271743489
                  i64.add
                  i64.const 9
-                 i64.shr_s
+                 i64.shr_u
                  i64.const 281479271743489
                  i64.and
                  i64.add
@@ -3724,7 +3724,7 @@
                  i64.const 281479271743489
                  i64.add
                  i64.const 9
-                 i64.shr_s
+                 i64.shr_u
                  i64.const 281479271743489
                  i64.and
                  i64.add
@@ -3752,7 +3752,7 @@
                  i64.const 281479271743489
                  i64.add
                  i64.const 9
-                 i64.shr_s
+                 i64.shr_u
                  i64.const 281479271743489
                  i64.and
                  i64.add
@@ -3786,7 +3786,7 @@
                  i64.const 281479271743489
                  i64.add
                  i64.const 9
-                 i64.shr_s
+                 i64.shr_u
                  i64.const 281479271743489
                  i64.and
                  i64.add
@@ -3889,7 +3889,7 @@
                  i64.const 281479271743489
                  i64.add
                  i64.const 9
-                 i64.shr_s
+                 i64.shr_u
                  i64.const 281479271743489
                  i64.and
                  i64.add
@@ -3917,7 +3917,7 @@
                  i64.const 281479271743489
                  i64.add
                  i64.const 9
-                 i64.shr_s
+                 i64.shr_u
                  i64.const 281479271743489
                  i64.and
                  i64.add
@@ -3951,7 +3951,7 @@
                  i64.const 281479271743489
                  i64.add
                  i64.const 9
-                 i64.shr_s
+                 i64.shr_u
                  i64.const 281479271743489
                  i64.and
                  i64.add
@@ -4054,7 +4054,7 @@
                  i64.const 281479271743489
                  i64.add
                  i64.const 9
-                 i64.shr_s
+                 i64.shr_u
                  i64.const 281479271743489
                  i64.and
                  i64.add
@@ -4082,7 +4082,7 @@
                  i64.const 281479271743489
                  i64.add
                  i64.const 9
-                 i64.shr_s
+                 i64.shr_u
                  i64.const 281479271743489
                  i64.and
                  i64.add
@@ -4116,7 +4116,7 @@
                  i64.const 281479271743489
                  i64.add
                  i64.const 9
-                 i64.shr_s
+                 i64.shr_u
                  i64.const 281479271743489
                  i64.and
                  i64.add
@@ -4311,7 +4311,7 @@
                 i64.const 281479271743489
                 i64.add
                 i64.const 9
-                i64.shr_s
+                i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 i64.add
@@ -4387,7 +4387,7 @@
                 i64.const 281479271743489
                 i64.add
                 i64.const 9
-                i64.shr_s
+                i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 i64.add
@@ -4467,7 +4467,7 @@
                 i64.const 281479271743489
                 i64.add
                 i64.const 9
-                i64.shr_s
+                i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 i64.add
@@ -4598,7 +4598,7 @@
                 i64.const 281479271743489
                 i64.add
                 i64.const 9
-                i64.shr_s
+                i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 i64.add
@@ -4629,7 +4629,7 @@
                 i64.const 281479271743489
                 i64.add
                 i64.const 9
-                i64.shr_s
+                i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 i64.add
@@ -4663,7 +4663,7 @@
                 i64.const 281479271743489
                 i64.add
                 i64.const 9
-                i64.shr_s
+                i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 local.get $10
@@ -4797,7 +4797,7 @@
                 i64.const 281479271743489
                 i64.add
                 i64.const 9
-                i64.shr_s
+                i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 i64.add
@@ -4825,7 +4825,7 @@
                 i64.const 281479271743489
                 i64.add
                 i64.const 9
-                i64.shr_s
+                i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 local.get $3
@@ -4865,7 +4865,7 @@
                 i64.const 281479271743489
                 i64.add
                 i64.const 9
-                i64.shr_s
+                i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 i64.add
@@ -4996,7 +4996,7 @@
                 i64.const 281479271743489
                 i64.add
                 i64.const 9
-                i64.shr_s
+                i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 i64.add
@@ -5027,7 +5027,7 @@
                 i64.const 281479271743489
                 i64.add
                 i64.const 9
-                i64.shr_s
+                i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 i64.add
@@ -5064,7 +5064,7 @@
                 i64.const 281479271743489
                 i64.add
                 i64.const 9
-                i64.shr_s
+                i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 i64.add
@@ -5495,7 +5495,7 @@
                 i64.const 281479271743489
                 i64.add
                 i64.const 9
-                i64.shr_s
+                i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 i64.add
@@ -5534,7 +5534,7 @@
                 i64.const 281479271743489
                 i64.add
                 i64.const 9
-                i64.shr_s
+                i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 i64.add
@@ -5579,7 +5579,7 @@
                 i64.const 281479271743489
                 i64.add
                 i64.const 9
-                i64.shr_s
+                i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 i64.add
@@ -5618,7 +5618,7 @@
                 i64.const 281479271743489
                 i64.add
                 i64.const 9
-                i64.shr_s
+                i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 i64.add
@@ -5938,7 +5938,7 @@
                i64.const 281479271743489
                i64.add
                i64.const 9
-               i64.shr_s
+               i64.shr_u
                i64.const 281479271743489
                i64.and
                i64.add
@@ -5966,7 +5966,7 @@
                i64.const 281479271743489
                i64.add
                i64.const 9
-               i64.shr_s
+               i64.shr_u
                i64.const 281479271743489
                i64.and
                i64.add
@@ -6000,7 +6000,7 @@
                i64.const 281479271743489
                i64.add
                i64.const 9
-               i64.shr_s
+               i64.shr_u
                i64.const 281479271743489
                i64.and
                i64.add
@@ -6028,7 +6028,7 @@
                i64.const 281479271743489
                i64.add
                i64.const 9
-               i64.shr_s
+               i64.shr_u
                i64.const 281479271743489
                i64.and
                i64.add
@@ -6235,7 +6235,7 @@
             i64.const 281479271743489
             i64.add
             i64.const 9
-            i64.shr_s
+            i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
@@ -6306,7 +6306,7 @@
             i64.const 281479271743489
             i64.add
             i64.const 9
-            i64.shr_s
+            i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
@@ -6388,7 +6388,7 @@
             i64.const 281479271743489
             i64.add
             i64.const 9
-            i64.shr_s
+            i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
@@ -6464,7 +6464,7 @@
             i64.const 281479271743489
             i64.add
             i64.const 9
-            i64.shr_s
+            i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
@@ -6596,7 +6596,7 @@
             i64.const 281479271743489
             i64.add
             i64.const 9
-            i64.shr_s
+            i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
@@ -6627,7 +6627,7 @@
             i64.const 281479271743489
             i64.add
             i64.const 9
-            i64.shr_s
+            i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
@@ -6664,7 +6664,7 @@
             i64.const 281479271743489
             i64.add
             i64.const 9
-            i64.shr_s
+            i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
@@ -6692,7 +6692,7 @@
             i64.const 281479271743489
             i64.add
             i64.const 9
-            i64.shr_s
+            i64.shr_u
             i64.const 281479271743489
             i64.and
             local.get $3
@@ -6827,7 +6827,7 @@
             i64.const 281479271743489
             i64.add
             i64.const 9
-            i64.shr_s
+            i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
@@ -6858,7 +6858,7 @@
             i64.const 281479271743489
             i64.add
             i64.const 9
-            i64.shr_s
+            i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
@@ -6895,7 +6895,7 @@
             i64.const 281479271743489
             i64.add
             i64.const 9
-            i64.shr_s
+            i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
@@ -6926,7 +6926,7 @@
             i64.const 281479271743489
             i64.add
             i64.const 9
-            i64.shr_s
+            i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
@@ -7058,7 +7058,7 @@
             i64.const 281479271743489
             i64.add
             i64.const 9
-            i64.shr_s
+            i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
@@ -7089,7 +7089,7 @@
             i64.const 281479271743489
             i64.add
             i64.const 9
-            i64.shr_s
+            i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
@@ -7126,7 +7126,7 @@
             i64.const 281479271743489
             i64.add
             i64.const 9
-            i64.shr_s
+            i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
@@ -7157,7 +7157,7 @@
             i64.const 281479271743489
             i64.add
             i64.const 9
-            i64.shr_s
+            i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
@@ -7310,7 +7310,7 @@
            i64.const 281479271743489
            i64.add
            i64.const 9
-           i64.shr_s
+           i64.shr_u
            i64.const 281479271743489
            i64.and
            local.get $6
@@ -7378,7 +7378,7 @@
            i64.const 281479271743489
            i64.add
            i64.const 9
-           i64.shr_s
+           i64.shr_u
            i64.const 281479271743489
            i64.and
            i64.add
@@ -7459,7 +7459,7 @@
            i64.const 281479271743489
            i64.add
            i64.const 9
-           i64.shr_s
+           i64.shr_u
            i64.const 281479271743489
            i64.and
            i64.add
@@ -7524,7 +7524,7 @@
            i64.const 281479271743489
            i64.add
            i64.const 9
-           i64.shr_s
+           i64.shr_u
            i64.const 281479271743489
            i64.and
            i64.add
@@ -7628,7 +7628,7 @@
            i64.const 281479271743489
            i64.add
            i64.const 9
-           i64.shr_s
+           i64.shr_u
            i64.const 281479271743489
            i64.and
            i64.add
@@ -7656,7 +7656,7 @@
            i64.const 281479271743489
            i64.add
            i64.const 9
-           i64.shr_s
+           i64.shr_u
            i64.const 281479271743489
            i64.and
            i64.add
@@ -7690,7 +7690,7 @@
            i64.const 281479271743489
            i64.add
            i64.const 9
-           i64.shr_s
+           i64.shr_u
            i64.const 281479271743489
            i64.and
            i64.add
@@ -7718,7 +7718,7 @@
            i64.const 281479271743489
            i64.add
            i64.const 9
-           i64.shr_s
+           i64.shr_u
            i64.const 281479271743489
            i64.and
            i64.add
@@ -7822,7 +7822,7 @@
            i64.const 281479271743489
            i64.add
            i64.const 9
-           i64.shr_s
+           i64.shr_u
            i64.const 281479271743489
            i64.and
            i64.add
@@ -7850,7 +7850,7 @@
            i64.const 281479271743489
            i64.add
            i64.const 9
-           i64.shr_s
+           i64.shr_u
            i64.const 281479271743489
            i64.and
            i64.add
@@ -7884,7 +7884,7 @@
            i64.const 281479271743489
            i64.add
            i64.const 9
-           i64.shr_s
+           i64.shr_u
            i64.const 281479271743489
            i64.and
            i64.add
@@ -7912,7 +7912,7 @@
            i64.const 281479271743489
            i64.add
            i64.const 9
-           i64.shr_s
+           i64.shr_u
            i64.const 281479271743489
            i64.and
            i64.add
@@ -8016,7 +8016,7 @@
            i64.const 281479271743489
            i64.add
            i64.const 9
-           i64.shr_s
+           i64.shr_u
            i64.const 281479271743489
            i64.and
            i64.add
@@ -8044,7 +8044,7 @@
            i64.const 281479271743489
            i64.add
            i64.const 9
-           i64.shr_s
+           i64.shr_u
            i64.const 281479271743489
            i64.and
            i64.add
@@ -8078,7 +8078,7 @@
            i64.const 281479271743489
            i64.add
            i64.const 9
-           i64.shr_s
+           i64.shr_u
            i64.const 281479271743489
            i64.and
            i64.add
@@ -8106,7 +8106,7 @@
            i64.const 281479271743489
            i64.add
            i64.const 9
-           i64.shr_s
+           i64.shr_u
            i64.const 281479271743489
            i64.and
            i64.add
@@ -8826,7 +8826,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -8873,7 +8873,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -8931,7 +8931,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -8978,7 +8978,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -9079,7 +9079,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -9107,7 +9107,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -9141,7 +9141,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -9169,7 +9169,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -9270,7 +9270,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -9298,7 +9298,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -9332,7 +9332,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -9360,7 +9360,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -9461,7 +9461,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -9489,7 +9489,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -9523,7 +9523,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -9551,7 +9551,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -9692,7 +9692,7 @@
         i64.const 281479271743489
         i64.add
         i64.const 9
-        i64.shr_s
+        i64.shr_u
         i64.const 281479271743489
         i64.and
         i64.add
@@ -9750,7 +9750,7 @@
         i64.const 281479271743489
         i64.add
         i64.const 9
-        i64.shr_s
+        i64.shr_u
         i64.const 281479271743489
         i64.and
         i64.add
@@ -9857,7 +9857,7 @@
         i64.const 281479271743489
         i64.add
         i64.const 9
-        i64.shr_s
+        i64.shr_u
         i64.const 281479271743489
         i64.and
         i64.add
@@ -9896,7 +9896,7 @@
         i64.const 281479271743489
         i64.add
         i64.const 9
-        i64.shr_s
+        i64.shr_u
         i64.const 281479271743489
         i64.and
         i64.add
@@ -10003,7 +10003,7 @@
         i64.const 281479271743489
         i64.add
         i64.const 9
-        i64.shr_s
+        i64.shr_u
         i64.const 281479271743489
         i64.and
         i64.add
@@ -10042,7 +10042,7 @@
         i64.const 281479271743489
         i64.add
         i64.const 9
-        i64.shr_s
+        i64.shr_u
         i64.const 281479271743489
         i64.and
         i64.add
@@ -10149,7 +10149,7 @@
         i64.const 281479271743489
         i64.add
         i64.const 9
-        i64.shr_s
+        i64.shr_u
         i64.const 281479271743489
         i64.and
         i64.add
@@ -10188,7 +10188,7 @@
         i64.const 281479271743489
         i64.add
         i64.const 9
-        i64.shr_s
+        i64.shr_u
         i64.const 281479271743489
         i64.and
         i64.add
@@ -10473,7 +10473,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -10523,7 +10523,7 @@
          i64.const 281479271743489
          i64.add
          i64.const 9
-         i64.shr_s
+         i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
@@ -10678,7 +10678,7 @@
       i64.const 281479271743489
       i64.add
       i64.const 9
-      i64.shr_s
+      i64.shr_u
       i64.const 281479271743489
       i64.and
       i64.add
@@ -10763,7 +10763,7 @@
       i64.const 281479271743489
       i64.add
       i64.const 9
-      i64.shr_s
+      i64.shr_u
       i64.const 281479271743489
       i64.and
       i64.add
@@ -10862,7 +10862,7 @@
       i64.const 281479271743489
       i64.add
       i64.const 9
-      i64.shr_s
+      i64.shr_u
       i64.const 281479271743489
       i64.and
       i64.add
@@ -10928,7 +10928,7 @@
       i64.const 281479271743489
       i64.add
       i64.const 9
-      i64.shr_s
+      i64.shr_u
       i64.const 281479271743489
       i64.and
       i64.add
@@ -11027,7 +11027,7 @@
       i64.const 281479271743489
       i64.add
       i64.const 9
-      i64.shr_s
+      i64.shr_u
       i64.const 281479271743489
       i64.and
       i64.add
@@ -11093,7 +11093,7 @@
       i64.const 281479271743489
       i64.add
       i64.const 9
-      i64.shr_s
+      i64.shr_u
       i64.const 281479271743489
       i64.and
       i64.add
@@ -11192,7 +11192,7 @@
       i64.const 281479271743489
       i64.add
       i64.const 9
-      i64.shr_s
+      i64.shr_u
       i64.const 281479271743489
       i64.and
       i64.add
@@ -11258,7 +11258,7 @@
       i64.const 281479271743489
       i64.add
       i64.const 9
-      i64.shr_s
+      i64.shr_u
       i64.const 281479271743489
       i64.and
       i64.add
@@ -11411,7 +11411,7 @@
      i64.const 281479271743489
      i64.add
      i64.const 9
-     i64.shr_s
+     i64.shr_u
      i64.const 281479271743489
      i64.and
      local.get $4
@@ -11459,7 +11459,7 @@
      i64.const 281479271743489
      i64.add
      i64.const 9
-     i64.shr_s
+     i64.shr_u
      i64.const 281479271743489
      i64.and
      i64.add
@@ -11510,7 +11510,7 @@
      i64.const 281479271743489
      i64.add
      i64.const 9
-     i64.shr_s
+     i64.shr_u
      i64.const 281479271743489
      i64.and
      i64.add
@@ -11617,7 +11617,7 @@
      i64.const 281479271743489
      i64.add
      i64.const 9
-     i64.shr_s
+     i64.shr_u
      i64.const 281479271743489
      i64.and
      i64.add
@@ -11645,7 +11645,7 @@
      i64.const 281479271743489
      i64.add
      i64.const 9
-     i64.shr_s
+     i64.shr_u
      i64.const 281479271743489
      i64.and
      i64.add
@@ -11679,7 +11679,7 @@
      i64.const 281479271743489
      i64.add
      i64.const 9
-     i64.shr_s
+     i64.shr_u
      i64.const 281479271743489
      i64.and
      i64.add
@@ -11789,7 +11789,7 @@
      i64.const 281479271743489
      i64.add
      i64.const 9
-     i64.shr_s
+     i64.shr_u
      i64.const 281479271743489
      i64.and
      i64.add
@@ -11817,7 +11817,7 @@
      i64.const 281479271743489
      i64.add
      i64.const 9
-     i64.shr_s
+     i64.shr_u
      i64.const 281479271743489
      i64.and
      i64.add
@@ -11851,7 +11851,7 @@
      i64.const 281479271743489
      i64.add
      i64.const 9
-     i64.shr_s
+     i64.shr_u
      i64.const 281479271743489
      i64.and
      i64.add
@@ -11958,7 +11958,7 @@
      i64.const 281479271743489
      i64.add
      i64.const 9
-     i64.shr_s
+     i64.shr_u
      i64.const 281479271743489
      i64.and
      i64.add
@@ -11986,7 +11986,7 @@
      i64.const 281479271743489
      i64.add
      i64.const 9
-     i64.shr_s
+     i64.shr_u
      i64.const 281479271743489
      i64.and
      i64.add
@@ -12020,7 +12020,7 @@
      i64.const 281479271743489
      i64.add
      i64.const 9
-     i64.shr_s
+     i64.shr_u
      i64.const 281479271743489
      i64.and
      i64.add
@@ -12270,7 +12270,7 @@
    loop $for-loop|01
     local.get $1
     i32.const 4
-    i32.lt_s
+    i32.lt_u
     if
      i32.const 511
      i32.const 0
@@ -12291,7 +12291,7 @@
      loop $for-loop|1
       local.get $2
       i32.const 3
-      i32.lt_s
+      i32.lt_u
       if
        local.get $1
        local.get $2
@@ -12331,7 +12331,7 @@
    loop $for-loop|02
     local.get $1
     i32.const 8
-    i32.lt_s
+    i32.lt_u
     if
      i32.const 511
      i32.const 0
@@ -12355,7 +12355,7 @@
      loop $for-loop|13
       local.get $2
       i32.const 5
-      i32.lt_s
+      i32.lt_u
       if
        local.get $1
        local.get $2
@@ -12395,7 +12395,7 @@
    loop $for-loop|04
     local.get $1
     i32.const 16
-    i32.lt_s
+    i32.lt_u
     if
      i32.const 511
      i32.const 0
@@ -12406,7 +12406,7 @@
      local.set $3
      local.get $1
      i32.const 1
-     i32.shr_s
+     i32.shr_u
      i32.const 65
      i32.mul
      local.set $4
@@ -12415,7 +12415,7 @@
      loop $for-loop|15
       local.get $2
       i32.const 3
-      i32.lt_s
+      i32.lt_u
       if
        local.get $1
        local.get $2
@@ -12455,7 +12455,7 @@
    loop $for-loop|06
     local.get $1
     i32.const 32
-    i32.lt_s
+    i32.lt_u
     if
      i32.const 511
      i32.const 0
@@ -12479,7 +12479,7 @@
      loop $for-loop|17
       local.get $2
       i32.const 5
-      i32.lt_s
+      i32.lt_u
       if
        local.get $1
        local.get $2
@@ -12519,7 +12519,7 @@
    loop $for-loop|08
     local.get $1
     i32.const 64
-    i32.lt_s
+    i32.lt_u
     if
      i32.const 511
      i32.const 0
@@ -12543,7 +12543,7 @@
      loop $for-loop|19
       local.get $2
       i32.const 3
-      i32.lt_s
+      i32.lt_u
       if
        local.get $1
        local.get $2
