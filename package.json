@@ -14,16 +14,16 @@
   "author": "The Khronos Group, Inc.",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/node": "^14.6.4",
-    "@typescript-eslint/eslint-plugin": "^4.1.0",
-    "@typescript-eslint/parser": "^4.1.0",
-    "assemblyscript": "0.14.10",
-    "eslint-plugin-unicorn": "^21.0.0",
-    "eslint": "^7.8.1",
+    "@types/node": "^14.11.5",
+    "@typescript-eslint/eslint-plugin": "^4.4.0",
+    "@typescript-eslint/parser": "^4.4.0",
+    "assemblyscript": "0.15.0",
+    "eslint": "^7.10.0",
+    "eslint-plugin-unicorn": "^22.0.0",
     "tap-spec": "^5.0.0",
     "tape": "^5.0.1",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.2"
+    "typescript": "^4.0.3"
   },
   "scripts": {
     "asbuild:generator": "asc assembly/uastc-generator.ts -b build/uastc_generator.wasm -t build/uastc_generator.wat --optimize --converge --runtime none --noAssert --importMemory --memoryBase 63488",
