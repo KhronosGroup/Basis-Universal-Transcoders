@@ -137,10 +137,10 @@
                       i32.or
                       i32.load8_u offset=1284
                       i64.extend_i32_u
-                      local.tee $7
+                      local.tee $8
                       i64.const 18014673391583296
                       i64.mul
-                      local.tee $8
+                      local.tee $10
                       local.get $4
                       i64.const 35
                       i64.shr_u
@@ -157,9 +157,9 @@
                       i32.or
                       i32.load8_u offset=1284
                       i64.extend_i32_u
-                      local.get $7
+                      local.get $8
                       i64.sub
-                      local.tee $7
+                      local.tee $8
                       local.get $3
                       i64.const -16
                       i64.and
@@ -169,34 +169,34 @@
                       i64.const 7
                       i64.and
                       i64.or
-                      local.tee $9
+                      local.tee $5
                       i64.const 65535
                       i64.and
-                      local.tee $5
-                      local.get $5
+                      local.tee $6
+                      local.get $6
                       i64.const 24
                       i64.shl
                       i64.or
                       i64.const 1095216660735
                       i64.and
-                      local.tee $5
-                      local.get $5
+                      local.tee $6
+                      local.get $6
                       i64.const 12
                       i64.shl
                       i64.or
                       i64.const 4222189076152335
                       i64.and
-                      local.tee $5
+                      local.tee $6
                       i64.const 2
                       i64.shl
-                      local.get $5
+                      local.get $6
                       i64.const 2
                       i64.shr_u
                       i64.or
                       i64.const 17733194119839807
                       i64.and
-                      local.tee $5
-                      local.get $5
+                      local.tee $6
+                      local.get $6
                       i64.const 5
                       i64.shr_u
                       i64.const 281479271743489
@@ -205,12 +205,15 @@
                       local.tee $12
                       i64.mul
                       i64.add
-                      local.tee $5
+                      local.tee $6
+                      i64.const 6
+                      i64.shr_u
+                      local.get $6
                       i64.const 5
                       i64.shr_u
                       i64.const 143835907860922879
                       i64.and
-                      local.get $5
+                      local.get $6
                       i64.const 3
                       i64.shl
                       i64.const 141865552958718456
@@ -222,9 +225,6 @@
                       i64.shr_u
                       i64.const 281479271743489
                       i64.and
-                      local.get $5
-                      i64.const 6
-                      i64.shr_u
                       i64.add
                       i64.const 71777214294589695
                       i64.and
@@ -244,10 +244,10 @@
                       i32.or
                       i32.load8_u offset=1284
                       i64.extend_i32_u
-                      local.tee $6
+                      local.tee $7
                       i64.const 18014673391583296
                       i64.mul
-                      local.tee $5
+                      local.tee $6
                       local.get $4
                       i64.const 47
                       i64.shr_u
@@ -264,21 +264,21 @@
                       i32.or
                       i32.load8_u offset=1284
                       i64.extend_i32_u
-                      local.get $6
+                      local.get $7
                       i64.sub
-                      local.tee $6
+                      local.tee $7
                       local.get $12
                       i64.mul
                       i64.add
-                      local.tee $10
+                      local.tee $9
                       i64.const 6
                       i64.shr_u
-                      local.get $10
+                      local.get $9
                       i64.const 5
                       i64.shr_u
                       i64.const 143835907860922879
                       i64.and
-                      local.get $10
+                      local.get $9
                       i64.const 3
                       i64.shl
                       i64.const 141865552958718456
@@ -296,7 +296,7 @@
                       i64.const 8
                       i64.shl
                       i64.or
-                      local.tee $10
+                      local.tee $9
                       i64.const 65535
                       i64.and
                       local.get $4
@@ -381,7 +381,7 @@
                       i64.const 32
                       i64.shl
                       i64.or
-                      local.get $10
+                      local.get $9
                       i64.const 4294901760
                       i64.and
                       local.get $3
@@ -393,7 +393,7 @@
                       i64.or
                       i64.store
                       local.get $1
-                      local.get $10
+                      local.get $9
                       i64.const 32
                       i64.shr_u
                       i64.const 65535
@@ -402,7 +402,7 @@
                       i64.const -281474976710656
                       i64.and
                       i64.or
-                      local.get $10
+                      local.get $9
                       i64.const -281474976710656
                       i64.and
                       local.get $3
@@ -417,9 +417,9 @@
                       local.get $2
                       i32.add
                       local.tee $0
+                      local.get $10
                       local.get $8
-                      local.get $7
-                      local.get $9
+                      local.get $5
                       i64.const 16
                       i64.shr_u
                       i64.const 65535
@@ -454,7 +454,7 @@
                       i64.const 281479271743489
                       i64.and
                       i64.add
-                      local.tee $10
+                      local.tee $9
                       i64.mul
                       i64.add
                       local.tee $3
@@ -480,9 +480,9 @@
                       i64.add
                       i64.const 71777214294589695
                       i64.and
-                      local.get $5
                       local.get $6
-                      local.get $10
+                      local.get $7
+                      local.get $9
                       i64.mul
                       i64.add
                       local.tee $3
@@ -516,18 +516,18 @@
                       i64.and
                       local.get $11
                       local.get $4
-                      local.get $10
+                      local.get $9
                       i64.mul
                       i64.add
-                      local.tee $10
+                      local.tee $9
                       i64.const 6
                       i64.shr_u
-                      local.get $10
+                      local.get $9
                       i64.const 5
                       i64.shr_u
                       i64.const 143835907860922879
                       i64.and
-                      local.get $10
+                      local.get $9
                       i64.const 3
                       i64.shl
                       i64.const 141865552958718456
@@ -544,7 +544,7 @@
                       i64.and
                       i64.const -71777214294589696
                       i64.or
-                      local.tee $10
+                      local.tee $9
                       i64.const 4294901760
                       i64.and
                       i64.const 32
@@ -553,7 +553,7 @@
                       local.get $3
                       i64.const 4294901760
                       i64.and
-                      local.get $10
+                      local.get $9
                       i64.const 65535
                       i64.and
                       i64.or
@@ -567,14 +567,14 @@
                       i64.shr_u
                       i64.const 65535
                       i64.and
-                      local.get $10
+                      local.get $9
                       i64.const -281474976710656
                       i64.and
                       i64.or
                       local.get $3
                       i64.const -281474976710656
                       i64.and
-                      local.get $10
+                      local.get $9
                       i64.const 281470681743360
                       i64.and
                       i64.or
@@ -586,9 +586,9 @@
                       local.get $2
                       i32.add
                       local.tee $0
+                      local.get $10
                       local.get $8
-                      local.get $7
-                      local.get $9
+                      local.get $5
                       i64.const 32
                       i64.shr_u
                       i64.const 65535
@@ -623,7 +623,7 @@
                       i64.const 281479271743489
                       i64.and
                       i64.add
-                      local.tee $10
+                      local.tee $9
                       i64.mul
                       i64.add
                       local.tee $3
@@ -649,9 +649,9 @@
                       i64.add
                       i64.const 71777214294589695
                       i64.and
-                      local.get $5
                       local.get $6
-                      local.get $10
+                      local.get $7
+                      local.get $9
                       i64.mul
                       i64.add
                       local.tee $3
@@ -685,18 +685,18 @@
                       i64.and
                       local.get $11
                       local.get $4
-                      local.get $10
+                      local.get $9
                       i64.mul
                       i64.add
-                      local.tee $10
+                      local.tee $9
                       i64.const 6
                       i64.shr_u
-                      local.get $10
+                      local.get $9
                       i64.const 5
                       i64.shr_u
                       i64.const 143835907860922879
                       i64.and
-                      local.get $10
+                      local.get $9
                       i64.const 3
                       i64.shl
                       i64.const 141865552958718456
@@ -713,7 +713,7 @@
                       i64.and
                       i64.const -71777214294589696
                       i64.or
-                      local.tee $10
+                      local.tee $9
                       i64.const 4294901760
                       i64.and
                       i64.const 32
@@ -722,7 +722,7 @@
                       local.get $3
                       i64.const 4294901760
                       i64.and
-                      local.get $10
+                      local.get $9
                       i64.const 65535
                       i64.and
                       i64.or
@@ -736,14 +736,14 @@
                       i64.shr_u
                       i64.const 65535
                       i64.and
-                      local.get $10
+                      local.get $9
                       i64.const -281474976710656
                       i64.and
                       i64.or
                       local.get $3
                       i64.const -281474976710656
                       i64.and
-                      local.get $10
+                      local.get $9
                       i64.const 281470681743360
                       i64.and
                       i64.or
@@ -755,9 +755,9 @@
                       local.get $2
                       i32.add
                       local.tee $0
+                      local.get $10
                       local.get $8
-                      local.get $7
-                      local.get $9
+                      local.get $5
                       i64.const 48
                       i64.shr_u
                       i64.const 65535
@@ -792,7 +792,7 @@
                       i64.const 281479271743489
                       i64.and
                       i64.add
-                      local.tee $8
+                      local.tee $10
                       i64.mul
                       i64.add
                       local.tee $3
@@ -818,9 +818,9 @@
                       i64.add
                       i64.const 71777214294589695
                       i64.and
-                      local.get $5
                       local.get $6
-                      local.get $8
+                      local.get $7
+                      local.get $10
                       i64.mul
                       i64.add
                       local.tee $3
@@ -854,7 +854,7 @@
                       i64.and
                       local.get $11
                       local.get $4
-                      local.get $8
+                      local.get $10
                       i64.mul
                       i64.add
                       local.tee $4
@@ -930,10 +930,10 @@
                      i32.const 255
                      i32.and
                      i64.extend_i32_u
-                     local.tee $7
+                     local.tee $8
                      i64.const 18014673391583296
                      i64.mul
-                     local.tee $8
+                     local.tee $10
                      local.get $4
                      i64.const 29
                      i64.shr_u
@@ -941,9 +941,9 @@
                      i32.const 255
                      i32.and
                      i64.extend_i32_u
-                     local.get $7
+                     local.get $8
                      i64.sub
-                     local.tee $7
+                     local.tee $8
                      local.get $3
                      i64.const 4
                      i64.shr_u
@@ -955,18 +955,18 @@
                      i64.const 1
                      i64.and
                      i64.or
-                     local.tee $9
+                     local.tee $5
                      i64.const 255
                      i64.and
-                     local.tee $5
-                     local.get $5
+                     local.tee $6
+                     local.get $6
                      i64.const 28
                      i64.shl
                      i64.or
                      i64.const 64424509455
                      i64.and
-                     local.tee $5
-                     local.get $5
+                     local.tee $6
+                     local.get $6
                      i64.const 14
                      i64.shl
                      i64.or
@@ -974,8 +974,8 @@
                      i64.and
                      i64.const 21
                      i64.mul
-                     local.tee $5
-                     local.get $5
+                     local.tee $6
+                     local.get $6
                      i64.const 5
                      i64.shr_u
                      i64.const 281479271743489
@@ -984,15 +984,15 @@
                      local.tee $12
                      i64.mul
                      i64.add
-                     local.tee $5
+                     local.tee $6
                      i64.const 6
                      i64.shr_u
-                     local.get $5
+                     local.get $6
                      i64.const 5
                      i64.shr_u
                      i64.const 143835907860922879
                      i64.and
-                     local.get $5
+                     local.get $6
                      i64.const 3
                      i64.shl
                      i64.const 141865552958718456
@@ -1014,10 +1014,10 @@
                      i32.const 255
                      i32.and
                      i64.extend_i32_u
-                     local.tee $6
+                     local.tee $7
                      i64.const 18014673391583296
                      i64.mul
-                     local.tee $5
+                     local.tee $6
                      local.get $4
                      i64.const 45
                      i64.shr_u
@@ -1025,21 +1025,21 @@
                      i32.const 255
                      i32.and
                      i64.extend_i32_u
-                     local.get $6
+                     local.get $7
                      i64.sub
-                     local.tee $6
+                     local.tee $7
                      local.get $12
                      i64.mul
                      i64.add
-                     local.tee $10
+                     local.tee $9
                      i64.const 6
                      i64.shr_u
-                     local.get $10
+                     local.get $9
                      i64.const 5
                      i64.shr_u
                      i64.const 143835907860922879
                      i64.and
-                     local.get $10
+                     local.get $9
                      i64.const 3
                      i64.shl
                      i64.const 141865552958718456
@@ -1057,7 +1057,7 @@
                      i64.const 8
                      i64.shl
                      i64.or
-                     local.tee $10
+                     local.tee $9
                      i64.const 65535
                      i64.and
                      local.get $4
@@ -1120,7 +1120,7 @@
                      i64.const 32
                      i64.shl
                      i64.or
-                     local.get $10
+                     local.get $9
                      i64.const 4294901760
                      i64.and
                      local.get $3
@@ -1132,7 +1132,7 @@
                      i64.or
                      i64.store
                      local.get $1
-                     local.get $10
+                     local.get $9
                      i64.const 32
                      i64.shr_u
                      i64.const 65535
@@ -1141,7 +1141,7 @@
                      i64.const -281474976710656
                      i64.and
                      i64.or
-                     local.get $10
+                     local.get $9
                      i64.const -281474976710656
                      i64.and
                      local.get $3
@@ -1156,9 +1156,9 @@
                      local.get $2
                      i32.add
                      local.tee $0
+                     local.get $10
                      local.get $8
-                     local.get $7
-                     local.get $9
+                     local.get $5
                      i64.const 8
                      i64.shr_u
                      i64.const 255
@@ -1186,7 +1186,7 @@
                      i64.const 281479271743489
                      i64.and
                      i64.add
-                     local.tee $10
+                     local.tee $9
                      i64.mul
                      i64.add
                      local.tee $3
@@ -1212,9 +1212,9 @@
                      i64.add
                      i64.const 71777214294589695
                      i64.and
-                     local.get $5
                      local.get $6
-                     local.get $10
+                     local.get $7
+                     local.get $9
                      i64.mul
                      i64.add
                      local.tee $3
@@ -1248,18 +1248,18 @@
                      i64.and
                      local.get $11
                      local.get $4
-                     local.get $10
+                     local.get $9
                      i64.mul
                      i64.add
-                     local.tee $10
+                     local.tee $9
                      i64.const 6
                      i64.shr_u
-                     local.get $10
+                     local.get $9
                      i64.const 5
                      i64.shr_u
                      i64.const 143835907860922879
                      i64.and
-                     local.get $10
+                     local.get $9
                      i64.const 3
                      i64.shl
                      i64.const 141865552958718456
@@ -1276,7 +1276,7 @@
                      i64.and
                      i64.const -71777214294589696
                      i64.or
-                     local.tee $10
+                     local.tee $9
                      i64.const 4294901760
                      i64.and
                      i64.const 32
@@ -1285,7 +1285,7 @@
                      local.get $3
                      i64.const 4294901760
                      i64.and
-                     local.get $10
+                     local.get $9
                      i64.const 65535
                      i64.and
                      i64.or
@@ -1299,14 +1299,14 @@
                      i64.shr_u
                      i64.const 65535
                      i64.and
-                     local.get $10
+                     local.get $9
                      i64.const -281474976710656
                      i64.and
                      i64.or
                      local.get $3
                      i64.const -281474976710656
                      i64.and
-                     local.get $10
+                     local.get $9
                      i64.const 281470681743360
                      i64.and
                      i64.or
@@ -1318,9 +1318,9 @@
                      local.get $2
                      i32.add
                      local.tee $0
+                     local.get $10
                      local.get $8
-                     local.get $7
-                     local.get $9
+                     local.get $5
                      i64.const 16
                      i64.shr_u
                      i64.const 255
@@ -1348,7 +1348,7 @@
                      i64.const 281479271743489
                      i64.and
                      i64.add
-                     local.tee $10
+                     local.tee $9
                      i64.mul
                      i64.add
                      local.tee $3
@@ -1374,9 +1374,9 @@
                      i64.add
                      i64.const 71777214294589695
                      i64.and
-                     local.get $5
                      local.get $6
-                     local.get $10
+                     local.get $7
+                     local.get $9
                      i64.mul
                      i64.add
                      local.tee $3
@@ -1410,18 +1410,18 @@
                      i64.and
                      local.get $11
                      local.get $4
-                     local.get $10
+                     local.get $9
                      i64.mul
                      i64.add
-                     local.tee $10
+                     local.tee $9
                      i64.const 6
                      i64.shr_u
-                     local.get $10
+                     local.get $9
                      i64.const 5
                      i64.shr_u
                      i64.const 143835907860922879
                      i64.and
-                     local.get $10
+                     local.get $9
                      i64.const 3
                      i64.shl
                      i64.const 141865552958718456
@@ -1438,7 +1438,7 @@
                      i64.and
                      i64.const -71777214294589696
                      i64.or
-                     local.tee $10
+                     local.tee $9
                      i64.const 4294901760
                      i64.and
                      i64.const 32
@@ -1447,7 +1447,7 @@
                      local.get $3
                      i64.const 4294901760
                      i64.and
-                     local.get $10
+                     local.get $9
                      i64.const 65535
                      i64.and
                      i64.or
@@ -1461,14 +1461,14 @@
                      i64.shr_u
                      i64.const 65535
                      i64.and
-                     local.get $10
+                     local.get $9
                      i64.const -281474976710656
                      i64.and
                      i64.or
                      local.get $3
                      i64.const -281474976710656
                      i64.and
-                     local.get $10
+                     local.get $9
                      i64.const 281470681743360
                      i64.and
                      i64.or
@@ -1480,9 +1480,9 @@
                      local.get $2
                      i32.add
                      local.tee $0
+                     local.get $10
                      local.get $8
-                     local.get $7
-                     local.get $9
+                     local.get $5
                      i64.const 24
                      i64.shr_u
                      i64.const 255
@@ -1510,7 +1510,7 @@
                      i64.const 281479271743489
                      i64.and
                      i64.add
-                     local.tee $8
+                     local.tee $10
                      i64.mul
                      i64.add
                      local.tee $3
@@ -1536,9 +1536,9 @@
                      i64.add
                      i64.const 71777214294589695
                      i64.and
-                     local.get $5
                      local.get $6
-                     local.get $8
+                     local.get $7
+                     local.get $10
                      i64.mul
                      i64.add
                      local.tee $3
@@ -1572,7 +1572,7 @@
                      i64.and
                      local.get $11
                      local.get $4
-                     local.get $8
+                     local.get $10
                      i64.mul
                      i64.add
                      local.tee $4
@@ -1697,7 +1697,7 @@
                     i64.and
                     i64.or
                     i64.or
-                    local.set $8
+                    local.set $10
                     local.get $0
                     i32.const 1
                     i32.shl
@@ -1712,12 +1712,12 @@
                     i64.or
                     i64.const 1085102592571150095
                     i64.and
-                    local.tee $7
-                    local.get $7
+                    local.tee $8
+                    local.get $8
                     i64.const 4
                     i64.shl
                     i64.or
-                    local.tee $7
+                    local.tee $8
                     i64.const 255
                     i64.and
                     local.get $3
@@ -1739,8 +1739,8 @@
                     i64.and
                     local.tee $3
                     i64.sub
-                    local.set $9
-                    local.get $7
+                    local.set $5
+                    local.get $8
                     i64.const 24
                     i64.shr_u
                     i64.const 255
@@ -1750,10 +1750,10 @@
                     i64.shr_u
                     i64.const 255
                     i64.and
-                    local.tee $5
+                    local.tee $6
                     i64.sub
-                    local.set $6
-                    local.get $7
+                    local.set $7
+                    local.get $8
                     i64.const 8
                     i64.shr_u
                     i64.const 255
@@ -1763,10 +1763,10 @@
                     i64.shr_u
                     i64.const 255
                     i64.and
-                    local.tee $10
+                    local.tee $9
                     i64.sub
                     local.set $11
-                    local.get $7
+                    local.get $8
                     i64.const 32
                     i64.shr_u
                     i64.const 255
@@ -1779,7 +1779,7 @@
                     local.tee $12
                     i64.sub
                     local.set $14
-                    local.get $7
+                    local.get $8
                     i64.const 16
                     i64.shr_u
                     i64.const 255
@@ -1792,7 +1792,7 @@
                     local.tee $15
                     i64.sub
                     local.set $17
-                    local.get $7
+                    local.get $8
                     i64.const 40
                     i64.shr_u
                     i64.const 255
@@ -1809,14 +1809,14 @@
                     i64.const 18014673391583296
                     i64.mul
                     local.set $20
-                    local.get $5
+                    local.get $6
                     i64.const 18014673391583296
                     i64.mul
-                    local.set $5
-                    local.get $10
+                    local.set $6
+                    local.get $9
                     i64.const 18014673391583296
                     i64.mul
-                    local.set $10
+                    local.set $9
                     local.get $12
                     i64.const 18014673391583296
                     i64.mul
@@ -1838,7 +1838,7 @@
                      if
                       local.get $1
                       local.get $20
-                      local.get $8
+                      local.get $10
                       i64.const 4095
                       i64.and
                       local.tee $4
@@ -1868,21 +1868,21 @@
                       i64.and
                       i64.add
                       local.tee $4
-                      local.get $9
+                      local.get $5
                       i64.mul
                       i64.add
                       local.tee $3
                       local.get $16
                       i64.extend_i32_u
-                      local.tee $7
-                      local.get $7
+                      local.tee $8
+                      local.get $8
                       i64.const 30
                       i64.shl
                       i64.or
                       i64.const 12884901891
                       i64.and
-                      local.tee $7
-                      local.get $7
+                      local.tee $8
+                      local.get $8
                       i64.const 15
                       i64.shl
                       i64.or
@@ -1890,11 +1890,11 @@
                       i64.and
                       i64.const 65535
                       i64.mul
-                      local.tee $7
+                      local.tee $8
                       local.get $3
-                      local.get $5
-                      local.get $4
                       local.get $6
+                      local.get $4
+                      local.get $7
                       i64.mul
                       i64.add
                       i64.xor
@@ -1923,13 +1923,13 @@
                       i64.add
                       i64.const 71777214294589695
                       i64.and
-                      local.get $10
+                      local.get $9
                       local.get $4
                       local.get $11
                       i64.mul
                       i64.add
                       local.tee $3
-                      local.get $7
+                      local.get $8
                       local.get $3
                       local.get $12
                       local.get $4
@@ -1974,7 +1974,7 @@
                       i64.mul
                       i64.add
                       local.tee $22
-                      local.get $7
+                      local.get $8
                       local.get $22
                       local.get $21
                       local.get $4
@@ -2051,10 +2051,10 @@
                       local.get $2
                       i32.add
                       local.set $1
-                      local.get $8
+                      local.get $10
                       i64.const 12
                       i64.shr_u
-                      local.set $8
+                      local.set $10
                       local.get $16
                       i32.const 4
                       i32.shr_u
@@ -2109,7 +2109,7 @@
                    local.get $3
                    i64.const 23
                    i64.shr_u
-                   local.tee $6
+                   local.tee $7
                    i32.wrap_i64
                    i32.const 1
                    i32.const 1476400895
@@ -2154,7 +2154,7 @@
                    i32.or
                    i32.or
                    i64.extend_i32_u
-                   local.set $8
+                   local.set $10
                    local.get $16
                    i32.load offset=2048
                    local.tee $0
@@ -2188,7 +2188,7 @@
                    i32.or
                    i32.load8_u offset=1024
                    i64.extend_i32_u
-                   local.set $7
+                   local.set $8
                    local.get $4
                    i64.const 55
                    i64.shr_u
@@ -2205,9 +2205,9 @@
                    i32.or
                    i32.load8_u offset=1024
                    i64.extend_i32_u
-                   local.get $7
+                   local.get $8
                    i64.sub
-                   local.set $10
+                   local.set $9
                    local.get $3
                    i64.const 1
                    i64.shr_u
@@ -2233,7 +2233,7 @@
                    i32.or
                    i32.load8_u offset=1024
                    i64.extend_i32_u
-                   local.set $9
+                   local.set $5
                    local.get $3
                    i64.const 3
                    i64.shr_u
@@ -2250,7 +2250,7 @@
                    i32.or
                    i32.load8_u offset=1024
                    i64.extend_i32_u
-                   local.get $9
+                   local.get $5
                    i64.sub
                    local.set $11
                    local.get $3
@@ -2278,7 +2278,7 @@
                    i32.or
                    i32.load8_u offset=1024
                    i64.extend_i32_u
-                   local.set $5
+                   local.set $6
                    local.get $3
                    i64.const 15
                    i64.shr_u
@@ -2295,7 +2295,7 @@
                    i32.or
                    i32.load8_u offset=1024
                    i64.extend_i32_u
-                   local.get $5
+                   local.get $6
                    i64.sub
                    local.set $12
                    local.get $4
@@ -2475,7 +2475,7 @@
                    local.tee $24
                    i64.sub
                    local.set $26
-                   local.get $6
+                   local.get $7
                    i32.wrap_i64
                    i32.const 3
                    i32.and
@@ -2507,19 +2507,19 @@
                    i64.extend_i32_u
                    local.tee $3
                    i64.sub
-                   local.set $6
-                   local.get $7
+                   local.set $7
+                   local.get $8
                    i64.const 18014673391583296
                    i64.mul
                    local.set $27
-                   local.get $9
-                   i64.const 18014673391583296
-                   i64.mul
-                   local.set $28
                    local.get $5
                    i64.const 18014673391583296
                    i64.mul
-                   local.set $5
+                   local.set $28
+                   local.get $6
+                   i64.const 18014673391583296
+                   i64.mul
+                   local.set $6
                    local.get $14
                    i64.const 18014673391583296
                    i64.mul
@@ -2551,7 +2551,7 @@
                     if
                      local.get $1
                      local.get $27
-                     local.get $8
+                     local.get $10
                      i64.const 255
                      i64.and
                      local.tee $4
@@ -2578,21 +2578,21 @@
                      i64.and
                      i64.add
                      local.tee $4
-                     local.get $10
+                     local.get $9
                      i64.mul
                      i64.add
                      local.tee $3
                      local.get $23
                      i64.extend_i32_u
-                     local.tee $7
-                     local.get $7
+                     local.tee $8
+                     local.get $8
                      i64.const 30
                      i64.shl
                      i64.or
                      i64.const 12884901891
                      i64.and
-                     local.tee $7
-                     local.get $7
+                     local.tee $8
+                     local.get $8
                      i64.const 15
                      i64.shl
                      i64.or
@@ -2600,7 +2600,7 @@
                      i64.and
                      i64.const 65535
                      i64.mul
-                     local.tee $7
+                     local.tee $8
                      local.get $3
                      local.get $28
                      local.get $4
@@ -2613,15 +2613,15 @@
                      local.tee $3
                      local.get $25
                      i64.extend_i32_u
-                     local.tee $9
-                     local.get $9
+                     local.tee $5
+                     local.get $5
                      i64.const 30
                      i64.shl
                      i64.or
                      i64.const 12884901891
                      i64.and
-                     local.tee $9
-                     local.get $9
+                     local.tee $5
+                     local.get $5
                      i64.const 15
                      i64.shl
                      i64.or
@@ -2629,9 +2629,9 @@
                      i64.and
                      i64.const 65535
                      i64.mul
-                     local.tee $9
+                     local.tee $5
                      local.get $3
-                     local.get $5
+                     local.get $6
                      local.get $4
                      local.get $12
                      i64.mul
@@ -2668,7 +2668,7 @@
                      i64.mul
                      i64.add
                      local.tee $3
-                     local.get $7
+                     local.get $8
                      local.get $3
                      local.get $17
                      local.get $4
@@ -2679,7 +2679,7 @@
                      i64.and
                      i64.xor
                      local.tee $3
-                     local.get $9
+                     local.get $5
                      local.get $3
                      local.get $20
                      local.get $4
@@ -2724,7 +2724,7 @@
                      i64.mul
                      i64.add
                      local.tee $32
-                     local.get $7
+                     local.get $8
                      local.get $32
                      local.get $24
                      local.get $4
@@ -2734,12 +2734,12 @@
                      i64.xor
                      i64.and
                      i64.xor
-                     local.tee $7
-                     local.get $9
-                     local.get $7
+                     local.tee $8
+                     local.get $5
+                     local.get $8
                      local.get $31
                      local.get $4
-                     local.get $6
+                     local.get $7
                      i64.mul
                      i64.add
                      i64.xor
@@ -2812,10 +2812,10 @@
                      local.get $2
                      i32.add
                      local.set $1
-                     local.get $8
+                     local.get $10
                      i64.const 8
                      i64.shr_u
-                     local.set $8
+                     local.set $10
                      local.get $23
                      i32.const 4
                      i32.shr_u
@@ -2900,7 +2900,7 @@
                   i32.or
                   i32.load8_u offset=1036
                   i64.extend_i32_u
-                  local.set $7
+                  local.set $5
                   local.get $4
                   i64.const 62
                   i64.shr_u
@@ -2929,7 +2929,7 @@
                   i32.or
                   i32.load8_u offset=1036
                   i64.extend_i32_u
-                  local.set $11
+                  local.set $12
                   local.get $3
                   i64.const 1
                   i64.shr_u
@@ -2946,7 +2946,7 @@
                   i32.or
                   i32.load8_u offset=1036
                   i64.extend_i32_u
-                  local.set $9
+                  local.set $6
                   local.get $3
                   i64.const 4
                   i64.shr_u
@@ -2961,7 +2961,7 @@
                   i32.or
                   i32.load8_u offset=1036
                   i64.extend_i32_u
-                  local.set $12
+                  local.set $14
                   local.get $3
                   i64.const 7
                   i64.shr_u
@@ -2985,7 +2985,7 @@
                   i32.or
                   i32.load8_u offset=1036
                   i64.extend_i32_u
-                  local.set $5
+                  local.set $7
                   local.get $3
                   i64.const 10
                   i64.shr_u
@@ -3002,7 +3002,7 @@
                   i32.or
                   i32.load8_u offset=1036
                   i64.extend_i32_u
-                  local.set $14
+                  local.set $15
                   local.get $3
                   i64.const 13
                   i64.shr_u
@@ -3017,7 +3017,7 @@
                   i32.or
                   i32.load8_u offset=1036
                   i64.extend_i32_u
-                  local.set $6
+                  local.set $9
                   local.get $3
                   i64.const 16
                   i64.shr_u
@@ -3041,7 +3041,7 @@
                   i32.or
                   i32.load8_u offset=1036
                   i64.extend_i32_u
-                  local.set $15
+                  local.set $17
                   local.get $3
                   i64.const 19
                   i64.shr_u
@@ -3073,7 +3073,7 @@
                   i32.or
                   i32.load8_u offset=1036
                   i64.extend_i32_u
-                  local.set $17
+                  local.set $19
                   local.get $3
                   i64.const 25
                   i64.shr_u
@@ -3135,7 +3135,7 @@
                   i64.and
                   i64.or
                   i64.or
-                  local.set $3
+                  local.set $10
                   local.get $0
                   if (result i32)
                    local.get $13
@@ -3153,47 +3153,47 @@
                   local.set $0
                   local.get $8
                   i64.sub
-                  local.set $10
-                  local.get $14
-                  local.get $5
-                  i64.sub
-                  local.set $14
-                  local.get $11
-                  local.get $7
-                  i64.sub
                   local.set $11
                   local.get $15
-                  local.get $6
+                  local.get $7
                   i64.sub
                   local.set $15
                   local.get $12
-                  local.get $9
+                  local.get $5
                   i64.sub
                   local.set $12
                   local.get $17
-                  local.get $4
+                  local.get $9
                   i64.sub
                   local.set $17
+                  local.get $14
+                  local.get $6
+                  i64.sub
+                  local.set $14
+                  local.get $19
+                  local.get $4
+                  i64.sub
+                  local.set $19
                   local.get $8
                   i64.const 18014673391583296
                   i64.mul
-                  local.set $19
+                  local.set $20
+                  local.get $7
+                  i64.const 18014673391583296
+                  i64.mul
+                  local.set $7
                   local.get $5
                   i64.const 18014673391583296
                   i64.mul
                   local.set $5
-                  local.get $7
-                  i64.const 18014673391583296
-                  i64.mul
-                  local.set $20
-                  local.get $6
-                  i64.const 18014673391583296
-                  i64.mul
-                  local.set $6
                   local.get $9
                   i64.const 18014673391583296
                   i64.mul
                   local.set $9
+                  local.get $6
+                  i64.const 18014673391583296
+                  i64.mul
+                  local.set $6
                   local.get $4
                   i64.const 18014673391583296
                   i64.mul
@@ -3206,8 +3206,8 @@
                    i32.lt_s
                    if
                     local.get $0
-                    local.get $19
-                    local.get $3
+                    local.get $20
+                    local.get $10
                     i64.const 255
                     i64.and
                     local.tee $4
@@ -3234,21 +3234,21 @@
                     i64.and
                     i64.add
                     local.tee $4
-                    local.get $10
+                    local.get $11
                     i64.mul
                     i64.add
-                    local.tee $8
+                    local.tee $3
                     local.get $13
                     i64.extend_i32_u
-                    local.tee $7
-                    local.get $7
+                    local.tee $8
+                    local.get $8
                     i64.const 30
                     i64.shl
                     i64.or
                     i64.const 12884901891
                     i64.and
-                    local.tee $7
-                    local.get $7
+                    local.tee $8
+                    local.get $8
                     i64.const 15
                     i64.shl
                     i64.or
@@ -3256,25 +3256,25 @@
                     i64.and
                     i64.const 65535
                     i64.mul
-                    local.tee $7
-                    local.get $8
-                    local.get $5
+                    local.tee $8
+                    local.get $3
+                    local.get $7
                     local.get $4
-                    local.get $14
+                    local.get $15
                     i64.mul
                     i64.add
                     i64.xor
                     i64.and
                     i64.xor
-                    local.tee $8
+                    local.tee $3
                     i64.const 6
                     i64.shr_u
-                    local.get $8
+                    local.get $3
                     i64.const 5
                     i64.shr_u
                     i64.const 143835907860922879
                     i64.and
-                    local.get $8
+                    local.get $3
                     i64.const 3
                     i64.shl
                     i64.const 141865552958718456
@@ -3289,31 +3289,31 @@
                     i64.add
                     i64.const 71777214294589695
                     i64.and
-                    local.get $20
+                    local.get $5
                     local.get $4
-                    local.get $11
+                    local.get $12
                     i64.mul
                     i64.add
-                    local.tee $8
-                    local.get $7
+                    local.tee $3
                     local.get $8
-                    local.get $6
+                    local.get $3
+                    local.get $9
                     local.get $4
-                    local.get $15
+                    local.get $17
                     i64.mul
                     i64.add
                     i64.xor
                     i64.and
                     i64.xor
-                    local.tee $8
+                    local.tee $3
                     i64.const 6
                     i64.shr_u
-                    local.get $8
+                    local.get $3
                     i64.const 5
                     i64.shr_u
                     i64.const 143835907860922879
                     i64.and
-                    local.get $8
+                    local.get $3
                     i64.const 3
                     i64.shl
                     i64.const 141865552958718456
@@ -3331,20 +3331,20 @@
                     i64.const 8
                     i64.shl
                     i64.or
-                    local.tee $8
+                    local.tee $3
                     i64.const 65535
                     i64.and
-                    local.get $9
+                    local.get $6
                     local.get $4
-                    local.get $12
+                    local.get $14
                     i64.mul
                     i64.add
                     local.tee $22
-                    local.get $7
+                    local.get $8
                     local.get $22
                     local.get $21
                     local.get $4
-                    local.get $17
+                    local.get $19
                     i64.mul
                     i64.add
                     i64.xor
@@ -3381,7 +3381,7 @@
                     i64.const 32
                     i64.shl
                     i64.or
-                    local.get $8
+                    local.get $3
                     i64.const 4294901760
                     i64.and
                     local.get $4
@@ -3393,7 +3393,7 @@
                     i64.or
                     i64.store
                     local.get $0
-                    local.get $8
+                    local.get $3
                     i64.const 32
                     i64.shr_u
                     i64.const 65535
@@ -3402,7 +3402,7 @@
                     i64.const -281474976710656
                     i64.and
                     i64.or
-                    local.get $8
+                    local.get $3
                     i64.const -281474976710656
                     i64.and
                     local.get $4
@@ -3417,10 +3417,10 @@
                     local.get $2
                     i32.add
                     local.set $0
-                    local.get $3
+                    local.get $10
                     i64.const 8
                     i64.shr_u
-                    local.set $3
+                    local.set $10
                     local.get $13
                     i32.const 4
                     i32.shr_u
@@ -3442,10 +3442,10 @@
                  i32.const 255
                  i32.and
                  i64.extend_i32_u
-                 local.tee $7
+                 local.tee $8
                  i64.const 18014673391583296
                  i64.mul
-                 local.tee $8
+                 local.tee $10
                  local.get $4
                  i64.const 28
                  i64.shr_u
@@ -3453,9 +3453,9 @@
                  i32.const 255
                  i32.and
                  i64.extend_i32_u
-                 local.get $7
+                 local.get $8
                  i64.sub
-                 local.tee $7
+                 local.tee $8
                  local.get $3
                  i64.const 3
                  i64.shr_u
@@ -3467,30 +3467,30 @@
                  i64.const 3
                  i64.and
                  i64.or
-                 local.tee $9
+                 local.tee $5
                  i64.const 4095
                  i64.and
-                 local.tee $5
-                 local.get $5
+                 local.tee $6
+                 local.get $6
                  i64.const 26
                  i64.shl
                  i64.or
                  i64.const 270582939711
                  i64.and
-                 local.tee $5
-                 local.get $5
+                 local.tee $6
+                 local.get $6
                  i64.const 13
                  i64.shl
                  i64.or
                  i64.const 1970354902204423
                  i64.and
-                 local.tee $5
-                 local.get $5
+                 local.tee $6
+                 local.get $6
                  i64.const 3
                  i64.shl
                  i64.or
-                 local.tee $5
-                 local.get $5
+                 local.tee $6
+                 local.get $6
                  i64.const 5
                  i64.shr_u
                  i64.const 281479271743489
@@ -3499,15 +3499,15 @@
                  local.tee $12
                  i64.mul
                  i64.add
-                 local.tee $5
+                 local.tee $6
                  i64.const 6
                  i64.shr_u
-                 local.get $5
+                 local.get $6
                  i64.const 5
                  i64.shr_u
                  i64.const 143835907860922879
                  i64.and
-                 local.get $5
+                 local.get $6
                  i64.const 3
                  i64.shl
                  i64.const 141865552958718456
@@ -3529,10 +3529,10 @@
                  i32.const 255
                  i32.and
                  i64.extend_i32_u
-                 local.tee $6
+                 local.tee $7
                  i64.const 18014673391583296
                  i64.mul
-                 local.tee $5
+                 local.tee $6
                  local.get $4
                  i64.const 44
                  i64.shr_u
@@ -3540,21 +3540,21 @@
                  i32.const 255
                  i32.and
                  i64.extend_i32_u
-                 local.get $6
+                 local.get $7
                  i64.sub
-                 local.tee $6
+                 local.tee $7
                  local.get $12
                  i64.mul
                  i64.add
-                 local.tee $10
+                 local.tee $9
                  i64.const 6
                  i64.shr_u
-                 local.get $10
+                 local.get $9
                  i64.const 5
                  i64.shr_u
                  i64.const 143835907860922879
                  i64.and
-                 local.get $10
+                 local.get $9
                  i64.const 3
                  i64.shl
                  i64.const 141865552958718456
@@ -3572,7 +3572,7 @@
                  i64.const 8
                  i64.shl
                  i64.or
-                 local.tee $10
+                 local.tee $9
                  i64.const 65535
                  i64.and
                  local.get $4
@@ -3635,7 +3635,7 @@
                  i64.const 32
                  i64.shl
                  i64.or
-                 local.get $10
+                 local.get $9
                  i64.const 4294901760
                  i64.and
                  local.get $3
@@ -3647,7 +3647,7 @@
                  i64.or
                  i64.store
                  local.get $1
-                 local.get $10
+                 local.get $9
                  i64.const 32
                  i64.shr_u
                  i64.const 65535
@@ -3656,7 +3656,7 @@
                  i64.const -281474976710656
                  i64.and
                  i64.or
-                 local.get $10
+                 local.get $9
                  i64.const -281474976710656
                  i64.and
                  local.get $3
@@ -3671,9 +3671,9 @@
                  local.get $2
                  i32.add
                  local.tee $0
+                 local.get $10
                  local.get $8
-                 local.get $7
-                 local.get $9
+                 local.get $5
                  i64.const 12
                  i64.shr_u
                  i64.const 4095
@@ -3704,7 +3704,7 @@
                  i64.const 281479271743489
                  i64.and
                  i64.add
-                 local.tee $10
+                 local.tee $9
                  i64.mul
                  i64.add
                  local.tee $3
@@ -3730,9 +3730,9 @@
                  i64.add
                  i64.const 71777214294589695
                  i64.and
-                 local.get $5
                  local.get $6
-                 local.get $10
+                 local.get $7
+                 local.get $9
                  i64.mul
                  i64.add
                  local.tee $3
@@ -3766,18 +3766,18 @@
                  i64.and
                  local.get $11
                  local.get $4
-                 local.get $10
+                 local.get $9
                  i64.mul
                  i64.add
-                 local.tee $10
+                 local.tee $9
                  i64.const 6
                  i64.shr_u
-                 local.get $10
+                 local.get $9
                  i64.const 5
                  i64.shr_u
                  i64.const 143835907860922879
                  i64.and
-                 local.get $10
+                 local.get $9
                  i64.const 3
                  i64.shl
                  i64.const 141865552958718456
@@ -3794,7 +3794,7 @@
                  i64.and
                  i64.const -71777214294589696
                  i64.or
-                 local.tee $10
+                 local.tee $9
                  i64.const 4294901760
                  i64.and
                  i64.const 32
@@ -3803,7 +3803,7 @@
                  local.get $3
                  i64.const 4294901760
                  i64.and
-                 local.get $10
+                 local.get $9
                  i64.const 65535
                  i64.and
                  i64.or
@@ -3817,14 +3817,14 @@
                  i64.shr_u
                  i64.const 65535
                  i64.and
-                 local.get $10
+                 local.get $9
                  i64.const -281474976710656
                  i64.and
                  i64.or
                  local.get $3
                  i64.const -281474976710656
                  i64.and
-                 local.get $10
+                 local.get $9
                  i64.const 281470681743360
                  i64.and
                  i64.or
@@ -3836,9 +3836,9 @@
                  local.get $2
                  i32.add
                  local.tee $0
+                 local.get $10
                  local.get $8
-                 local.get $7
-                 local.get $9
+                 local.get $5
                  i64.const 24
                  i64.shr_u
                  i64.const 4095
@@ -3869,7 +3869,7 @@
                  i64.const 281479271743489
                  i64.and
                  i64.add
-                 local.tee $10
+                 local.tee $9
                  i64.mul
                  i64.add
                  local.tee $3
@@ -3895,9 +3895,9 @@
                  i64.add
                  i64.const 71777214294589695
                  i64.and
-                 local.get $5
                  local.get $6
-                 local.get $10
+                 local.get $7
+                 local.get $9
                  i64.mul
                  i64.add
                  local.tee $3
@@ -3931,18 +3931,18 @@
                  i64.and
                  local.get $11
                  local.get $4
-                 local.get $10
+                 local.get $9
                  i64.mul
                  i64.add
-                 local.tee $10
+                 local.tee $9
                  i64.const 6
                  i64.shr_u
-                 local.get $10
+                 local.get $9
                  i64.const 5
                  i64.shr_u
                  i64.const 143835907860922879
                  i64.and
-                 local.get $10
+                 local.get $9
                  i64.const 3
                  i64.shl
                  i64.const 141865552958718456
@@ -3959,7 +3959,7 @@
                  i64.and
                  i64.const -71777214294589696
                  i64.or
-                 local.tee $10
+                 local.tee $9
                  i64.const 4294901760
                  i64.and
                  i64.const 32
@@ -3968,7 +3968,7 @@
                  local.get $3
                  i64.const 4294901760
                  i64.and
-                 local.get $10
+                 local.get $9
                  i64.const 65535
                  i64.and
                  i64.or
@@ -3982,14 +3982,14 @@
                  i64.shr_u
                  i64.const 65535
                  i64.and
-                 local.get $10
+                 local.get $9
                  i64.const -281474976710656
                  i64.and
                  i64.or
                  local.get $3
                  i64.const -281474976710656
                  i64.and
-                 local.get $10
+                 local.get $9
                  i64.const 281470681743360
                  i64.and
                  i64.or
@@ -4001,9 +4001,9 @@
                  local.get $2
                  i32.add
                  local.tee $0
+                 local.get $10
                  local.get $8
-                 local.get $7
-                 local.get $9
+                 local.get $5
                  i64.const 36
                  i64.shr_u
                  i64.const 4095
@@ -4034,7 +4034,7 @@
                  i64.const 281479271743489
                  i64.and
                  i64.add
-                 local.tee $8
+                 local.tee $10
                  i64.mul
                  i64.add
                  local.tee $3
@@ -4060,9 +4060,9 @@
                  i64.add
                  i64.const 71777214294589695
                  i64.and
-                 local.get $5
                  local.get $6
-                 local.get $8
+                 local.get $7
+                 local.get $10
                  i64.mul
                  i64.add
                  local.tee $3
@@ -4096,7 +4096,7 @@
                  i64.and
                  local.get $11
                  local.get $4
-                 local.get $8
+                 local.get $10
                  i64.mul
                  i64.add
                  local.tee $4
@@ -4188,10 +4188,10 @@
                 i32.or
                 i32.load8_u offset=1124
                 i64.extend_i32_u
-                local.tee $8
+                local.tee $10
                 i64.const 18014673391583296
                 i64.mul
-                local.tee $7
+                local.tee $8
                 local.get $4
                 i64.const 41
                 i64.shr_u
@@ -4208,9 +4208,9 @@
                 i32.or
                 i32.load8_u offset=1124
                 i64.extend_i32_u
-                local.get $8
+                local.get $10
                 i64.sub
-                local.tee $9
+                local.tee $5
                 local.get $3
                 i64.const 2
                 i64.shr_u
@@ -4226,20 +4226,20 @@
                 i64.and
                 i64.or
                 i64.or
-                local.tee $8
+                local.tee $10
                 i64.const 2
                 i64.shr_u
                 i64.const 13107
                 i64.and
-                local.tee $5
-                local.get $5
+                local.tee $6
+                local.get $6
                 i64.const 24
                 i64.shl
                 i64.or
                 i64.const 219043332147
                 i64.and
-                local.tee $5
-                local.get $5
+                local.tee $6
+                local.get $6
                 i64.const 12
                 i64.shl
                 i64.or
@@ -4247,26 +4247,26 @@
                 i64.and
                 i64.const 21
                 i64.mul
-                local.tee $5
-                local.get $5
+                local.tee $6
+                local.get $6
                 i64.const 5
                 i64.shr_u
                 i64.const 281479271743489
                 i64.and
                 i64.add
                 local.tee $12
-                local.get $8
+                local.get $10
                 i64.const 13107
                 i64.and
-                local.tee $5
-                local.get $5
+                local.tee $6
+                local.get $6
                 i64.const 24
                 i64.shl
                 i64.or
                 i64.const 219043332147
                 i64.and
-                local.tee $5
-                local.get $5
+                local.tee $6
+                local.get $6
                 i64.const 12
                 i64.shl
                 i64.or
@@ -4274,8 +4274,8 @@
                 i64.and
                 i64.const 21
                 i64.mul
-                local.tee $5
-                local.get $5
+                local.tee $6
+                local.get $6
                 i64.const 5
                 i64.shr_u
                 i64.const 281479271743489
@@ -4294,15 +4294,15 @@
                 select
                 i64.mul
                 i64.add
-                local.tee $5
+                local.tee $6
                 i64.const 6
                 i64.shr_u
-                local.get $5
+                local.get $6
                 i64.const 5
                 i64.shr_u
                 i64.const 143835907860922879
                 i64.and
-                local.get $5
+                local.get $6
                 i64.const 3
                 i64.shl
                 i64.const 141865552958718456
@@ -4331,10 +4331,10 @@
                 i32.or
                 i32.load8_u offset=1124
                 i64.extend_i32_u
-                local.tee $6
+                local.tee $7
                 i64.const 18014673391583296
                 i64.mul
-                local.tee $5
+                local.tee $6
                 local.get $4
                 i64.const 51
                 i64.shr_u
@@ -4358,9 +4358,9 @@
                 i32.or
                 i32.load8_u offset=1124
                 i64.extend_i32_u
-                local.get $6
+                local.get $7
                 i64.sub
-                local.tee $6
+                local.tee $7
                 local.get $12
                 local.get $14
                 local.get $16
@@ -4370,15 +4370,15 @@
                 select
                 i64.mul
                 i64.add
-                local.tee $10
+                local.tee $9
                 i64.const 6
                 i64.shr_u
-                local.get $10
+                local.get $9
                 i64.const 5
                 i64.shr_u
                 i64.const 143835907860922879
                 i64.and
-                local.get $10
+                local.get $9
                 i64.const 3
                 i64.shl
                 i64.const 141865552958718456
@@ -4396,7 +4396,7 @@
                 i64.const 8
                 i64.shl
                 i64.or
-                local.tee $10
+                local.tee $9
                 i64.const 65535
                 i64.and
                 local.get $4
@@ -4481,7 +4481,7 @@
                 i64.const 32
                 i64.shl
                 i64.or
-                local.get $10
+                local.get $9
                 i64.const 4294901760
                 i64.and
                 local.get $3
@@ -4493,7 +4493,7 @@
                 i64.or
                 i64.store
                 local.get $1
-                local.get $10
+                local.get $9
                 i64.const 32
                 i64.shr_u
                 i64.const 65535
@@ -4502,7 +4502,7 @@
                 i64.const -281474976710656
                 i64.and
                 i64.or
-                local.get $10
+                local.get $9
                 i64.const -281474976710656
                 i64.and
                 local.get $3
@@ -4517,9 +4517,9 @@
                 local.get $2
                 i32.add
                 local.tee $1
-                local.get $7
-                local.get $9
                 local.get $8
+                local.get $5
+                local.get $10
                 i64.const 18
                 i64.shr_u
                 i64.const 13107
@@ -4547,8 +4547,8 @@
                 i64.const 281479271743489
                 i64.and
                 i64.add
-                local.tee $10
-                local.get $8
+                local.tee $9
+                local.get $10
                 i64.const 16
                 i64.shr_u
                 i64.const 13107
@@ -4604,9 +4604,9 @@
                 i64.add
                 i64.const 71777214294589695
                 i64.and
-                local.get $5
                 local.get $6
-                local.get $10
+                local.get $7
+                local.get $9
                 local.get $12
                 local.get $13
                 select
@@ -4643,18 +4643,18 @@
                 i64.and
                 local.get $11
                 local.get $4
-                local.get $10
+                local.get $9
                 local.get $12
                 local.get $16
                 select
                 i64.mul
                 i64.add
-                local.tee $10
+                local.tee $9
                 i64.const 5
                 i64.shr_u
                 i64.const 143835907860922879
                 i64.and
-                local.get $10
+                local.get $9
                 i64.const 3
                 i64.shl
                 i64.const 141865552958718456
@@ -4666,7 +4666,7 @@
                 i64.shr_u
                 i64.const 281479271743489
                 i64.and
-                local.get $10
+                local.get $9
                 i64.const 6
                 i64.shr_u
                 i64.add
@@ -4674,7 +4674,7 @@
                 i64.and
                 i64.const -71777214294589696
                 i64.or
-                local.tee $10
+                local.tee $9
                 i64.const 4294901760
                 i64.and
                 i64.const 32
@@ -4683,7 +4683,7 @@
                 local.get $3
                 i64.const 4294901760
                 i64.and
-                local.get $10
+                local.get $9
                 i64.const 65535
                 i64.and
                 i64.or
@@ -4697,14 +4697,14 @@
                 i64.shr_u
                 i64.const 65535
                 i64.and
-                local.get $10
+                local.get $9
                 i64.const -281474976710656
                 i64.and
                 i64.or
                 local.get $3
                 i64.const -281474976710656
                 i64.and
-                local.get $10
+                local.get $9
                 i64.const 281470681743360
                 i64.and
                 i64.or
@@ -4716,9 +4716,9 @@
                 local.get $2
                 i32.add
                 local.tee $1
-                local.get $7
-                local.get $9
                 local.get $8
+                local.get $5
+                local.get $10
                 i64.const 34
                 i64.shr_u
                 i64.const 13107
@@ -4746,8 +4746,8 @@
                 i64.const 281479271743489
                 i64.and
                 i64.add
-                local.tee $10
-                local.get $8
+                local.tee $9
+                local.get $10
                 i64.const 32
                 i64.shr_u
                 i64.const 13107
@@ -4803,9 +4803,9 @@
                 i64.add
                 i64.const 71777214294589695
                 i64.and
-                local.get $5
                 local.get $6
-                local.get $10
+                local.get $7
+                local.get $9
                 local.get $12
                 local.get $13
                 select
@@ -4842,21 +4842,21 @@
                 i64.and
                 local.get $11
                 local.get $4
-                local.get $10
+                local.get $9
                 local.get $12
                 local.get $16
                 select
                 i64.mul
                 i64.add
-                local.tee $10
+                local.tee $9
                 i64.const 6
                 i64.shr_u
-                local.get $10
+                local.get $9
                 i64.const 5
                 i64.shr_u
                 i64.const 143835907860922879
                 i64.and
-                local.get $10
+                local.get $9
                 i64.const 3
                 i64.shl
                 i64.const 141865552958718456
@@ -4873,7 +4873,7 @@
                 i64.and
                 i64.const -71777214294589696
                 i64.or
-                local.tee $10
+                local.tee $9
                 i64.const 4294901760
                 i64.and
                 i64.const 32
@@ -4882,7 +4882,7 @@
                 local.get $3
                 i64.const 4294901760
                 i64.and
-                local.get $10
+                local.get $9
                 i64.const 65535
                 i64.and
                 i64.or
@@ -4896,14 +4896,14 @@
                 i64.shr_u
                 i64.const 65535
                 i64.and
-                local.get $10
+                local.get $9
                 i64.const -281474976710656
                 i64.and
                 i64.or
                 local.get $3
                 i64.const -281474976710656
                 i64.and
-                local.get $10
+                local.get $9
                 i64.const 281470681743360
                 i64.and
                 i64.or
@@ -4915,9 +4915,9 @@
                 local.get $2
                 i32.add
                 local.tee $1
-                local.get $7
-                local.get $9
                 local.get $8
+                local.get $5
+                local.get $10
                 i64.const 50
                 i64.shr_u
                 i64.const 13107
@@ -4945,8 +4945,8 @@
                 i64.const 281479271743489
                 i64.and
                 i64.add
-                local.tee $7
-                local.get $8
+                local.tee $8
+                local.get $10
                 i64.const 48
                 i64.shr_u
                 i64.const 13107
@@ -4974,7 +4974,7 @@
                 i64.const 281479271743489
                 i64.and
                 i64.add
-                local.tee $8
+                local.tee $10
                 local.get $0
                 select
                 i64.mul
@@ -5002,10 +5002,10 @@
                 i64.add
                 i64.const 71777214294589695
                 i64.and
-                local.get $5
                 local.get $6
                 local.get $7
                 local.get $8
+                local.get $10
                 local.get $13
                 select
                 i64.mul
@@ -5041,8 +5041,8 @@
                 i64.and
                 local.get $11
                 local.get $4
-                local.get $7
                 local.get $8
+                local.get $10
                 local.get $16
                 select
                 i64.mul
@@ -5244,7 +5244,7 @@
               i64.and
               i64.or
               i64.or
-              local.set $8
+              local.set $10
               local.get $0
               i32.const 1
               i32.shl
@@ -5259,12 +5259,12 @@
               i64.or
               i64.const 1085102592571150095
               i64.and
-              local.tee $7
-              local.get $7
+              local.tee $8
+              local.get $8
               i64.const 4
               i64.shl
               i64.or
-              local.tee $7
+              local.tee $8
               i64.const 255
               i64.and
               local.get $3
@@ -5286,34 +5286,34 @@
               i64.and
               local.tee $3
               i64.sub
-              local.set $5
-              local.get $7
+              local.set $6
+              local.get $8
               i64.const 32
               i64.shr_u
               i64.const 255
               i64.and
               local.get $4
               i64.const 32
+              i64.shr_u
+              i64.const 255
+              i64.and
+              local.tee $5
+              i64.sub
+              local.set $7
+              local.get $8
+              i64.const 8
+              i64.shr_u
+              i64.const 255
+              i64.and
+              local.get $4
+              i64.const 8
               i64.shr_u
               i64.const 255
               i64.and
               local.tee $9
               i64.sub
-              local.set $6
-              local.get $7
-              i64.const 8
-              i64.shr_u
-              i64.const 255
-              i64.and
-              local.get $4
-              i64.const 8
-              i64.shr_u
-              i64.const 255
-              i64.and
-              local.tee $10
-              i64.sub
               local.set $11
-              local.get $7
+              local.get $8
               i64.const 40
               i64.shr_u
               i64.const 255
@@ -5326,7 +5326,7 @@
               local.tee $12
               i64.sub
               local.set $14
-              local.get $7
+              local.get $8
               i64.const 16
               i64.shr_u
               i64.const 255
@@ -5339,7 +5339,7 @@
               local.tee $15
               i64.sub
               local.set $17
-              local.get $7
+              local.get $8
               i64.const 48
               i64.shr_u
               i64.const 255
@@ -5352,7 +5352,7 @@
               local.tee $19
               i64.sub
               local.set $20
-              local.get $7
+              local.get $8
               i64.const 24
               i64.shr_u
               i64.const 255
@@ -5365,7 +5365,7 @@
               local.tee $21
               i64.sub
               local.set $22
-              local.get $7
+              local.get $8
               i64.const 56
               i64.shr_u
               i64.const 255
@@ -5382,14 +5382,14 @@
               i64.const 18014673391583296
               i64.mul
               local.set $26
-              local.get $9
+              local.get $5
               i64.const 18014673391583296
               i64.mul
               local.set $27
-              local.get $10
+              local.get $9
               i64.const 18014673391583296
               i64.mul
-              local.set $10
+              local.set $9
               local.get $12
               i64.const 18014673391583296
               i64.mul
@@ -5419,7 +5419,7 @@
                if
                 local.get $1
                 local.get $26
-                local.get $8
+                local.get $10
                 i64.const 255
                 i64.and
                 local.tee $4
@@ -5446,10 +5446,10 @@
                 i64.and
                 i64.add
                 local.tee $4
-                local.get $5
+                local.get $6
                 i64.mul
                 i64.add
-                local.tee $7
+                local.tee $8
                 local.get $13
                 i64.extend_i32_u
                 local.tee $3
@@ -5469,24 +5469,24 @@
                 i64.const 65535
                 i64.mul
                 local.tee $3
-                local.get $7
+                local.get $8
                 local.get $27
                 local.get $4
-                local.get $6
+                local.get $7
                 i64.mul
                 i64.add
                 i64.xor
                 i64.and
                 i64.xor
-                local.tee $7
+                local.tee $8
                 i64.const 6
                 i64.shr_u
-                local.get $7
+                local.get $8
                 i64.const 5
                 i64.shr_u
                 i64.const 143835907860922879
                 i64.and
-                local.get $7
+                local.get $8
                 i64.const 3
                 i64.shl
                 i64.const 141865552958718456
@@ -5501,14 +5501,14 @@
                 i64.add
                 i64.const 71777214294589695
                 i64.and
-                local.get $10
+                local.get $9
                 local.get $4
                 local.get $11
                 i64.mul
                 i64.add
-                local.tee $7
+                local.tee $8
                 local.get $3
-                local.get $7
+                local.get $8
                 local.get $12
                 local.get $4
                 local.get $14
@@ -5517,15 +5517,15 @@
                 i64.xor
                 i64.and
                 i64.xor
-                local.tee $7
+                local.tee $8
                 i64.const 6
                 i64.shr_u
-                local.get $7
+                local.get $8
                 i64.const 5
                 i64.shr_u
                 i64.const 143835907860922879
                 i64.and
-                local.get $7
+                local.get $8
                 i64.const 3
                 i64.shl
                 i64.const 141865552958718456
@@ -5543,7 +5543,7 @@
                 i64.const 8
                 i64.shl
                 i64.or
-                local.tee $7
+                local.tee $8
                 i64.const 65535
                 i64.and
                 local.get $15
@@ -5551,9 +5551,9 @@
                 local.get $17
                 i64.mul
                 i64.add
-                local.tee $9
+                local.tee $5
                 local.get $3
-                local.get $9
+                local.get $5
                 local.get $19
                 local.get $4
                 local.get $20
@@ -5562,15 +5562,15 @@
                 i64.xor
                 i64.and
                 i64.xor
-                local.tee $9
+                local.tee $5
                 i64.const 6
                 i64.shr_u
-                local.get $9
+                local.get $5
                 i64.const 5
                 i64.shr_u
                 i64.const 143835907860922879
                 i64.and
-                local.get $9
+                local.get $5
                 i64.const 3
                 i64.shl
                 i64.const 141865552958718456
@@ -5590,9 +5590,9 @@
                 local.get $22
                 i64.mul
                 i64.add
-                local.tee $9
+                local.tee $5
                 local.get $3
-                local.get $9
+                local.get $5
                 local.get $28
                 local.get $4
                 local.get $24
@@ -5633,7 +5633,7 @@
                 i64.const 32
                 i64.shl
                 i64.or
-                local.get $7
+                local.get $8
                 i64.const 4294901760
                 i64.and
                 local.get $4
@@ -5645,7 +5645,7 @@
                 i64.or
                 i64.store
                 local.get $1
-                local.get $7
+                local.get $8
                 i64.const 32
                 i64.shr_u
                 i64.const 65535
@@ -5654,7 +5654,7 @@
                 i64.const -281474976710656
                 i64.and
                 i64.or
-                local.get $7
+                local.get $8
                 i64.const -281474976710656
                 i64.and
                 local.get $4
@@ -5669,10 +5669,10 @@
                 local.get $2
                 i32.add
                 local.set $1
-                local.get $8
+                local.get $10
                 i64.const 8
                 i64.shr_u
-                local.set $8
+                local.set $10
                 local.get $13
                 i32.const 4
                 i32.shr_u
@@ -5695,7 +5695,7 @@
              i64.const 7
              i64.and
              i64.or
-             local.set $8
+             local.set $10
              local.get $4
              i64.const 33
              i64.shr_u
@@ -5719,7 +5719,7 @@
              i32.or
              i32.load8_u offset=1076
              i64.extend_i32_u
-             local.set $7
+             local.set $8
              local.get $4
              i64.const 37
              i64.shr_u
@@ -5736,9 +5736,9 @@
              i32.or
              i32.load8_u offset=1076
              i64.extend_i32_u
-             local.get $7
+             local.get $8
              i64.sub
-             local.set $9
+             local.set $5
              local.get $4
              i64.const 45
              i64.shr_u
@@ -5771,9 +5771,9 @@
              i32.or
              i32.load8_u offset=1076
              i64.extend_i32_u
-             local.tee $5
+             local.tee $6
              i64.sub
-             local.set $6
+             local.set $7
              local.get $4
              i64.const 53
              i64.shr_u
@@ -5811,7 +5811,7 @@
              i32.or
              i32.load8_u offset=1076
              i64.extend_i32_u
-             local.tee $10
+             local.tee $9
              i64.sub
              local.set $11
              local.get $4
@@ -5854,18 +5854,18 @@
              local.tee $4
              i64.sub
              local.set $12
-             local.get $7
+             local.get $8
              i64.const 18014673391583296
              i64.mul
              local.set $14
-             local.get $5
+             local.get $6
              i64.const 18014673391583296
              i64.mul
-             local.set $5
-             local.get $10
+             local.set $6
+             local.get $9
              i64.const 18014673391583296
              i64.mul
-             local.set $10
+             local.set $9
              local.get $4
              i64.const 18014673391583296
              i64.mul
@@ -5884,7 +5884,7 @@
               if
                local.get $0
                local.get $14
-               local.get $8
+               local.get $10
                i64.const 65535
                i64.and
                local.tee $4
@@ -5918,7 +5918,7 @@
                i64.and
                i64.add
                local.tee $4
-               local.get $9
+               local.get $5
                i64.mul
                i64.add
                local.tee $3
@@ -5944,9 +5944,9 @@
                i64.add
                i64.const 71777214294589695
                i64.and
-               local.get $5
-               local.get $4
                local.get $6
+               local.get $4
+               local.get $7
                i64.mul
                i64.add
                local.tee $3
@@ -5978,20 +5978,20 @@
                local.tee $3
                i64.const 65535
                i64.and
-               local.get $10
+               local.get $9
                local.get $4
                local.get $11
                i64.mul
                i64.add
-               local.tee $7
+               local.tee $8
                i64.const 6
                i64.shr_u
-               local.get $7
+               local.get $8
                i64.const 5
                i64.shr_u
                i64.const 143835907860922879
                i64.and
-               local.get $7
+               local.get $8
                i64.const 3
                i64.shl
                i64.const 141865552958718456
@@ -6079,10 +6079,10 @@
                local.get $2
                i32.add
                local.set $0
-               local.get $8
+               local.get $10
                i64.const 16
                i64.shr_u
-               local.set $8
+               local.set $10
                br $while-continue|56
               end
              end
@@ -6112,10 +6112,10 @@
             i32.or
             i32.load8_u offset=1076
             i64.extend_i32_u
-            local.tee $8
+            local.tee $10
             i64.const 18014673391583296
             i64.mul
-            local.tee $7
+            local.tee $8
             local.get $4
             i64.const 38
             i64.shr_u
@@ -6132,9 +6132,9 @@
             i32.or
             i32.load8_u offset=1076
             i64.extend_i32_u
-            local.get $8
+            local.get $10
             i64.sub
-            local.tee $9
+            local.tee $5
             local.get $3
             i64.const 2
             i64.shr_u
@@ -6150,20 +6150,20 @@
             i64.and
             i64.or
             i64.or
-            local.tee $8
+            local.tee $10
             i64.const 2
             i64.shr_u
             i64.const 13107
             i64.and
-            local.tee $5
-            local.get $5
+            local.tee $6
+            local.get $6
             i64.const 24
             i64.shl
             i64.or
             i64.const 219043332147
             i64.and
-            local.tee $5
-            local.get $5
+            local.tee $6
+            local.get $6
             i64.const 12
             i64.shl
             i64.or
@@ -6171,26 +6171,26 @@
             i64.and
             i64.const 21
             i64.mul
-            local.tee $5
-            local.get $5
+            local.tee $6
+            local.get $6
             i64.const 5
             i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
-            local.tee $5
-            local.get $8
+            local.tee $6
+            local.get $10
             i64.const 13107
             i64.and
-            local.tee $6
-            local.get $6
+            local.tee $7
+            local.get $7
             i64.const 24
             i64.shl
             i64.or
             i64.const 219043332147
             i64.and
-            local.tee $6
-            local.get $6
+            local.tee $7
+            local.get $7
             i64.const 12
             i64.shl
             i64.or
@@ -6198,14 +6198,14 @@
             i64.and
             i64.const 21
             i64.mul
-            local.tee $6
-            local.get $6
+            local.tee $7
+            local.get $7
             i64.const 5
             i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
-            local.tee $6
+            local.tee $7
             local.get $4
             i64.const 19
             i64.shr_u
@@ -6218,15 +6218,15 @@
             select
             i64.mul
             i64.add
-            local.tee $10
+            local.tee $9
             i64.const 6
             i64.shr_u
-            local.get $10
+            local.get $9
             i64.const 5
             i64.shr_u
             i64.const 143835907860922879
             i64.and
-            local.get $10
+            local.get $9
             i64.const 3
             i64.shl
             i64.const 141865552958718456
@@ -6260,7 +6260,7 @@
             local.tee $11
             i64.const 18014673391583296
             i64.mul
-            local.tee $10
+            local.tee $9
             local.get $4
             i64.const 46
             i64.shr_u
@@ -6280,8 +6280,8 @@
             local.get $11
             i64.sub
             local.tee $11
-            local.get $5
             local.get $6
+            local.get $7
             local.get $13
             i32.const 1
             i32.eq
@@ -6362,8 +6362,8 @@
             local.get $15
             i64.sub
             local.tee $15
-            local.get $5
             local.get $6
+            local.get $7
             local.get $13
             i32.const 2
             i32.eq
@@ -6438,8 +6438,8 @@
             local.get $19
             i64.sub
             local.tee $4
-            local.get $5
             local.get $6
+            local.get $7
             local.get $13
             i32.const 3
             i32.eq
@@ -6515,9 +6515,9 @@
             local.get $2
             i32.add
             local.tee $1
-            local.get $7
-            local.get $9
             local.get $8
+            local.get $5
+            local.get $10
             i64.const 18
             i64.shr_u
             i64.const 13107
@@ -6546,20 +6546,20 @@
             i64.and
             i64.add
             local.tee $3
-            local.get $8
+            local.get $10
             i64.const 16
             i64.shr_u
             i64.const 13107
             i64.and
-            local.tee $5
-            local.get $5
+            local.tee $6
+            local.get $6
             i64.const 24
             i64.shl
             i64.or
             i64.const 219043332147
             i64.and
-            local.tee $5
-            local.get $5
+            local.tee $6
+            local.get $6
             i64.const 12
             i64.shl
             i64.or
@@ -6567,27 +6567,27 @@
             i64.and
             i64.const 21
             i64.mul
-            local.tee $5
-            local.get $5
+            local.tee $6
+            local.get $6
             i64.const 5
             i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
-            local.tee $5
+            local.tee $6
             local.get $16
             select
             i64.mul
             i64.add
-            local.tee $6
+            local.tee $7
             i64.const 6
             i64.shr_u
-            local.get $6
+            local.get $7
             i64.const 5
             i64.shr_u
             i64.const 143835907860922879
             i64.and
-            local.get $6
+            local.get $7
             i64.const 3
             i64.shl
             i64.const 141865552958718456
@@ -6602,23 +6602,23 @@
             i64.add
             i64.const 71777214294589695
             i64.and
-            local.get $10
+            local.get $9
             local.get $11
             local.get $3
-            local.get $5
+            local.get $6
             local.get $18
             select
             i64.mul
             i64.add
-            local.tee $6
+            local.tee $7
             i64.const 6
             i64.shr_u
-            local.get $6
+            local.get $7
             i64.const 5
             i64.shr_u
             i64.const 143835907860922879
             i64.and
-            local.get $6
+            local.get $7
             i64.const 3
             i64.shl
             i64.const 141865552958718456
@@ -6636,13 +6636,13 @@
             i64.const 8
             i64.shl
             i64.or
-            local.tee $6
+            local.tee $7
             i64.const 65535
             i64.and
             local.get $14
             local.get $15
             local.get $3
-            local.get $5
+            local.get $6
             local.get $0
             select
             i64.mul
@@ -6673,7 +6673,7 @@
             local.get $17
             local.get $4
             local.get $3
-            local.get $5
+            local.get $6
             local.get $13
             select
             i64.mul
@@ -6710,7 +6710,7 @@
             i64.const 32
             i64.shl
             i64.or
-            local.get $6
+            local.get $7
             i64.const 4294901760
             i64.and
             local.get $3
@@ -6722,7 +6722,7 @@
             i64.or
             i64.store
             local.get $1
-            local.get $6
+            local.get $7
             i64.const 32
             i64.shr_u
             i64.const 65535
@@ -6731,7 +6731,7 @@
             i64.const -281474976710656
             i64.and
             i64.or
-            local.get $6
+            local.get $7
             i64.const -281474976710656
             i64.and
             local.get $3
@@ -6746,9 +6746,9 @@
             local.get $2
             i32.add
             local.tee $1
-            local.get $7
-            local.get $9
             local.get $8
+            local.get $5
+            local.get $10
             i64.const 34
             i64.shr_u
             i64.const 13107
@@ -6777,20 +6777,20 @@
             i64.and
             i64.add
             local.tee $3
-            local.get $8
+            local.get $10
             i64.const 32
             i64.shr_u
             i64.const 13107
             i64.and
-            local.tee $5
-            local.get $5
+            local.tee $6
+            local.get $6
             i64.const 24
             i64.shl
             i64.or
             i64.const 219043332147
             i64.and
-            local.tee $5
-            local.get $5
+            local.tee $6
+            local.get $6
             i64.const 12
             i64.shl
             i64.or
@@ -6798,27 +6798,27 @@
             i64.and
             i64.const 21
             i64.mul
-            local.tee $5
-            local.get $5
+            local.tee $6
+            local.get $6
             i64.const 5
             i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
-            local.tee $5
+            local.tee $6
             local.get $16
             select
             i64.mul
             i64.add
-            local.tee $6
+            local.tee $7
             i64.const 6
             i64.shr_u
-            local.get $6
+            local.get $7
             i64.const 5
             i64.shr_u
             i64.const 143835907860922879
             i64.and
-            local.get $6
+            local.get $7
             i64.const 3
             i64.shl
             i64.const 141865552958718456
@@ -6833,23 +6833,23 @@
             i64.add
             i64.const 71777214294589695
             i64.and
-            local.get $10
+            local.get $9
             local.get $11
             local.get $3
-            local.get $5
+            local.get $6
             local.get $18
             select
             i64.mul
             i64.add
-            local.tee $6
+            local.tee $7
             i64.const 6
             i64.shr_u
-            local.get $6
+            local.get $7
             i64.const 5
             i64.shr_u
             i64.const 143835907860922879
             i64.and
-            local.get $6
+            local.get $7
             i64.const 3
             i64.shl
             i64.const 141865552958718456
@@ -6867,13 +6867,13 @@
             i64.const 8
             i64.shl
             i64.or
-            local.tee $6
+            local.tee $7
             i64.const 65535
             i64.and
             local.get $14
             local.get $15
             local.get $3
-            local.get $5
+            local.get $6
             local.get $0
             select
             i64.mul
@@ -6904,7 +6904,7 @@
             local.get $17
             local.get $4
             local.get $3
-            local.get $5
+            local.get $6
             local.get $13
             select
             i64.mul
@@ -6941,7 +6941,7 @@
             i64.const 32
             i64.shl
             i64.or
-            local.get $6
+            local.get $7
             i64.const 4294901760
             i64.and
             local.get $3
@@ -6953,7 +6953,7 @@
             i64.or
             i64.store
             local.get $1
-            local.get $6
+            local.get $7
             i64.const 32
             i64.shr_u
             i64.const 65535
@@ -6962,7 +6962,7 @@
             i64.const -281474976710656
             i64.and
             i64.or
-            local.get $6
+            local.get $7
             i64.const -281474976710656
             i64.and
             local.get $3
@@ -6977,9 +6977,9 @@
             local.get $2
             i32.add
             local.tee $1
-            local.get $7
-            local.get $9
             local.get $8
+            local.get $5
+            local.get $10
             i64.const 50
             i64.shr_u
             i64.const 13107
@@ -7008,20 +7008,20 @@
             i64.and
             i64.add
             local.tee $3
-            local.get $8
+            local.get $10
             i64.const 48
             i64.shr_u
             i64.const 13107
             i64.and
-            local.tee $8
-            local.get $8
+            local.tee $10
+            local.get $10
             i64.const 24
             i64.shl
             i64.or
             i64.const 219043332147
             i64.and
-            local.tee $8
-            local.get $8
+            local.tee $10
+            local.get $10
             i64.const 12
             i64.shl
             i64.or
@@ -7029,27 +7029,27 @@
             i64.and
             i64.const 21
             i64.mul
-            local.tee $8
-            local.get $8
+            local.tee $10
+            local.get $10
             i64.const 5
             i64.shr_u
             i64.const 281479271743489
             i64.and
             i64.add
-            local.tee $8
+            local.tee $10
             local.get $16
             select
             i64.mul
             i64.add
-            local.tee $7
+            local.tee $8
             i64.const 6
             i64.shr_u
-            local.get $7
+            local.get $8
             i64.const 5
             i64.shr_u
             i64.const 143835907860922879
             i64.and
-            local.get $7
+            local.get $8
             i64.const 3
             i64.shl
             i64.const 141865552958718456
@@ -7064,23 +7064,23 @@
             i64.add
             i64.const 71777214294589695
             i64.and
-            local.get $10
+            local.get $9
             local.get $11
             local.get $3
-            local.get $8
+            local.get $10
             local.get $18
             select
             i64.mul
             i64.add
-            local.tee $7
+            local.tee $8
             i64.const 6
             i64.shr_u
-            local.get $7
+            local.get $8
             i64.const 5
             i64.shr_u
             i64.const 143835907860922879
             i64.and
-            local.get $7
+            local.get $8
             i64.const 3
             i64.shl
             i64.const 141865552958718456
@@ -7098,26 +7098,26 @@
             i64.const 8
             i64.shl
             i64.or
-            local.tee $7
+            local.tee $8
             i64.const 65535
             i64.and
             local.get $14
             local.get $15
             local.get $3
-            local.get $8
+            local.get $10
             local.get $0
             select
             i64.mul
             i64.add
-            local.tee $9
+            local.tee $5
             i64.const 6
             i64.shr_u
-            local.get $9
+            local.get $5
             i64.const 5
             i64.shr_u
             i64.const 143835907860922879
             i64.and
-            local.get $9
+            local.get $5
             i64.const 3
             i64.shl
             i64.const 141865552958718456
@@ -7135,7 +7135,7 @@
             local.get $17
             local.get $4
             local.get $3
-            local.get $8
+            local.get $10
             local.get $13
             select
             i64.mul
@@ -7172,7 +7172,7 @@
             i64.const 32
             i64.shl
             i64.or
-            local.get $7
+            local.get $8
             i64.const 4294901760
             i64.and
             local.get $4
@@ -7184,7 +7184,7 @@
             i64.or
             i64.store
             local.get $1
-            local.get $7
+            local.get $8
             i64.const 32
             i64.shr_u
             i64.const 65535
@@ -7193,7 +7193,7 @@
             i64.const -281474976710656
             i64.and
             i64.or
-            local.get $7
+            local.get $8
             i64.const -281474976710656
             i64.and
             local.get $4
@@ -7230,29 +7230,10 @@
            i32.or
            i32.load8_u offset=1284
            i64.extend_i32_u
-           local.tee $7
+           local.tee $6
            i64.const 18014673391583296
            i64.mul
-           local.tee $8
-           local.get $4
-           i64.const 39
-           i64.shr_u
-           i32.wrap_i64
-           i32.const 63
-           i32.and
-           local.get $0
-           i32.const 2
-           i32.shr_u
-           i32.const 3
-           i32.and
-           i32.const 6
-           i32.shl
-           i32.or
-           i32.load8_u offset=1284
-           i64.extend_i32_u
-           local.get $7
-           i64.sub
-           local.tee $7
+           local.tee $10
            local.get $3
            i64.const 16
            i64.shr_u
@@ -7264,7 +7245,7 @@
            i64.const 3
            i64.and
            i64.or
-           local.tee $9
+           local.tee $8
            i64.const 4095
            i64.and
            local.tee $5
@@ -7294,14 +7275,36 @@
            i64.and
            i64.add
            local.tee $5
+           local.get $4
+           i64.const 39
+           i64.shr_u
+           i32.wrap_i64
+           i32.const 63
+           i32.and
+           local.get $0
+           i32.const 2
+           i32.shr_u
+           i32.const 3
+           i32.and
+           i32.const 6
+           i32.shl
+           i32.or
+           i32.load8_u offset=1284
+           i64.extend_i32_u
+           local.get $6
+           i64.sub
+           local.tee $6
            i64.mul
            i64.add
-           local.tee $6
+           local.tee $7
+           i64.const 6
+           i64.shr_u
+           local.get $7
            i64.const 5
            i64.shr_u
            i64.const 143835907860922879
            i64.and
-           local.get $6
+           local.get $7
            i64.const 3
            i64.shl
            i64.const 141865552958718456
@@ -7313,9 +7316,6 @@
            i64.shr_u
            i64.const 281479271743489
            i64.and
-           local.get $6
-           i64.const 6
-           i64.shr_u
            i64.add
            i64.const 71777214294589695
            i64.and
@@ -7335,10 +7335,10 @@
            i32.or
            i32.load8_u offset=1284
            i64.extend_i32_u
-           local.tee $10
+           local.tee $9
            i64.const 18014673391583296
            i64.mul
-           local.tee $6
+           local.tee $7
            local.get $5
            local.get $4
            i64.const 51
@@ -7356,9 +7356,9 @@
            i32.or
            i32.load8_u offset=1284
            i64.extend_i32_u
-           local.get $10
+           local.get $9
            i64.sub
-           local.tee $10
+           local.tee $9
            i64.mul
            i64.add
            local.tee $11
@@ -7575,9 +7575,9 @@
            local.get $2
            i32.add
            local.tee $0
+           local.get $10
+           local.get $6
            local.get $8
-           local.get $7
-           local.get $9
            i64.const 12
            i64.shr_u
            i64.const 4095
@@ -7634,9 +7634,9 @@
            i64.add
            i64.const 71777214294589695
            i64.and
-           local.get $6
+           local.get $7
            local.get $5
-           local.get $10
+           local.get $9
            i64.mul
            i64.add
            local.tee $11
@@ -7769,9 +7769,9 @@
            local.get $2
            i32.add
            local.tee $0
+           local.get $10
+           local.get $6
            local.get $8
-           local.get $7
-           local.get $9
            i64.const 24
            i64.shr_u
            i64.const 4095
@@ -7828,9 +7828,9 @@
            i64.add
            i64.const 71777214294589695
            i64.and
-           local.get $6
+           local.get $7
            local.get $5
-           local.get $10
+           local.get $9
            i64.mul
            i64.add
            local.tee $11
@@ -7963,51 +7963,51 @@
            local.get $2
            i32.add
            local.tee $0
+           local.get $10
+           local.get $6
            local.get $8
-           local.get $7
-           local.get $9
            i64.const 36
            i64.shr_u
            i64.const 4095
            i64.and
-           local.tee $8
-           local.get $8
+           local.tee $10
+           local.get $10
            i64.const 26
            i64.shl
            i64.or
            i64.const 270582939711
            i64.and
-           local.tee $8
-           local.get $8
+           local.tee $10
+           local.get $10
            i64.const 13
            i64.shl
            i64.or
            i64.const 1970354902204423
            i64.and
-           local.tee $8
-           local.get $8
+           local.tee $10
+           local.get $10
            i64.const 3
            i64.shl
            i64.or
-           local.tee $8
-           local.get $8
+           local.tee $10
+           local.get $10
            i64.const 5
            i64.shr_u
            i64.const 281479271743489
            i64.and
            i64.add
-           local.tee $8
+           local.tee $10
            i64.mul
            i64.add
-           local.tee $7
+           local.tee $8
            i64.const 6
            i64.shr_u
-           local.get $7
+           local.get $8
            i64.const 5
            i64.shr_u
            i64.const 143835907860922879
            i64.and
-           local.get $7
+           local.get $8
            i64.const 3
            i64.shl
            i64.const 141865552958718456
@@ -8022,20 +8022,20 @@
            i64.add
            i64.const 71777214294589695
            i64.and
-           local.get $6
-           local.get $8
+           local.get $7
+           local.get $9
            local.get $10
            i64.mul
            i64.add
-           local.tee $7
+           local.tee $8
            i64.const 6
            i64.shr_u
-           local.get $7
+           local.get $8
            i64.const 5
            i64.shr_u
            i64.const 143835907860922879
            i64.and
-           local.get $7
+           local.get $8
            i64.const 3
            i64.shl
            i64.const 141865552958718456
@@ -8053,12 +8053,12 @@
            i64.const 8
            i64.shl
            i64.or
-           local.tee $7
+           local.tee $8
            i64.const 65535
            i64.and
            local.get $12
            local.get $4
-           local.get $8
+           local.get $10
            i64.mul
            i64.add
            local.tee $4
@@ -8086,7 +8086,7 @@
            i64.and
            local.get $14
            local.get $3
-           local.get $8
+           local.get $10
            i64.mul
            i64.add
            local.tee $4
@@ -8121,7 +8121,7 @@
            i64.const 32
            i64.shl
            i64.or
-           local.get $7
+           local.get $8
            i64.const 4294901760
            i64.and
            local.get $4
@@ -8133,7 +8133,7 @@
            i64.or
            i64.store
            local.get $0
-           local.get $7
+           local.get $8
            i64.const 32
            i64.shr_u
            i64.const 65535
@@ -8142,7 +8142,7 @@
            i64.const -281474976710656
            i64.and
            i64.or
-           local.get $7
+           local.get $8
            i64.const -281474976710656
            i64.and
            local.get $4
@@ -8163,11 +8163,11 @@
           i32.const 255
           i32.and
           i64.extend_i32_u
-          local.tee $8
+          local.tee $10
           i64.const 281479271743489
           i64.mul
-          local.tee $7
-          local.get $8
+          local.tee $8
+          local.get $10
           local.get $4
           i64.const 38
           i64.shr_u
@@ -8178,26 +8178,26 @@
           i64.xor
           i64.const 281479271743489
           i64.mul
-          local.tee $9
+          local.tee $5
           local.get $3
           i64.const 28
           i64.shr_u
           i64.const 4294967292
           i64.and
-          local.tee $8
+          local.tee $10
           i64.const 1
           i64.shr_u
           i64.const 85
           i64.and
-          local.tee $5
-          local.get $5
+          local.tee $6
+          local.get $6
           i64.const 28
           i64.shl
           i64.or
           i64.const 21474836485
           i64.and
-          local.tee $5
-          local.get $5
+          local.tee $6
+          local.get $6
           i64.const 14
           i64.shl
           i64.or
@@ -8205,19 +8205,19 @@
           i64.and
           i64.const 65535
           i64.mul
-          local.tee $5
-          local.get $8
+          local.tee $6
+          local.get $10
           i64.const 85
           i64.and
-          local.tee $6
-          local.get $6
+          local.tee $7
+          local.get $7
           i64.const 28
           i64.shl
           i64.or
           i64.const 21474836485
           i64.and
-          local.tee $6
-          local.get $6
+          local.tee $7
+          local.get $7
           i64.const 14
           i64.shl
           i64.or
@@ -8225,7 +8225,7 @@
           i64.and
           i64.const 65535
           i64.mul
-          local.tee $6
+          local.tee $7
           local.get $4
           i64.const 28
           i64.shr_u
@@ -8248,7 +8248,7 @@
           local.tee $11
           i64.const 72058693566333184
           i64.mul
-          local.tee $10
+          local.tee $9
           local.get $11
           local.get $4
           i64.const 54
@@ -8261,8 +8261,8 @@
           i64.const 72058693566333184
           i64.mul
           local.tee $11
-          local.get $5
           local.get $6
+          local.get $7
           local.get $0
           i32.const 1
           i32.eq
@@ -8302,8 +8302,8 @@
           i64.const 281479271743489
           i64.mul
           local.tee $14
-          local.get $5
           local.get $6
+          local.get $7
           local.get $0
           i32.const 2
           i32.eq
@@ -8334,8 +8334,8 @@
           i64.const 72058693566333184
           i64.mul
           local.tee $3
-          local.get $5
           local.get $6
+          local.get $7
           local.get $0
           i32.const 3
           i32.eq
@@ -8344,7 +8344,7 @@
           i64.and
           i64.xor
           i64.or
-          local.tee $5
+          local.tee $6
           i64.const 4294901760
           i64.and
           i64.const 32
@@ -8353,7 +8353,7 @@
           local.get $12
           i64.const 4294901760
           i64.and
-          local.get $5
+          local.get $6
           i64.const 65535
           i64.and
           i64.or
@@ -8367,14 +8367,14 @@
           i64.shr_u
           i64.const 65535
           i64.and
-          local.get $5
+          local.get $6
           i64.const -281474976710656
           i64.and
           i64.or
           local.get $12
           i64.const -281474976710656
           i64.and
-          local.get $5
+          local.get $6
           i64.const 281470681743360
           i64.and
           i64.or
@@ -8386,22 +8386,22 @@
           local.get $2
           i32.add
           local.tee $1
-          local.get $7
-          local.get $9
           local.get $8
+          local.get $5
+          local.get $10
           i64.const 9
           i64.shr_u
           i64.const 85
           i64.and
-          local.tee $5
-          local.get $5
+          local.tee $6
+          local.get $6
           i64.const 28
           i64.shl
           i64.or
           i64.const 21474836485
           i64.and
-          local.tee $5
-          local.get $5
+          local.tee $6
+          local.get $6
           i64.const 14
           i64.shl
           i64.or
@@ -8409,21 +8409,21 @@
           i64.and
           i64.const 65535
           i64.mul
-          local.tee $5
-          local.get $8
+          local.tee $6
+          local.get $10
           i64.const 8
           i64.shr_u
           i64.const 85
           i64.and
-          local.tee $6
-          local.get $6
+          local.tee $7
+          local.get $7
           i64.const 28
           i64.shl
           i64.or
           i64.const 21474836485
           i64.and
-          local.tee $6
-          local.get $6
+          local.tee $7
+          local.get $7
           i64.const 14
           i64.shl
           i64.or
@@ -8431,15 +8431,15 @@
           i64.and
           i64.const 65535
           i64.mul
-          local.tee $6
+          local.tee $7
           local.get $13
           select
           i64.and
           i64.xor
-          local.get $10
+          local.get $9
           local.get $11
-          local.get $5
           local.get $6
+          local.get $7
           local.get $16
           select
           i64.and
@@ -8450,22 +8450,22 @@
           i64.and
           local.get $4
           local.get $14
-          local.get $5
           local.get $6
+          local.get $7
           local.get $18
           select
           i64.and
           i64.xor
           local.get $15
           local.get $3
-          local.get $5
           local.get $6
+          local.get $7
           local.get $0
           select
           i64.and
           i64.xor
           i64.or
-          local.tee $5
+          local.tee $6
           i64.const 4294901760
           i64.and
           i64.const 32
@@ -8474,7 +8474,7 @@
           local.get $12
           i64.const 4294901760
           i64.and
-          local.get $5
+          local.get $6
           i64.const 65535
           i64.and
           i64.or
@@ -8488,14 +8488,14 @@
           i64.shr_u
           i64.const 65535
           i64.and
-          local.get $5
+          local.get $6
           i64.const -281474976710656
           i64.and
           i64.or
           local.get $12
           i64.const -281474976710656
           i64.and
-          local.get $5
+          local.get $6
           i64.const 281470681743360
           i64.and
           i64.or
@@ -8507,22 +8507,22 @@
           local.get $2
           i32.add
           local.tee $1
-          local.get $7
-          local.get $9
           local.get $8
+          local.get $5
+          local.get $10
           i64.const 17
           i64.shr_u
           i64.const 85
           i64.and
-          local.tee $5
-          local.get $5
+          local.tee $6
+          local.get $6
           i64.const 28
           i64.shl
           i64.or
           i64.const 21474836485
           i64.and
-          local.tee $5
-          local.get $5
+          local.tee $6
+          local.get $6
           i64.const 14
           i64.shl
           i64.or
@@ -8530,21 +8530,21 @@
           i64.and
           i64.const 65535
           i64.mul
-          local.tee $5
-          local.get $8
+          local.tee $6
+          local.get $10
           i64.const 16
           i64.shr_u
           i64.const 85
           i64.and
-          local.tee $6
-          local.get $6
+          local.tee $7
+          local.get $7
           i64.const 28
           i64.shl
           i64.or
           i64.const 21474836485
           i64.and
-          local.tee $6
-          local.get $6
+          local.tee $7
+          local.get $7
           i64.const 14
           i64.shl
           i64.or
@@ -8552,15 +8552,15 @@
           i64.and
           i64.const 65535
           i64.mul
-          local.tee $6
+          local.tee $7
           local.get $13
           select
           i64.and
           i64.xor
-          local.get $10
+          local.get $9
           local.get $11
-          local.get $5
           local.get $6
+          local.get $7
           local.get $16
           select
           i64.and
@@ -8571,22 +8571,22 @@
           i64.and
           local.get $4
           local.get $14
-          local.get $5
           local.get $6
+          local.get $7
           local.get $18
           select
           i64.and
           i64.xor
           local.get $15
           local.get $3
-          local.get $5
           local.get $6
+          local.get $7
           local.get $0
           select
           i64.and
           i64.xor
           i64.or
-          local.tee $5
+          local.tee $6
           i64.const 4294901760
           i64.and
           i64.const 32
@@ -8595,7 +8595,7 @@
           local.get $12
           i64.const 4294901760
           i64.and
-          local.get $5
+          local.get $6
           i64.const 65535
           i64.and
           i64.or
@@ -8609,14 +8609,14 @@
           i64.shr_u
           i64.const 65535
           i64.and
-          local.get $5
+          local.get $6
           i64.const -281474976710656
           i64.and
           i64.or
           local.get $12
           i64.const -281474976710656
           i64.and
-          local.get $5
+          local.get $6
           i64.const 281470681743360
           i64.and
           i64.or
@@ -8628,22 +8628,22 @@
           local.get $2
           i32.add
           local.tee $1
-          local.get $7
-          local.get $9
           local.get $8
+          local.get $5
+          local.get $10
           i64.const 25
           i64.shr_u
           i64.const 85
           i64.and
-          local.tee $7
-          local.get $7
+          local.tee $8
+          local.get $8
           i64.const 28
           i64.shl
           i64.or
           i64.const 21474836485
           i64.and
-          local.tee $7
-          local.get $7
+          local.tee $8
+          local.get $8
           i64.const 14
           i64.shl
           i64.or
@@ -8651,21 +8651,21 @@
           i64.and
           i64.const 65535
           i64.mul
-          local.tee $7
-          local.get $8
+          local.tee $8
+          local.get $10
           i64.const 24
           i64.shr_u
           i64.const 85
           i64.and
-          local.tee $8
-          local.get $8
+          local.tee $10
+          local.get $10
           i64.const 28
           i64.shl
           i64.or
           i64.const 21474836485
           i64.and
-          local.tee $8
-          local.get $8
+          local.tee $10
+          local.get $10
           i64.const 14
           i64.shl
           i64.or
@@ -8673,35 +8673,35 @@
           i64.and
           i64.const 65535
           i64.mul
-          local.tee $8
+          local.tee $10
           local.get $13
           select
           i64.and
           i64.xor
-          local.get $10
+          local.get $9
           local.get $11
-          local.get $7
           local.get $8
+          local.get $10
           local.get $16
           select
           i64.and
           i64.xor
           i64.or
-          local.tee $9
+          local.tee $5
           i64.const 65535
           i64.and
           local.get $4
           local.get $14
-          local.get $7
           local.get $8
+          local.get $10
           local.get $18
           select
           i64.and
           i64.xor
           local.get $15
           local.get $3
-          local.get $7
           local.get $8
+          local.get $10
           local.get $0
           select
           i64.and
@@ -8713,7 +8713,7 @@
           i64.const 32
           i64.shl
           i64.or
-          local.get $9
+          local.get $5
           i64.const 4294901760
           i64.and
           local.get $4
@@ -8725,7 +8725,7 @@
           i64.or
           i64.store
           local.get $1
-          local.get $9
+          local.get $5
           i64.const 32
           i64.shr_u
           i64.const 65535
@@ -8734,7 +8734,7 @@
           i64.const -281474976710656
           i64.and
           i64.or
-          local.get $9
+          local.get $5
           i64.const -281474976710656
           i64.and
           local.get $4
@@ -8755,20 +8755,10 @@
          i32.const 255
          i32.and
          i64.extend_i32_u
-         local.tee $7
+         local.tee $6
          i64.const 18014673391583296
          i64.mul
-         local.tee $8
-         local.get $4
-         i64.const 36
-         i64.shr_u
-         i32.wrap_i64
-         i32.const 255
-         i32.and
-         i64.extend_i32_u
-         local.get $7
-         i64.sub
-         local.tee $7
+         local.tee $10
          local.get $3
          i64.const 27
          i64.shr_u
@@ -8780,7 +8770,7 @@
          i64.const 1
          i64.and
          i64.or
-         local.tee $9
+         local.tee $8
          i64.const 255
          i64.and
          local.tee $5
@@ -8807,17 +8797,27 @@
          i64.and
          i64.add
          local.tee $5
+         local.get $4
+         i64.const 36
+         i64.shr_u
+         i32.wrap_i64
+         i32.const 255
+         i32.and
+         i64.extend_i32_u
+         local.get $6
+         i64.sub
+         local.tee $6
          i64.mul
          i64.add
-         local.tee $6
+         local.tee $7
          i64.const 6
          i64.shr_u
-         local.get $6
+         local.get $7
          i64.const 5
          i64.shr_u
          i64.const 143835907860922879
          i64.and
-         local.get $6
+         local.get $7
          i64.const 3
          i64.shl
          i64.const 141865552958718456
@@ -8839,10 +8839,10 @@
          i32.const 255
          i32.and
          i64.extend_i32_u
-         local.tee $10
+         local.tee $9
          i64.const 18014673391583296
          i64.mul
-         local.tee $6
+         local.tee $7
          local.get $5
          local.get $4
          i64.const 52
@@ -8851,9 +8851,9 @@
          i32.const 255
          i32.and
          i64.extend_i32_u
-         local.get $10
+         local.get $9
          i64.sub
-         local.tee $10
+         local.tee $9
          i64.mul
          i64.add
          local.tee $11
@@ -9029,9 +9029,9 @@
          local.get $2
          i32.add
          local.tee $0
+         local.get $10
+         local.get $6
          local.get $8
-         local.get $7
-         local.get $9
          i64.const 8
          i64.shr_u
          i64.const 255
@@ -9085,9 +9085,9 @@
          i64.add
          i64.const 71777214294589695
          i64.and
-         local.get $6
+         local.get $7
          local.get $5
-         local.get $10
+         local.get $9
          i64.mul
          i64.add
          local.tee $11
@@ -9220,9 +9220,9 @@
          local.get $2
          i32.add
          local.tee $0
+         local.get $10
+         local.get $6
          local.get $8
-         local.get $7
-         local.get $9
          i64.const 16
          i64.shr_u
          i64.const 255
@@ -9276,9 +9276,9 @@
          i64.add
          i64.const 71777214294589695
          i64.and
-         local.get $6
+         local.get $7
          local.get $5
-         local.get $10
+         local.get $9
          i64.mul
          i64.add
          local.tee $11
@@ -9411,22 +9411,22 @@
          local.get $2
          i32.add
          local.tee $0
+         local.get $10
+         local.get $6
          local.get $8
-         local.get $7
-         local.get $9
          i64.const 24
          i64.shr_u
          i64.const 255
          i64.and
-         local.tee $8
-         local.get $8
+         local.tee $10
+         local.get $10
          i64.const 28
          i64.shl
          i64.or
          i64.const 64424509455
          i64.and
-         local.tee $8
-         local.get $8
+         local.tee $10
+         local.get $10
          i64.const 14
          i64.shl
          i64.or
@@ -9434,25 +9434,25 @@
          i64.and
          i64.const 21
          i64.mul
-         local.tee $8
-         local.get $8
+         local.tee $10
+         local.get $10
          i64.const 5
          i64.shr_u
          i64.const 281479271743489
          i64.and
          i64.add
-         local.tee $8
+         local.tee $10
          i64.mul
          i64.add
-         local.tee $7
+         local.tee $8
          i64.const 6
          i64.shr_u
-         local.get $7
+         local.get $8
          i64.const 5
          i64.shr_u
          i64.const 143835907860922879
          i64.and
-         local.get $7
+         local.get $8
          i64.const 3
          i64.shl
          i64.const 141865552958718456
@@ -9467,20 +9467,20 @@
          i64.add
          i64.const 71777214294589695
          i64.and
-         local.get $6
-         local.get $8
+         local.get $7
+         local.get $9
          local.get $10
          i64.mul
          i64.add
-         local.tee $7
+         local.tee $8
          i64.const 6
          i64.shr_u
-         local.get $7
+         local.get $8
          i64.const 5
          i64.shr_u
          i64.const 143835907860922879
          i64.and
-         local.get $7
+         local.get $8
          i64.const 3
          i64.shl
          i64.const 141865552958718456
@@ -9498,11 +9498,11 @@
          i64.const 8
          i64.shl
          i64.or
-         local.tee $7
+         local.tee $8
          i64.const 65535
          i64.and
          local.get $4
-         local.get $8
+         local.get $10
          local.get $12
          i64.mul
          i64.add
@@ -9531,7 +9531,7 @@
          i64.and
          local.get $14
          local.get $3
-         local.get $8
+         local.get $10
          i64.mul
          i64.add
          local.tee $4
@@ -9566,7 +9566,7 @@
          i64.const 32
          i64.shl
          i64.or
-         local.get $7
+         local.get $8
          i64.const 4294901760
          i64.and
          local.get $4
@@ -9578,7 +9578,7 @@
          i64.or
          i64.store
          local.get $0
-         local.get $7
+         local.get $8
          i64.const 32
          i64.shr_u
          i64.const 65535
@@ -9587,7 +9587,7 @@
          i64.const -281474976710656
          i64.and
          i64.or
-         local.get $7
+         local.get $8
          i64.const -281474976710656
          i64.and
          local.get $4
@@ -9608,10 +9608,10 @@
         i32.const 255
         i32.and
         i64.extend_i32_u
-        local.tee $7
+        local.tee $8
         i64.const 18014673391583296
         i64.mul
-        local.tee $8
+        local.tee $10
         local.get $4
         i64.const 38
         i64.shr_u
@@ -9619,9 +9619,9 @@
         i32.const 255
         i32.and
         i64.extend_i32_u
-        local.get $7
+        local.get $8
         i64.sub
-        local.tee $7
+        local.tee $8
         local.get $4
         i64.const 62
         i64.shr_u
@@ -9642,48 +9642,48 @@
         local.tee $3
         i64.const 65535
         i64.and
-        local.tee $9
-        local.get $9
+        local.tee $5
+        local.get $5
         i64.const 24
         i64.shl
         i64.or
         i64.const 1095216660735
         i64.and
-        local.tee $9
-        local.get $9
+        local.tee $5
+        local.get $5
         i64.const 12
         i64.shl
         i64.or
         i64.const 4222189076152335
         i64.and
-        local.tee $9
+        local.tee $5
         i64.const 2
         i64.shl
-        local.get $9
+        local.get $5
         i64.const 2
         i64.shr_u
         i64.or
         i64.const 17733194119839807
         i64.and
-        local.tee $9
-        local.get $9
+        local.tee $5
+        local.get $5
         i64.const 5
         i64.shr_u
         i64.const 281479271743489
         i64.and
         i64.add
-        local.tee $6
+        local.tee $7
         i64.mul
         i64.add
-        local.tee $9
+        local.tee $5
         i64.const 6
         i64.shr_u
-        local.get $9
+        local.get $5
         i64.const 5
         i64.shr_u
         i64.const 143835907860922879
         i64.and
-        local.get $9
+        local.get $5
         i64.const 3
         i64.shl
         i64.const 141865552958718456
@@ -9698,10 +9698,10 @@
         i64.add
         i64.const 71777214294589695
         i64.and
-        local.tee $9
+        local.tee $5
         i64.const 255
         i64.and
-        local.get $9
+        local.get $5
         i64.const 16711680
         i64.and
         i64.const 16
@@ -9716,10 +9716,10 @@
         i32.const 255
         i32.and
         i64.extend_i32_u
-        local.tee $10
+        local.tee $9
         i64.const 18014673391583296
         i64.mul
-        local.tee $5
+        local.tee $6
         local.get $4
         i64.const 54
         i64.shr_u
@@ -9727,21 +9727,21 @@
         i32.const 255
         i32.and
         i64.extend_i32_u
-        local.get $10
+        local.get $9
         i64.sub
         local.tee $4
-        local.get $6
+        local.get $7
         i64.mul
         i64.add
-        local.tee $6
+        local.tee $7
         i64.const 6
         i64.shr_u
-        local.get $6
+        local.get $7
         i64.const 5
         i64.shr_u
         i64.const 143835907860922879
         i64.and
-        local.get $6
+        local.get $7
         i64.const 3
         i64.shl
         i64.const 141865552958718456
@@ -9758,12 +9758,12 @@
         i64.and
         i64.const 8
         i64.shl
-        local.tee $6
+        local.tee $7
         i64.const 65280
         i64.and
         i64.const 16
         i64.shl
-        local.get $6
+        local.get $7
         i64.const 4278190080
         i64.and
         i64.const 32
@@ -9772,12 +9772,12 @@
         i64.or
         i64.store
         local.get $1
-        local.get $9
+        local.get $5
         i64.const 1095216660480
         i64.and
         i64.const 32
         i64.shr_u
-        local.get $9
+        local.get $5
         i64.const 71776119061217280
         i64.and
         i64.const 16
@@ -9785,10 +9785,10 @@
         i64.or
         i64.const 65793
         i64.mul
-        local.get $6
+        local.get $7
         i64.const -72057594037927936
         i64.and
-        local.get $6
+        local.get $7
         i64.const 280375465082880
         i64.and
         i64.const 16
@@ -9800,55 +9800,55 @@
         local.get $2
         i32.add
         local.tee $0
+        local.get $10
         local.get $8
-        local.get $7
         local.get $3
         i64.const 16
         i64.shr_u
         i64.const 65535
         i64.and
-        local.tee $9
-        local.get $9
+        local.tee $5
+        local.get $5
         i64.const 24
         i64.shl
         i64.or
         i64.const 1095216660735
         i64.and
-        local.tee $9
-        local.get $9
+        local.tee $5
+        local.get $5
         i64.const 12
         i64.shl
         i64.or
         i64.const 4222189076152335
         i64.and
-        local.tee $9
+        local.tee $5
         i64.const 2
         i64.shl
-        local.get $9
+        local.get $5
         i64.const 2
         i64.shr_u
         i64.or
         i64.const 17733194119839807
         i64.and
-        local.tee $9
-        local.get $9
+        local.tee $5
+        local.get $5
         i64.const 5
         i64.shr_u
         i64.const 281479271743489
         i64.and
         i64.add
-        local.tee $6
+        local.tee $7
         i64.mul
         i64.add
-        local.tee $9
+        local.tee $5
         i64.const 6
         i64.shr_u
-        local.get $9
+        local.get $5
         i64.const 5
         i64.shr_u
         i64.const 143835907860922879
         i64.and
-        local.get $9
+        local.get $5
         i64.const 3
         i64.shl
         i64.const 141865552958718456
@@ -9863,10 +9863,10 @@
         i64.add
         i64.const 71777214294589695
         i64.and
-        local.tee $9
+        local.tee $5
         i64.const 255
         i64.and
-        local.get $9
+        local.get $5
         i64.const 16711680
         i64.and
         i64.const 16
@@ -9874,20 +9874,20 @@
         i64.or
         i64.const 65793
         i64.mul
-        local.get $5
-        local.get $4
         local.get $6
+        local.get $4
+        local.get $7
         i64.mul
         i64.add
-        local.tee $6
+        local.tee $7
         i64.const 6
         i64.shr_u
-        local.get $6
+        local.get $7
         i64.const 5
         i64.shr_u
         i64.const 143835907860922879
         i64.and
-        local.get $6
+        local.get $7
         i64.const 3
         i64.shl
         i64.const 141865552958718456
@@ -9904,12 +9904,12 @@
         i64.and
         i64.const 8
         i64.shl
-        local.tee $6
+        local.tee $7
         i64.const 65280
         i64.and
         i64.const 16
         i64.shl
-        local.get $6
+        local.get $7
         i64.const 4278190080
         i64.and
         i64.const 32
@@ -9918,12 +9918,12 @@
         i64.or
         i64.store
         local.get $0
-        local.get $9
+        local.get $5
         i64.const 1095216660480
         i64.and
         i64.const 32
         i64.shr_u
-        local.get $9
+        local.get $5
         i64.const 71776119061217280
         i64.and
         i64.const 16
@@ -9931,10 +9931,10 @@
         i64.or
         i64.const 65793
         i64.mul
-        local.get $6
+        local.get $7
         i64.const -72057594037927936
         i64.and
-        local.get $6
+        local.get $7
         i64.const 280375465082880
         i64.and
         i64.const 16
@@ -9946,55 +9946,55 @@
         local.get $2
         i32.add
         local.tee $0
+        local.get $10
         local.get $8
-        local.get $7
         local.get $3
         i64.const 32
         i64.shr_u
         i64.const 65535
         i64.and
-        local.tee $9
-        local.get $9
+        local.tee $5
+        local.get $5
         i64.const 24
         i64.shl
         i64.or
         i64.const 1095216660735
         i64.and
-        local.tee $9
-        local.get $9
+        local.tee $5
+        local.get $5
         i64.const 12
         i64.shl
         i64.or
         i64.const 4222189076152335
         i64.and
-        local.tee $9
+        local.tee $5
         i64.const 2
         i64.shl
-        local.get $9
+        local.get $5
         i64.const 2
         i64.shr_u
         i64.or
         i64.const 17733194119839807
         i64.and
-        local.tee $9
-        local.get $9
+        local.tee $5
+        local.get $5
         i64.const 5
         i64.shr_u
         i64.const 281479271743489
         i64.and
         i64.add
-        local.tee $6
+        local.tee $7
         i64.mul
         i64.add
-        local.tee $9
+        local.tee $5
         i64.const 6
         i64.shr_u
-        local.get $9
+        local.get $5
         i64.const 5
         i64.shr_u
         i64.const 143835907860922879
         i64.and
-        local.get $9
+        local.get $5
         i64.const 3
         i64.shl
         i64.const 141865552958718456
@@ -10009,10 +10009,10 @@
         i64.add
         i64.const 71777214294589695
         i64.and
-        local.tee $9
+        local.tee $5
         i64.const 255
         i64.and
-        local.get $9
+        local.get $5
         i64.const 16711680
         i64.and
         i64.const 16
@@ -10020,20 +10020,20 @@
         i64.or
         i64.const 65793
         i64.mul
-        local.get $5
-        local.get $4
         local.get $6
+        local.get $4
+        local.get $7
         i64.mul
         i64.add
-        local.tee $6
+        local.tee $7
         i64.const 6
         i64.shr_u
-        local.get $6
+        local.get $7
         i64.const 5
         i64.shr_u
         i64.const 143835907860922879
         i64.and
-        local.get $6
+        local.get $7
         i64.const 3
         i64.shl
         i64.const 141865552958718456
@@ -10050,12 +10050,12 @@
         i64.and
         i64.const 8
         i64.shl
-        local.tee $6
+        local.tee $7
         i64.const 65280
         i64.and
         i64.const 16
         i64.shl
-        local.get $6
+        local.get $7
         i64.const 4278190080
         i64.and
         i64.const 32
@@ -10064,12 +10064,12 @@
         i64.or
         i64.store
         local.get $0
-        local.get $9
+        local.get $5
         i64.const 1095216660480
         i64.and
         i64.const 32
         i64.shr_u
-        local.get $9
+        local.get $5
         i64.const 71776119061217280
         i64.and
         i64.const 16
@@ -10077,10 +10077,10 @@
         i64.or
         i64.const 65793
         i64.mul
-        local.get $6
+        local.get $7
         i64.const -72057594037927936
         i64.and
-        local.get $6
+        local.get $7
         i64.const 280375465082880
         i64.and
         i64.const 16
@@ -10092,8 +10092,8 @@
         local.get $2
         i32.add
         local.tee $0
+        local.get $10
         local.get $8
-        local.get $7
         local.get $3
         i64.const 48
         i64.shr_u
@@ -10129,7 +10129,7 @@
         i64.const 281479271743489
         i64.and
         i64.add
-        local.tee $8
+        local.tee $10
         i64.mul
         i64.add
         local.tee $3
@@ -10166,9 +10166,9 @@
         i64.or
         i64.const 65793
         i64.mul
-        local.get $5
+        local.get $6
         local.get $4
-        local.get $8
+        local.get $10
         i64.mul
         i64.add
         local.tee $4
@@ -10293,7 +10293,7 @@
        i64.and
        i64.or
        i64.or
-       local.set $8
+       local.set $10
        local.get $0
        i32.const 1
        i32.shl
@@ -10313,9 +10313,9 @@
        i32.const 255
        i32.and
        i64.extend_i32_u
-       local.tee $7
+       local.tee $8
        i64.sub
-       local.set $9
+       local.set $5
        local.get $3
        i64.const 10
        i64.shr_u
@@ -10330,9 +10330,9 @@
        i32.const 255
        i32.and
        i64.extend_i32_u
-       local.tee $5
+       local.tee $6
        i64.sub
-       local.set $6
+       local.set $7
        local.get $4
        i64.const 58
        i64.shr_u
@@ -10354,7 +10354,7 @@
        i64.extend_i32_u
        local.tee $4
        i64.sub
-       local.set $10
+       local.set $9
        local.get $3
        i64.const 26
        i64.shr_u
@@ -10372,14 +10372,14 @@
        local.tee $3
        i64.sub
        local.set $11
-       local.get $7
+       local.get $8
        i64.const 18014673391583296
        i64.mul
-       local.set $7
-       local.get $5
+       local.set $8
+       local.get $6
        i64.const 18014673391583296
        i64.mul
-       local.set $5
+       local.set $6
        local.get $4
        i64.const 18014673391583296
        i64.mul
@@ -10396,8 +10396,8 @@
         i32.lt_s
         if
          local.get $1
-         local.get $7
          local.get $8
+         local.get $10
          i64.const 255
          i64.and
          local.tee $4
@@ -10424,7 +10424,7 @@
          i64.and
          i64.add
          local.tee $4
-         local.get $9
+         local.get $5
          i64.mul
          i64.add
          local.tee $3
@@ -10448,9 +10448,9 @@
          i64.mul
          local.tee $15
          local.get $3
-         local.get $5
-         local.get $4
          local.get $6
+         local.get $4
+         local.get $7
          i64.mul
          i64.add
          i64.xor
@@ -10492,7 +10492,7 @@
          i64.mul
          local.get $12
          local.get $4
-         local.get $10
+         local.get $9
          i64.mul
          i64.add
          local.tee $17
@@ -10573,10 +10573,10 @@
          local.get $2
          i32.add
          local.set $1
-         local.get $8
+         local.get $10
          i64.const 8
          i64.shr_u
-         local.set $8
+         local.set $10
          local.get $0
          i32.const 4
          i32.shr_u
@@ -10598,10 +10598,10 @@
       i32.const 255
       i32.and
       i64.extend_i32_u
-      local.tee $7
+      local.tee $8
       i64.const 18014673391583296
       i64.mul
-      local.tee $8
+      local.tee $10
       local.get $4
       i64.const 37
       i64.shr_u
@@ -10609,9 +10609,9 @@
       i32.const 255
       i32.and
       i64.extend_i32_u
-      local.get $7
+      local.get $8
       i64.sub
-      local.tee $7
+      local.tee $8
       local.get $4
       i64.const 61
       i64.shr_u
@@ -10636,15 +10636,15 @@
       local.tee $3
       i64.const 13107
       i64.and
-      local.tee $9
-      local.get $9
+      local.tee $5
+      local.get $5
       i64.const 24
       i64.shl
       i64.or
       i64.const 219043332147
       i64.and
-      local.tee $9
-      local.get $9
+      local.tee $5
+      local.get $5
       i64.const 12
       i64.shl
       i64.or
@@ -10652,8 +10652,8 @@
       i64.and
       i64.const 21
       i64.mul
-      local.tee $9
-      local.get $9
+      local.tee $5
+      local.get $5
       i64.const 5
       i64.shr_u
       i64.const 281479271743489
@@ -10661,15 +10661,15 @@
       i64.add
       i64.mul
       i64.add
-      local.tee $9
+      local.tee $5
       i64.const 6
       i64.shr_u
-      local.get $9
+      local.get $5
       i64.const 5
       i64.shr_u
       i64.const 143835907860922879
       i64.and
-      local.get $9
+      local.get $5
       i64.const 3
       i64.shl
       i64.const 141865552958718456
@@ -10684,10 +10684,10 @@
       i64.add
       i64.const 71777214294589695
       i64.and
-      local.tee $9
+      local.tee $5
       i64.const 255
       i64.and
-      local.get $9
+      local.get $5
       i64.const 16711680
       i64.and
       i64.const 16
@@ -10702,10 +10702,10 @@
       i32.const 255
       i32.and
       i64.extend_i32_u
-      local.tee $6
+      local.tee $7
       i64.const 18014673391583296
       i64.mul
-      local.tee $5
+      local.tee $6
       local.get $4
       i64.const 53
       i64.shr_u
@@ -10713,7 +10713,7 @@
       i32.const 255
       i32.and
       i64.extend_i32_u
-      local.get $6
+      local.get $7
       i64.sub
       local.tee $4
       local.get $3
@@ -10721,15 +10721,15 @@
       i64.shr_u
       i64.const 13107
       i64.and
-      local.tee $6
-      local.get $6
+      local.tee $7
+      local.get $7
       i64.const 24
       i64.shl
       i64.or
       i64.const 219043332147
       i64.and
-      local.tee $6
-      local.get $6
+      local.tee $7
+      local.get $7
       i64.const 12
       i64.shl
       i64.or
@@ -10737,8 +10737,8 @@
       i64.and
       i64.const 21
       i64.mul
-      local.tee $6
-      local.get $6
+      local.tee $7
+      local.get $7
       i64.const 5
       i64.shr_u
       i64.const 281479271743489
@@ -10746,15 +10746,15 @@
       i64.add
       i64.mul
       i64.add
-      local.tee $6
+      local.tee $7
       i64.const 6
       i64.shr_u
-      local.get $6
+      local.get $7
       i64.const 5
       i64.shr_u
       i64.const 143835907860922879
       i64.and
-      local.get $6
+      local.get $7
       i64.const 3
       i64.shl
       i64.const 141865552958718456
@@ -10771,12 +10771,12 @@
       i64.and
       i64.const 8
       i64.shl
-      local.tee $6
+      local.tee $7
       i64.const 65280
       i64.and
       i64.const 16
       i64.shl
-      local.get $6
+      local.get $7
       i64.const 4278190080
       i64.and
       i64.const 32
@@ -10785,12 +10785,12 @@
       i64.or
       i64.store
       local.get $1
-      local.get $9
+      local.get $5
       i64.const 1095216660480
       i64.and
       i64.const 32
       i64.shr_u
-      local.get $9
+      local.get $5
       i64.const 71776119061217280
       i64.and
       i64.const 16
@@ -10798,10 +10798,10 @@
       i64.or
       i64.const 65793
       i64.mul
-      local.get $6
+      local.get $7
       i64.const -72057594037927936
       i64.and
-      local.get $6
+      local.get $7
       i64.const 280375465082880
       i64.and
       i64.const 16
@@ -10813,22 +10813,22 @@
       local.get $2
       i32.add
       local.tee $0
+      local.get $10
       local.get $8
-      local.get $7
       local.get $3
       i64.const 16
       i64.shr_u
       i64.const 13107
       i64.and
-      local.tee $9
-      local.get $9
+      local.tee $5
+      local.get $5
       i64.const 24
       i64.shl
       i64.or
       i64.const 219043332147
       i64.and
-      local.tee $9
-      local.get $9
+      local.tee $5
+      local.get $5
       i64.const 12
       i64.shl
       i64.or
@@ -10836,8 +10836,8 @@
       i64.and
       i64.const 21
       i64.mul
-      local.tee $9
-      local.get $9
+      local.tee $5
+      local.get $5
       i64.const 5
       i64.shr_u
       i64.const 281479271743489
@@ -10845,15 +10845,15 @@
       i64.add
       i64.mul
       i64.add
-      local.tee $9
+      local.tee $5
       i64.const 6
       i64.shr_u
-      local.get $9
+      local.get $5
       i64.const 5
       i64.shr_u
       i64.const 143835907860922879
       i64.and
-      local.get $9
+      local.get $5
       i64.const 3
       i64.shl
       i64.const 141865552958718456
@@ -10868,10 +10868,10 @@
       i64.add
       i64.const 71777214294589695
       i64.and
-      local.tee $9
+      local.tee $5
       i64.const 255
       i64.and
-      local.get $9
+      local.get $5
       i64.const 16711680
       i64.and
       i64.const 16
@@ -10879,22 +10879,22 @@
       i64.or
       i64.const 65793
       i64.mul
-      local.get $5
+      local.get $6
       local.get $4
       local.get $3
       i64.const 18
       i64.shr_u
       i64.const 13107
       i64.and
-      local.tee $6
-      local.get $6
+      local.tee $7
+      local.get $7
       i64.const 24
       i64.shl
       i64.or
       i64.const 219043332147
       i64.and
-      local.tee $6
-      local.get $6
+      local.tee $7
+      local.get $7
       i64.const 12
       i64.shl
       i64.or
@@ -10902,8 +10902,8 @@
       i64.and
       i64.const 21
       i64.mul
-      local.tee $6
-      local.get $6
+      local.tee $7
+      local.get $7
       i64.const 5
       i64.shr_u
       i64.const 281479271743489
@@ -10911,15 +10911,15 @@
       i64.add
       i64.mul
       i64.add
-      local.tee $6
+      local.tee $7
       i64.const 6
       i64.shr_u
-      local.get $6
+      local.get $7
       i64.const 5
       i64.shr_u
       i64.const 143835907860922879
       i64.and
-      local.get $6
+      local.get $7
       i64.const 3
       i64.shl
       i64.const 141865552958718456
@@ -10936,12 +10936,12 @@
       i64.and
       i64.const 8
       i64.shl
-      local.tee $6
+      local.tee $7
       i64.const 65280
       i64.and
       i64.const 16
       i64.shl
-      local.get $6
+      local.get $7
       i64.const 4278190080
       i64.and
       i64.const 32
@@ -10950,12 +10950,12 @@
       i64.or
       i64.store
       local.get $0
-      local.get $9
+      local.get $5
       i64.const 1095216660480
       i64.and
       i64.const 32
       i64.shr_u
-      local.get $9
+      local.get $5
       i64.const 71776119061217280
       i64.and
       i64.const 16
@@ -10963,10 +10963,10 @@
       i64.or
       i64.const 65793
       i64.mul
-      local.get $6
+      local.get $7
       i64.const -72057594037927936
       i64.and
-      local.get $6
+      local.get $7
       i64.const 280375465082880
       i64.and
       i64.const 16
@@ -10978,22 +10978,22 @@
       local.get $2
       i32.add
       local.tee $0
+      local.get $10
       local.get $8
-      local.get $7
       local.get $3
       i64.const 32
       i64.shr_u
       i64.const 13107
       i64.and
-      local.tee $9
-      local.get $9
+      local.tee $5
+      local.get $5
       i64.const 24
       i64.shl
       i64.or
       i64.const 219043332147
       i64.and
-      local.tee $9
-      local.get $9
+      local.tee $5
+      local.get $5
       i64.const 12
       i64.shl
       i64.or
@@ -11001,8 +11001,8 @@
       i64.and
       i64.const 21
       i64.mul
-      local.tee $9
-      local.get $9
+      local.tee $5
+      local.get $5
       i64.const 5
       i64.shr_u
       i64.const 281479271743489
@@ -11010,15 +11010,15 @@
       i64.add
       i64.mul
       i64.add
-      local.tee $9
+      local.tee $5
       i64.const 6
       i64.shr_u
-      local.get $9
+      local.get $5
       i64.const 5
       i64.shr_u
       i64.const 143835907860922879
       i64.and
-      local.get $9
+      local.get $5
       i64.const 3
       i64.shl
       i64.const 141865552958718456
@@ -11033,10 +11033,10 @@
       i64.add
       i64.const 71777214294589695
       i64.and
-      local.tee $9
+      local.tee $5
       i64.const 255
       i64.and
-      local.get $9
+      local.get $5
       i64.const 16711680
       i64.and
       i64.const 16
@@ -11044,22 +11044,22 @@
       i64.or
       i64.const 65793
       i64.mul
-      local.get $5
+      local.get $6
       local.get $4
       local.get $3
       i64.const 34
       i64.shr_u
       i64.const 13107
       i64.and
-      local.tee $6
-      local.get $6
+      local.tee $7
+      local.get $7
       i64.const 24
       i64.shl
       i64.or
       i64.const 219043332147
       i64.and
-      local.tee $6
-      local.get $6
+      local.tee $7
+      local.get $7
       i64.const 12
       i64.shl
       i64.or
@@ -11067,8 +11067,8 @@
       i64.and
       i64.const 21
       i64.mul
-      local.tee $6
-      local.get $6
+      local.tee $7
+      local.get $7
       i64.const 5
       i64.shr_u
       i64.const 281479271743489
@@ -11076,15 +11076,15 @@
       i64.add
       i64.mul
       i64.add
-      local.tee $6
+      local.tee $7
       i64.const 6
       i64.shr_u
-      local.get $6
+      local.get $7
       i64.const 5
       i64.shr_u
       i64.const 143835907860922879
       i64.and
-      local.get $6
+      local.get $7
       i64.const 3
       i64.shl
       i64.const 141865552958718456
@@ -11101,12 +11101,12 @@
       i64.and
       i64.const 8
       i64.shl
-      local.tee $6
+      local.tee $7
       i64.const 65280
       i64.and
       i64.const 16
       i64.shl
-      local.get $6
+      local.get $7
       i64.const 4278190080
       i64.and
       i64.const 32
@@ -11115,12 +11115,12 @@
       i64.or
       i64.store
       local.get $0
-      local.get $9
+      local.get $5
       i64.const 1095216660480
       i64.and
       i64.const 32
       i64.shr_u
-      local.get $9
+      local.get $5
       i64.const 71776119061217280
       i64.and
       i64.const 16
@@ -11128,10 +11128,10 @@
       i64.or
       i64.const 65793
       i64.mul
-      local.get $6
+      local.get $7
       i64.const -72057594037927936
       i64.and
-      local.get $6
+      local.get $7
       i64.const 280375465082880
       i64.and
       i64.const 16
@@ -11143,22 +11143,22 @@
       local.get $2
       i32.add
       local.tee $0
+      local.get $10
       local.get $8
-      local.get $7
       local.get $3
       i64.const 48
       i64.shr_u
       i64.const 13107
       i64.and
-      local.tee $8
-      local.get $8
+      local.tee $10
+      local.get $10
       i64.const 24
       i64.shl
       i64.or
       i64.const 219043332147
       i64.and
-      local.tee $8
-      local.get $8
+      local.tee $10
+      local.get $10
       i64.const 12
       i64.shl
       i64.or
@@ -11166,8 +11166,8 @@
       i64.and
       i64.const 21
       i64.mul
-      local.tee $8
-      local.get $8
+      local.tee $10
+      local.get $10
       i64.const 5
       i64.shr_u
       i64.const 281479271743489
@@ -11175,15 +11175,15 @@
       i64.add
       i64.mul
       i64.add
-      local.tee $8
+      local.tee $10
       i64.const 6
       i64.shr_u
-      local.get $8
+      local.get $10
       i64.const 5
       i64.shr_u
       i64.const 143835907860922879
       i64.and
-      local.get $8
+      local.get $10
       i64.const 3
       i64.shl
       i64.const 141865552958718456
@@ -11198,10 +11198,10 @@
       i64.add
       i64.const 71777214294589695
       i64.and
-      local.tee $8
+      local.tee $10
       i64.const 255
       i64.and
-      local.get $8
+      local.get $10
       i64.const 16711680
       i64.and
       i64.const 16
@@ -11209,7 +11209,7 @@
       i64.or
       i64.const 65793
       i64.mul
-      local.get $5
+      local.get $6
       local.get $4
       local.get $3
       i64.const 50
@@ -11280,12 +11280,12 @@
       i64.or
       i64.store
       local.get $0
-      local.get $8
+      local.get $10
       i64.const 1095216660480
       i64.and
       i64.const 32
       i64.shr_u
-      local.get $8
+      local.get $10
       i64.const 71776119061217280
       i64.and
       i64.const 16
@@ -11322,10 +11322,10 @@
      i32.const 255
      i32.and
      i64.extend_i32_u
-     local.tee $7
+     local.tee $8
      i64.const 18014673391583296
      i64.mul
-     local.tee $8
+     local.tee $10
      local.get $4
      i64.const 21
      i64.shr_u
@@ -11341,9 +11341,9 @@
      i32.const 255
      i32.and
      i64.extend_i32_u
-     local.get $7
+     local.get $8
      i64.sub
-     local.tee $7
+     local.tee $8
      local.get $4
      i64.const 49
      i64.shr_u
@@ -11398,6 +11398,9 @@
      i64.mul
      i64.add
      local.tee $4
+     i64.const 6
+     i64.shr_u
+     local.get $4
      i64.const 5
      i64.shr_u
      i64.const 143835907860922879
@@ -11414,9 +11417,6 @@
      i64.shr_u
      i64.const 281479271743489
      i64.and
-     local.get $4
-     i64.const 6
-     i64.shr_u
      i64.add
      i64.const 71777214294589695
      i64.and
@@ -11426,7 +11426,7 @@
      i32.const 255
      i32.and
      i64.extend_i32_u
-     local.tee $9
+     local.tee $5
      i64.const 18014673391583296
      i64.mul
      local.tee $4
@@ -11436,21 +11436,21 @@
      i32.const 255
      i32.and
      i64.extend_i32_u
-     local.get $9
+     local.get $5
      i64.sub
-     local.tee $9
+     local.tee $5
      local.get $11
      i64.mul
      i64.add
-     local.tee $5
+     local.tee $6
      i64.const 6
      i64.shr_u
-     local.get $5
+     local.get $6
      i64.const 5
      i64.shr_u
      i64.const 143835907860922879
      i64.and
-     local.get $5
+     local.get $6
      i64.const 3
      i64.shl
      i64.const 141865552958718456
@@ -11468,7 +11468,7 @@
      i64.const 8
      i64.shl
      i64.or
-     local.tee $5
+     local.tee $6
      i64.const 65535
      i64.and
      local.get $0
@@ -11477,19 +11477,19 @@
      i32.const 255
      i32.and
      i64.extend_i32_u
-     local.tee $10
+     local.tee $9
      i64.const 18014673391583296
      i64.mul
-     local.tee $6
+     local.tee $7
      local.get $13
      i32.const 20
      i32.shr_u
      i32.const 255
      i32.and
      i64.extend_i32_u
-     local.get $10
+     local.get $9
      i64.sub
-     local.tee $10
+     local.tee $9
      local.get $11
      i64.mul
      i64.add
@@ -11524,7 +11524,7 @@
      i64.const 32
      i64.shl
      i64.or
-     local.get $5
+     local.get $6
      i64.const 4294901760
      i64.and
      local.get $11
@@ -11536,7 +11536,7 @@
      i64.or
      i64.store
      local.get $1
-     local.get $5
+     local.get $6
      i64.const 32
      i64.shr_u
      i64.const 65535
@@ -11545,7 +11545,7 @@
      i64.const -281474976710656
      i64.and
      i64.or
-     local.get $5
+     local.get $6
      i64.const -281474976710656
      i64.and
      local.get $11
@@ -11560,38 +11560,38 @@
      local.get $2
      i32.add
      local.tee $0
+     local.get $10
      local.get $8
-     local.get $7
      local.get $12
      i64.const 20
      i64.shr_u
      i64.const 1048575
      i64.and
-     local.tee $5
-     local.get $5
+     local.tee $6
+     local.get $6
      i64.const 22
      i64.shl
      i64.or
      i64.const 4393751544831
      i64.and
-     local.tee $5
-     local.get $5
+     local.tee $6
+     local.get $6
      i64.const 11
      i64.shl
      i64.or
      i64.const 8725857424048159
      i64.and
-     local.tee $5
+     local.tee $6
      i64.const 1
      i64.shl
-     local.get $5
+     local.get $6
      i64.const 4
      i64.shr_u
      i64.or
      i64.const 17733194119839807
      i64.and
-     local.tee $5
-     local.get $5
+     local.tee $6
+     local.get $6
      i64.const 5
      i64.shr_u
      i64.const 281479271743489
@@ -11600,15 +11600,15 @@
      local.tee $11
      i64.mul
      i64.add
-     local.tee $5
+     local.tee $6
      i64.const 6
      i64.shr_u
-     local.get $5
+     local.get $6
      i64.const 5
      i64.shr_u
      i64.const 143835907860922879
      i64.and
-     local.get $5
+     local.get $6
      i64.const 3
      i64.shl
      i64.const 141865552958718456
@@ -11624,19 +11624,19 @@
      i64.const 71777214294589695
      i64.and
      local.get $4
-     local.get $9
+     local.get $5
      local.get $11
      i64.mul
      i64.add
-     local.tee $5
+     local.tee $6
      i64.const 6
      i64.shr_u
-     local.get $5
+     local.get $6
      i64.const 5
      i64.shr_u
      i64.const 143835907860922879
      i64.and
-     local.get $5
+     local.get $6
      i64.const 3
      i64.shl
      i64.const 141865552958718456
@@ -11654,11 +11654,11 @@
      i64.const 8
      i64.shl
      i64.or
-     local.tee $5
+     local.tee $6
      i64.const 65535
      i64.and
-     local.get $6
-     local.get $10
+     local.get $7
+     local.get $9
      local.get $11
      i64.mul
      i64.add
@@ -11693,7 +11693,7 @@
      i64.const 32
      i64.shl
      i64.or
-     local.get $5
+     local.get $6
      i64.const 4294901760
      i64.and
      local.get $11
@@ -11705,7 +11705,7 @@
      i64.or
      i64.store
      local.get $0
-     local.get $5
+     local.get $6
      i64.const 32
      i64.shr_u
      i64.const 65535
@@ -11714,7 +11714,7 @@
      i64.const -281474976710656
      i64.and
      i64.or
-     local.get $5
+     local.get $6
      i64.const -281474976710656
      i64.and
      local.get $11
@@ -11729,8 +11729,8 @@
      local.get $2
      i32.add
      local.tee $0
+     local.get $10
      local.get $8
-     local.get $7
      local.get $3
      i64.const 24
      i64.shr_u
@@ -11769,7 +11769,7 @@
      i64.const 281479271743489
      i64.and
      i64.add
-     local.tee $5
+     local.tee $6
      i64.mul
      i64.add
      local.tee $3
@@ -11797,7 +11797,7 @@
      i64.and
      local.get $4
      local.get $5
-     local.get $9
+     local.get $6
      i64.mul
      i64.add
      local.tee $3
@@ -11829,20 +11829,20 @@
      local.tee $3
      i64.const 65535
      i64.and
+     local.get $7
      local.get $6
-     local.get $5
-     local.get $10
+     local.get $9
      i64.mul
      i64.add
-     local.tee $5
+     local.tee $6
      i64.const 6
      i64.shr_u
-     local.get $5
+     local.get $6
      i64.const 5
      i64.shr_u
      i64.const 143835907860922879
      i64.and
-     local.get $5
+     local.get $6
      i64.const 3
      i64.shl
      i64.const 141865552958718456
@@ -11859,7 +11859,7 @@
      i64.and
      i64.const -71777214294589696
      i64.or
-     local.tee $5
+     local.tee $6
      i64.const 4294901760
      i64.and
      i64.const 32
@@ -11868,7 +11868,7 @@
      local.get $3
      i64.const 4294901760
      i64.and
-     local.get $5
+     local.get $6
      i64.const 65535
      i64.and
      i64.or
@@ -11882,14 +11882,14 @@
      i64.shr_u
      i64.const 65535
      i64.and
-     local.get $5
+     local.get $6
      i64.const -281474976710656
      i64.and
      i64.or
      local.get $3
      i64.const -281474976710656
      i64.and
-     local.get $5
+     local.get $6
      i64.const 281470681743360
      i64.and
      i64.or
@@ -11901,8 +11901,8 @@
      local.get $2
      i32.add
      local.tee $0
+     local.get $10
      local.get $8
-     local.get $7
      local.get $11
      i64.const 20
      i64.shr_u
@@ -11941,15 +11941,15 @@
      local.tee $3
      i64.mul
      i64.add
-     local.tee $8
+     local.tee $10
      i64.const 6
      i64.shr_u
-     local.get $8
+     local.get $10
      i64.const 5
      i64.shr_u
      i64.const 143835907860922879
      i64.and
-     local.get $8
+     local.get $10
      i64.const 3
      i64.shl
      i64.const 141865552958718456
@@ -11966,7 +11966,7 @@
      i64.and
      local.get $4
      local.get $3
-     local.get $9
+     local.get $5
      i64.mul
      i64.add
      local.tee $4
@@ -11998,9 +11998,9 @@
      local.tee $4
      i64.const 65535
      i64.and
-     local.get $6
+     local.get $7
      local.get $3
-     local.get $10
+     local.get $9
      i64.mul
      i64.add
      local.tee $3

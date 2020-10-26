@@ -6317,9 +6317,7 @@
        i64.or
        i64.const 17
        i64.shl
-       i64.const -4611686018427387904
-       i64.or
-       i64.const 33858
+       i64.const -4611686018427354046
        i64.or
        local.set $16
        local.get $2
