@@ -1,4 +1,5 @@
 (module
+ (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
@@ -6,6 +7,461 @@
  (global $assembly/uastc-rgba32/firstRun (mut i32) (i32.const 1))
  (export "memory" (memory $0))
  (export "decodeRGBA32" (func $assembly/uastc-rgba32/decodeRGBA32))
+ (func $assembly/lib/uastc/common/storeCommonData
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 0
+  i64.const 507797397956067339
+  i64.store
+  i32.const 8
+  i64.const 651911486553854475
+  i64.store
+  i32.const 16
+  i64.const 579856091522400267
+  i64.store
+  i32.const 24
+  i64.const 940128668582810123
+  i64.store
+  i32.const 32
+  i64.const 507799596979322891
+  i64.store
+  i32.const 40
+  i64.const 651911486553854475
+  i64.store
+  i32.const 48
+  i64.const 579839598847983627
+  i64.store
+  i32.const 56
+  i64.const 940128668582810123
+  i64.store
+  i32.const 64
+  i64.const 507801796002578443
+  i64.store
+  i32.const 72
+  i64.const 651911486553854475
+  i64.store
+  i32.const 80
+  i64.const 579856091522400267
+  i64.store
+  i32.const 88
+  i64.const 940128668582810123
+  i64.store
+  i32.const 96
+  i64.const 507799596979322891
+  i64.store
+  i32.const 104
+  i64.const 651911486553854475
+  i64.store
+  i32.const 112
+  i64.const 579839598847983627
+  i64.store
+  i32.const 120
+  i64.const 940128668582810123
+  i64.store
+  loop $for-loop|0
+   local.get $0
+   i32.const 128
+   i32.lt_u
+   if
+    local.get $0
+    i32.const 1
+    i32.shl
+    local.get $0
+    i32.const 5
+    i32.rem_u
+    local.get $0
+    i32.const 125
+    i32.rem_u
+    i32.const 25
+    i32.div_u
+    i32.const 8
+    i32.shl
+    local.get $0
+    i32.const 25
+    i32.rem_u
+    i32.const 5
+    i32.div_u
+    i32.const 4
+    i32.shl
+    i32.or
+    i32.or
+    i32.store16 offset=256
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|0
+   end
+  end
+  i32.const 0
+  local.set $0
+  loop $for-loop|00
+   local.get $0
+   i32.const 256
+   i32.lt_u
+   if
+    local.get $0
+    i32.const 1
+    i32.shl
+    local.get $0
+    i32.const 3
+    i32.rem_u
+    local.get $0
+    i32.const 243
+    i32.rem_u
+    i32.const 81
+    i32.div_u
+    i32.const 8
+    i32.shl
+    local.get $0
+    i32.const 81
+    i32.rem_u
+    i32.const 27
+    i32.div_u
+    i32.const 6
+    i32.shl
+    i32.or
+    local.get $0
+    i32.const 27
+    i32.rem_u
+    i32.const 9
+    i32.div_u
+    i32.const 4
+    i32.shl
+    i32.or
+    local.get $0
+    i32.const 9
+    i32.rem_u
+    i32.const 3
+    i32.div_u
+    i32.const 2
+    i32.shl
+    i32.or
+    i32.or
+    i32.store16 offset=512
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|00
+   end
+  end
+  i32.const 0
+  local.set $0
+  loop $for-loop|01
+   local.get $0
+   i32.const 4
+   i32.lt_u
+   if
+    i32.const 511
+    i32.const 0
+    local.get $0
+    i32.const 1
+    i32.and
+    select
+    local.set $2
+    i32.const 278
+    i32.const 0
+    local.get $0
+    i32.const 2
+    i32.and
+    select
+    local.set $3
+    i32.const 0
+    local.set $1
+    loop $for-loop|1
+     local.get $1
+     i32.const 3
+     i32.lt_u
+     if
+      local.get $0
+      local.get $1
+      i32.const 2
+      i32.shl
+      i32.or
+      local.get $2
+      i32.const 128
+      i32.and
+      local.get $2
+      local.get $3
+      local.get $1
+      i32.const 93
+      i32.mul
+      i32.add
+      i32.xor
+      i32.const 2
+      i32.shr_u
+      i32.or
+      i32.store8 offset=1024
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $for-loop|1
+     end
+    end
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|01
+   end
+  end
+  i32.const 0
+  local.set $0
+  loop $for-loop|02
+   local.get $0
+   i32.const 8
+   i32.lt_u
+   if
+    i32.const 511
+    i32.const 0
+    local.get $0
+    i32.const 1
+    i32.and
+    select
+    local.set $2
+    local.get $0
+    i32.const 6
+    i32.and
+    i32.const 65
+    i32.mul
+    local.get $0
+    i32.const 2
+    i32.shr_u
+    i32.or
+    local.set $3
+    i32.const 0
+    local.set $1
+    loop $for-loop|13
+     local.get $1
+     i32.const 5
+     i32.lt_u
+     if
+      local.get $0
+      local.get $1
+      i32.const 3
+      i32.shl
+      i32.or
+      local.get $2
+      i32.const 128
+      i32.and
+      local.get $2
+      local.get $3
+      local.get $1
+      i32.const 26
+      i32.mul
+      i32.add
+      i32.xor
+      i32.const 2
+      i32.shr_u
+      i32.or
+      i32.store8 offset=1036
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $for-loop|13
+     end
+    end
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|02
+   end
+  end
+  i32.const 0
+  local.set $0
+  loop $for-loop|04
+   local.get $0
+   i32.const 16
+   i32.lt_u
+   if
+    i32.const 511
+    i32.const 0
+    local.get $0
+    i32.const 1
+    i32.and
+    select
+    local.set $2
+    local.get $0
+    i32.const 1
+    i32.shr_u
+    i32.const 65
+    i32.mul
+    local.set $3
+    i32.const 0
+    local.set $1
+    loop $for-loop|15
+     local.get $1
+     i32.const 3
+     i32.lt_u
+     if
+      local.get $0
+      local.get $1
+      i32.const 4
+      i32.shl
+      i32.or
+      local.get $2
+      i32.const 128
+      i32.and
+      local.get $2
+      local.get $3
+      local.get $1
+      i32.const 22
+      i32.mul
+      i32.add
+      i32.xor
+      i32.const 2
+      i32.shr_u
+      i32.or
+      i32.store8 offset=1076
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $for-loop|15
+     end
+    end
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|04
+   end
+  end
+  i32.const 0
+  local.set $0
+  loop $for-loop|06
+   local.get $0
+   i32.const 32
+   i32.lt_u
+   if
+    i32.const 511
+    i32.const 0
+    local.get $0
+    i32.const 1
+    i32.and
+    select
+    local.set $2
+    local.get $0
+    i32.const 30
+    i32.and
+    i32.const 4
+    i32.shl
+    local.get $0
+    i32.const 4
+    i32.shr_u
+    i32.or
+    local.set $3
+    i32.const 0
+    local.set $1
+    loop $for-loop|17
+     local.get $1
+     i32.const 5
+     i32.lt_u
+     if
+      local.get $0
+      local.get $1
+      i32.const 5
+      i32.shl
+      i32.or
+      local.get $2
+      i32.const 128
+      i32.and
+      local.get $2
+      local.get $3
+      local.get $1
+      i32.const 6
+      i32.mul
+      i32.add
+      i32.xor
+      i32.const 2
+      i32.shr_u
+      i32.or
+      i32.store8 offset=1124
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $for-loop|17
+     end
+    end
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|06
+   end
+  end
+  i32.const 0
+  local.set $0
+  loop $for-loop|08
+   local.get $0
+   i32.const 64
+   i32.lt_u
+   if
+    i32.const 511
+    i32.const 0
+    local.get $0
+    i32.const 1
+    i32.and
+    select
+    local.set $2
+    local.get $0
+    i32.const 62
+    i32.and
+    i32.const 3
+    i32.shl
+    local.get $0
+    i32.const 5
+    i32.shr_u
+    i32.or
+    local.set $3
+    i32.const 0
+    local.set $1
+    loop $for-loop|19
+     local.get $1
+     i32.const 3
+     i32.lt_u
+     if
+      local.get $0
+      local.get $1
+      i32.const 6
+      i32.shl
+      i32.or
+      local.get $2
+      i32.const 128
+      i32.and
+      local.get $2
+      local.get $3
+      local.get $1
+      i32.const 5
+      i32.mul
+      i32.add
+      i32.xor
+      i32.const 2
+      i32.shr_u
+      i32.or
+      i32.store8 offset=1284
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $for-loop|19
+     end
+    end
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|08
+   end
+  end
+ )
  (func $assembly/uastc-rgba32/writeErrorBlock (param $0 i32) (param $1 i32)
   local.get $0
   i64.const -280375465148161
@@ -12127,457 +12583,7 @@
   end
   global.get $assembly/uastc-rgba32/firstRun
   if
-   i32.const 0
-   i64.const 507797397956067339
-   i64.store
-   i32.const 8
-   i64.const 651911486553854475
-   i64.store
-   i32.const 16
-   i64.const 579856091522400267
-   i64.store
-   i32.const 24
-   i64.const 940128668582810123
-   i64.store
-   i32.const 32
-   i64.const 507799596979322891
-   i64.store
-   i32.const 40
-   i64.const 651911486553854475
-   i64.store
-   i32.const 48
-   i64.const 579839598847983627
-   i64.store
-   i32.const 56
-   i64.const 940128668582810123
-   i64.store
-   i32.const 64
-   i64.const 507801796002578443
-   i64.store
-   i32.const 72
-   i64.const 651911486553854475
-   i64.store
-   i32.const 80
-   i64.const 579856091522400267
-   i64.store
-   i32.const 88
-   i64.const 940128668582810123
-   i64.store
-   i32.const 96
-   i64.const 507799596979322891
-   i64.store
-   i32.const 104
-   i64.const 651911486553854475
-   i64.store
-   i32.const 112
-   i64.const 579839598847983627
-   i64.store
-   i32.const 120
-   i64.const 940128668582810123
-   i64.store
-   i32.const 0
-   local.set $1
-   loop $for-loop|0
-    local.get $1
-    i32.const 128
-    i32.lt_u
-    if
-     local.get $1
-     i32.const 1
-     i32.shl
-     local.get $1
-     i32.const 5
-     i32.rem_u
-     local.get $1
-     i32.const 125
-     i32.rem_u
-     i32.const 25
-     i32.div_u
-     i32.const 8
-     i32.shl
-     local.get $1
-     i32.const 25
-     i32.rem_u
-     i32.const 5
-     i32.div_u
-     i32.const 4
-     i32.shl
-     i32.or
-     i32.or
-     i32.store16 offset=256
-     local.get $1
-     i32.const 1
-     i32.add
-     local.set $1
-     br $for-loop|0
-    end
-   end
-   i32.const 0
-   local.set $1
-   loop $for-loop|00
-    local.get $1
-    i32.const 256
-    i32.lt_u
-    if
-     local.get $1
-     i32.const 1
-     i32.shl
-     local.get $1
-     i32.const 3
-     i32.rem_u
-     local.get $1
-     i32.const 243
-     i32.rem_u
-     i32.const 81
-     i32.div_u
-     i32.const 8
-     i32.shl
-     local.get $1
-     i32.const 81
-     i32.rem_u
-     i32.const 27
-     i32.div_u
-     i32.const 6
-     i32.shl
-     i32.or
-     local.get $1
-     i32.const 27
-     i32.rem_u
-     i32.const 9
-     i32.div_u
-     i32.const 4
-     i32.shl
-     i32.or
-     local.get $1
-     i32.const 9
-     i32.rem_u
-     i32.const 3
-     i32.div_u
-     i32.const 2
-     i32.shl
-     i32.or
-     i32.or
-     i32.store16 offset=512
-     local.get $1
-     i32.const 1
-     i32.add
-     local.set $1
-     br $for-loop|00
-    end
-   end
-   i32.const 0
-   local.set $1
-   loop $for-loop|01
-    local.get $1
-    i32.const 4
-    i32.lt_u
-    if
-     i32.const 511
-     i32.const 0
-     local.get $1
-     i32.const 1
-     i32.and
-     select
-     local.set $3
-     i32.const 278
-     i32.const 0
-     local.get $1
-     i32.const 2
-     i32.and
-     select
-     local.set $4
-     i32.const 0
-     local.set $2
-     loop $for-loop|1
-      local.get $2
-      i32.const 3
-      i32.lt_u
-      if
-       local.get $1
-       local.get $2
-       i32.const 2
-       i32.shl
-       i32.or
-       local.get $3
-       i32.const 128
-       i32.and
-       local.get $3
-       local.get $4
-       local.get $2
-       i32.const 93
-       i32.mul
-       i32.add
-       i32.xor
-       i32.const 2
-       i32.shr_u
-       i32.or
-       i32.store8 offset=1024
-       local.get $2
-       i32.const 1
-       i32.add
-       local.set $2
-       br $for-loop|1
-      end
-     end
-     local.get $1
-     i32.const 1
-     i32.add
-     local.set $1
-     br $for-loop|01
-    end
-   end
-   i32.const 0
-   local.set $1
-   loop $for-loop|02
-    local.get $1
-    i32.const 8
-    i32.lt_u
-    if
-     i32.const 511
-     i32.const 0
-     local.get $1
-     i32.const 1
-     i32.and
-     select
-     local.set $3
-     local.get $1
-     i32.const 6
-     i32.and
-     i32.const 65
-     i32.mul
-     local.get $1
-     i32.const 2
-     i32.shr_u
-     i32.or
-     local.set $4
-     i32.const 0
-     local.set $2
-     loop $for-loop|13
-      local.get $2
-      i32.const 5
-      i32.lt_u
-      if
-       local.get $1
-       local.get $2
-       i32.const 3
-       i32.shl
-       i32.or
-       local.get $3
-       i32.const 128
-       i32.and
-       local.get $3
-       local.get $4
-       local.get $2
-       i32.const 26
-       i32.mul
-       i32.add
-       i32.xor
-       i32.const 2
-       i32.shr_u
-       i32.or
-       i32.store8 offset=1036
-       local.get $2
-       i32.const 1
-       i32.add
-       local.set $2
-       br $for-loop|13
-      end
-     end
-     local.get $1
-     i32.const 1
-     i32.add
-     local.set $1
-     br $for-loop|02
-    end
-   end
-   i32.const 0
-   local.set $1
-   loop $for-loop|04
-    local.get $1
-    i32.const 16
-    i32.lt_u
-    if
-     i32.const 511
-     i32.const 0
-     local.get $1
-     i32.const 1
-     i32.and
-     select
-     local.set $3
-     local.get $1
-     i32.const 1
-     i32.shr_u
-     i32.const 65
-     i32.mul
-     local.set $4
-     i32.const 0
-     local.set $2
-     loop $for-loop|15
-      local.get $2
-      i32.const 3
-      i32.lt_u
-      if
-       local.get $1
-       local.get $2
-       i32.const 4
-       i32.shl
-       i32.or
-       local.get $3
-       i32.const 128
-       i32.and
-       local.get $3
-       local.get $4
-       local.get $2
-       i32.const 22
-       i32.mul
-       i32.add
-       i32.xor
-       i32.const 2
-       i32.shr_u
-       i32.or
-       i32.store8 offset=1076
-       local.get $2
-       i32.const 1
-       i32.add
-       local.set $2
-       br $for-loop|15
-      end
-     end
-     local.get $1
-     i32.const 1
-     i32.add
-     local.set $1
-     br $for-loop|04
-    end
-   end
-   i32.const 0
-   local.set $1
-   loop $for-loop|06
-    local.get $1
-    i32.const 32
-    i32.lt_u
-    if
-     i32.const 511
-     i32.const 0
-     local.get $1
-     i32.const 1
-     i32.and
-     select
-     local.set $3
-     local.get $1
-     i32.const 30
-     i32.and
-     i32.const 4
-     i32.shl
-     local.get $1
-     i32.const 4
-     i32.shr_u
-     i32.or
-     local.set $4
-     i32.const 0
-     local.set $2
-     loop $for-loop|17
-      local.get $2
-      i32.const 5
-      i32.lt_u
-      if
-       local.get $1
-       local.get $2
-       i32.const 5
-       i32.shl
-       i32.or
-       local.get $3
-       i32.const 128
-       i32.and
-       local.get $3
-       local.get $4
-       local.get $2
-       i32.const 6
-       i32.mul
-       i32.add
-       i32.xor
-       i32.const 2
-       i32.shr_u
-       i32.or
-       i32.store8 offset=1124
-       local.get $2
-       i32.const 1
-       i32.add
-       local.set $2
-       br $for-loop|17
-      end
-     end
-     local.get $1
-     i32.const 1
-     i32.add
-     local.set $1
-     br $for-loop|06
-    end
-   end
-   i32.const 0
-   local.set $1
-   loop $for-loop|08
-    local.get $1
-    i32.const 64
-    i32.lt_u
-    if
-     i32.const 511
-     i32.const 0
-     local.get $1
-     i32.const 1
-     i32.and
-     select
-     local.set $3
-     local.get $1
-     i32.const 62
-     i32.and
-     i32.const 3
-     i32.shl
-     local.get $1
-     i32.const 5
-     i32.shr_u
-     i32.or
-     local.set $4
-     i32.const 0
-     local.set $2
-     loop $for-loop|19
-      local.get $2
-      i32.const 3
-      i32.lt_u
-      if
-       local.get $1
-       local.get $2
-       i32.const 6
-       i32.shl
-       i32.or
-       local.get $3
-       i32.const 128
-       i32.and
-       local.get $3
-       local.get $4
-       local.get $2
-       i32.const 5
-       i32.mul
-       i32.add
-       i32.xor
-       i32.const 2
-       i32.shr_u
-       i32.or
-       i32.store8 offset=1284
-       local.get $2
-       i32.const 1
-       i32.add
-       local.set $2
-       br $for-loop|19
-      end
-     end
-     local.get $1
-     i32.const 1
-     i32.add
-     local.set $1
-     br $for-loop|08
-    end
-   end
+   call $assembly/lib/uastc/common/storeCommonData
    i32.const 2048
    i64.const -1152920405967621376
    i64.store
@@ -12651,7 +12657,7 @@
   local.get $0
   i32.const 2
   i32.shl
-  local.tee $4
+  local.tee $5
   i32.const 3
   i32.mul
   i32.add
@@ -12672,21 +12678,21 @@
   i32.const 65536
   i32.add
   local.set $1
-  loop $for-loop|010
-   local.get $5
+  loop $for-loop|0
+   local.get $4
    local.get $8
    i32.lt_s
    if
     i32.const 0
     local.set $3
-    loop $for-loop|111
+    loop $for-loop|1
      local.get $3
      local.get $7
      i32.lt_s
      if
       local.get $2
       local.get $1
-      local.get $4
+      local.get $5
       call $assembly/uastc-rgba32/decodeBlock
       local.get $2
       i32.const 16
@@ -12700,7 +12706,7 @@
       i32.const 1
       i32.add
       local.set $3
-      br $for-loop|111
+      br $for-loop|1
      end
     end
     local.get $2
@@ -12711,11 +12717,11 @@
     local.get $1
     i32.add
     local.set $1
-    local.get $5
+    local.get $4
     i32.const 1
     i32.add
-    local.set $5
-    br $for-loop|010
+    local.set $4
+    br $for-loop|0
    end
   end
   local.get $9
@@ -12733,7 +12739,7 @@
    i32.const 4
    i32.shl
    local.set $6
-   local.get $4
+   local.get $5
    i32.const 2
    i32.shl
    local.set $7
@@ -12763,9 +12769,9 @@
        i32.store
        local.get $0
        local.get $1
-       local.get $4
+       local.get $5
        i32.add
-       local.tee $5
+       local.tee $4
        i32.add
        local.get $0
        i32.load offset=4112
@@ -12774,7 +12780,7 @@
        local.get $4
        local.get $5
        i32.add
-       local.tee $5
+       local.tee $4
        i32.add
        local.get $0
        i32.load offset=4128
