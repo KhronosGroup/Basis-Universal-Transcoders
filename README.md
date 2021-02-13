@@ -1,4 +1,4 @@
-# Basis Universal Texture Transcoders
+# Basis Universal Transcoders
 
 ![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 [![CI](https://github.com/KhronosGroup/Basis-Universal-Transcoders/workflows/CI/badge.svg?branch=main&event=push)](https://github.com/KhronosGroup/Basis-Universal-Transcoders/actions?query=workflow%3ACI)
