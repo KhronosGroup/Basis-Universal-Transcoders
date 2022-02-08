@@ -17,7 +17,7 @@
     "@types/node": "^14.11.5",
     "@typescript-eslint/eslint-plugin": "^4.4.0",
     "@typescript-eslint/parser": "^4.4.0",
-    "assemblyscript": "0.15.0",
+    "assemblyscript": "0.19.22",
     "eslint": "^7.10.0",
     "eslint-plugin-unicorn": "^22.0.0",
     "tap-spec": "^5.0.0",
@@ -26,11 +26,11 @@
     "typescript": "^4.0.3"
   },
   "scripts": {
-    "asbuild:generator": "asc assembly/uastc-generator.ts -b build/uastc_generator.wasm -t build/uastc_generator.wat --optimize --converge --runtime none --noAssert --importMemory --memoryBase 63488",
-    "asbuild:uastc-rgba32-unorm": "asc assembly/uastc-rgba32.ts -u SRGB=0 -b build/uastc_rgba32_unorm.wasm -t build/uastc_rgba32_unorm.wat --optimize --converge --runtime none --noAssert --importMemory",
-    "asbuild:uastc-rgba32-srgb": "asc assembly/uastc-rgba32.ts -u SRGB=1 -b build/uastc_rgba32_srgb.wasm -t build/uastc_rgba32_srgb.wat --optimize --converge --runtime none --noAssert --importMemory",
-    "asbuild:uastc-astc": "asc assembly/uastc-astc.ts -b build/uastc_astc.wasm -t build/uastc_astc.wat --optimize --converge --runtime none --noAssert --importMemory",
-    "asbuild:uastc-bc7": "asc assembly/uastc-bc7.ts -b build/uastc_bc7.wasm -t build/uastc_bc7.wat --optimize --converge --runtime none --noAssert --importMemory",
+    "asbuild:generator": "asc assembly/uastc-generator.ts -b build/uastc_generator.wasm -t build/uastc_generator.wat --optimize --converge --runtime stub --noAssert --importMemory --memoryBase 63488",
+    "asbuild:uastc-rgba32-unorm": "asc assembly/uastc-rgba32.ts -u SRGB=0 -b build/uastc_rgba32_unorm.wasm -t build/uastc_rgba32_unorm.wat --optimize --converge --runtime stub --noAssert --importMemory",
+    "asbuild:uastc-rgba32-srgb": "asc assembly/uastc-rgba32.ts -u SRGB=1 -b build/uastc_rgba32_srgb.wasm -t build/uastc_rgba32_srgb.wat --optimize --converge --runtime stub --noAssert --importMemory",
+    "asbuild:uastc-astc": "asc assembly/uastc-astc.ts -b build/uastc_astc.wasm -t build/uastc_astc.wat --optimize --converge --runtime stub --noAssert --importMemory",
+    "asbuild:uastc-bc7": "asc assembly/uastc-bc7.ts -b build/uastc_bc7.wasm -t build/uastc_bc7.wat --optimize --converge --runtime stub --noAssert --importMemory",
     "asbuild:transcoders": "npm run asbuild:uastc-bc7 && npm run asbuild:uastc-astc && npm run asbuild:uastc-rgba32-unorm && npm run asbuild:uastc-rgba32-srgb",
     "asbuild": "npm run asbuild:generator && npm run asbuild:transcoders",
     "test": "ts-node node_modules/tape/bin/tape test/test.ts | tap-spec"
