@@ -1,7 +1,7 @@
-# Universal Texture Transcoders
+# Basis Universal Transcoders
 
 ![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
-[![CI](https://github.com/KhronosGroup/Universal-Texture-Transcoders/workflows/CI/badge.svg?branch=main&event=push)](https://github.com/KhronosGroup/Universal-Texture-Transcoders/actions?query=workflow%3ACI)
+[![CI](https://github.com/KhronosGroup/Basis-Universal-Transcoders/workflows/CI/badge.svg?branch=main&event=push)](https://github.com/KhronosGroup/Basis-Universal-Transcoders/actions?query=workflow%3ACI)
 
 A collection of optimized WebAssembly transcoders for [Basis Universal](https://github.com/BinomialLLC/basis_universal/) compressed GPU texture formats.
 

@@ -1,5 +1,5 @@
 {
-  "name": "universal-texture-transcoders",
+  "name": "basis-universal-transcoders",
   "version": "0.1.0",
   "description": "Lightweight WebAssembly transcoder implementations of universal texture formats.",
   "keywords": [
