@@ -14,16 +14,16 @@
   "author": "The Khronos Group, Inc.",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/node": "^14.11.5",
-    "@typescript-eslint/eslint-plugin": "^4.4.0",
-    "@typescript-eslint/parser": "^4.4.0",
+    "@types/node": "^17.0.16",
+    "@typescript-eslint/eslint-plugin": "^5.11.0",
+    "@typescript-eslint/parser": "^5.11.0",
     "assemblyscript": "0.19.22",
-    "eslint": "^7.10.0",
-    "eslint-plugin-unicorn": "^22.0.0",
-    "tap-spec": "^5.0.0",
-    "tape": "^5.0.1",
-    "ts-node": "^9.0.0",
-    "typescript": "^4.0.3"
+    "eslint": "^8.8.0",
+    "eslint-plugin-unicorn": "^40.1.0",
+    "tap-arc": "^0.1.2",
+    "tape": "^5.5.0",
+    "ts-node": "^10.5.0",
+    "typescript": "^4.5.5"
   },
   "scripts": {
     "asbuild:generator": "asc assembly/uastc-generator.ts -b build/uastc_generator.wasm -t build/uastc_generator.wat --optimize --converge --runtime stub --noAssert --importMemory --memoryBase 63488",
@@ -33,7 +33,7 @@
     "asbuild:uastc-bc7": "asc assembly/uastc-bc7.ts -b build/uastc_bc7.wasm -t build/uastc_bc7.wat --optimize --converge --runtime stub --noAssert --importMemory",
     "asbuild:transcoders": "npm run asbuild:uastc-bc7 && npm run asbuild:uastc-astc && npm run asbuild:uastc-rgba32-unorm && npm run asbuild:uastc-rgba32-srgb",
     "asbuild": "npm run asbuild:generator && npm run asbuild:transcoders",
-    "test": "ts-node node_modules/tape/bin/tape test/test.ts | tap-spec"
+    "test": "ts-node test/test.ts | tap-arc"
   },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
@@ -48,6 +48,7 @@
     "rules": {
       "semi": "off",
       "@typescript-eslint/ban-ts-comment": "off",
+      "@typescript-eslint/no-loss-of-precision": "off",
       "@typescript-eslint/semi": [
         "error",
         "always"
