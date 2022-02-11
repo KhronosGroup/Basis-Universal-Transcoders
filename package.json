@@ -1,6 +1,6 @@
 {
   "name": "basis-universal-transcoders",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Lightweight WebAssembly transcoder implementations of universal texture formats.",
   "keywords": [
     "gpu",
@@ -14,26 +14,30 @@
   "author": "The Khronos Group, Inc.",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/node": "^17.0.16",
-    "@typescript-eslint/eslint-plugin": "^5.11.0",
-    "@typescript-eslint/parser": "^5.11.0",
-    "assemblyscript": "0.19.22",
-    "eslint": "^8.8.0",
+    "@types/node": "^17.0.18",
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "assemblyscript": "0.19.23",
+    "eslint": "^8.9.0",
     "eslint-plugin-unicorn": "^40.1.0",
     "tap-arc": "^0.1.2",
-    "tape": "^5.5.0",
+    "tape": "^5.5.2",
     "ts-node": "^10.5.0",
     "typescript": "^4.5.5"
   },
   "scripts": {
-    "asbuild:generator": "asc assembly/uastc-generator.ts -b build/uastc_generator.wasm -t build/uastc_generator.wat --optimize --converge --runtime stub --noAssert --importMemory --memoryBase 63488",
-    "asbuild:uastc-rgba32-unorm": "asc assembly/uastc-rgba32.ts -u SRGB=0 -b build/uastc_rgba32_unorm.wasm -t build/uastc_rgba32_unorm.wat --optimize --converge --runtime stub --noAssert --importMemory",
-    "asbuild:uastc-rgba32-srgb": "asc assembly/uastc-rgba32.ts -u SRGB=1 -b build/uastc_rgba32_srgb.wasm -t build/uastc_rgba32_srgb.wat --optimize --converge --runtime stub --noAssert --importMemory",
-    "asbuild:uastc-astc": "asc assembly/uastc-astc.ts -b build/uastc_astc.wasm -t build/uastc_astc.wat --optimize --converge --runtime stub --noAssert --importMemory",
-    "asbuild:uastc-bc7": "asc assembly/uastc-bc7.ts -b build/uastc_bc7.wasm -t build/uastc_bc7.wat --optimize --converge --runtime stub --noAssert --importMemory",
-    "asbuild:transcoders": "npm run asbuild:uastc-bc7 && npm run asbuild:uastc-astc && npm run asbuild:uastc-rgba32-unorm && npm run asbuild:uastc-rgba32-srgb",
-    "asbuild": "npm run asbuild:generator && npm run asbuild:transcoders",
-    "test": "ts-node test/test.ts | tap-arc"
+    "asbuild:uastc-generator":   "asc assembly/uastc/generator.ts                     -b build/tools/uastc_generator.wasm -t build/tools/uastc_generator.wat --optimize --converge --runtime stub --noAssert --importMemory --memoryBase 63488",
+    "asbuild:uastc-astc":        "asc assembly/uastc/astc.ts                          -b build/uastc_astc.wasm            -t build/uastc_astc.wat            --optimize --converge --runtime stub --noAssert --importMemory --memoryBase 8",
+    "asbuild:uastc-bc7":         "asc assembly/uastc/bc7.ts                           -b build/uastc_bc7.wasm             -t build/uastc_bc7.wat             --optimize --converge --runtime stub --noAssert --importMemory --memoryBase 472",
+    "asbuild:uastc-rgba8-unorm": "asc assembly/uastc/rgba8.ts -u SRGB=0 -u CHANNELS=4 -b build/uastc_rgba8_unorm.wasm     -t build/uastc_rgba8_unorm.wat     --optimize --converge --runtime stub --noAssert --importMemory --memoryBase 512",
+    "asbuild:uastc-rg8-unorm":   "asc assembly/uastc/rgba8.ts -u SRGB=0 -u CHANNELS=2 -b build/uastc_rg8_unorm.wasm       -t build/uastc_rg8_unorm.wat       --optimize --converge --runtime stub --noAssert --importMemory --memoryBase 512",
+    "asbuild:uastc-r8-unorm":    "asc assembly/uastc/rgba8.ts -u SRGB=0 -u CHANNELS=1 -b build/uastc_r8_unorm.wasm        -t build/uastc_r8_unorm.wat        --optimize --converge --runtime stub --noAssert --importMemory --memoryBase 512",
+    "asbuild:uastc-rgba8-srgb":  "asc assembly/uastc/rgba8.ts -u SRGB=1 -u CHANNELS=4 -b build/uastc_rgba8_srgb.wasm      -t build/uastc_rgba8_srgb.wat      --optimize --converge --runtime stub --noAssert --importMemory --memoryBase 512",
+    "asbuild:uastc-transcoders": "npm run asbuild:uastc-astc && npm run asbuild:uastc-bc7",
+    "asbuild:uastc-decoders":    "npm run asbuild:uastc-rgba8-unorm && npm run asbuild:uastc-rg8-unorm && npm run asbuild:uastc-r8-unorm && npm run asbuild:uastc-rgba8-srgb",
+    "asbuild:uastc": "npm run asbuild:uastc-generator && npm run asbuild:uastc-transcoders && npm run asbuild:uastc-decoders",
+    "asbuild": "npm run asbuild:uastc",
+    "test": "ts-node test/uastc/test.ts | tap-arc"
   },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",

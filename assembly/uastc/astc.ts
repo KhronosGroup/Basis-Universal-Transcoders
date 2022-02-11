@@ -2,49 +2,113 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+// These static data segments need to be located before
+// the data segments from the imports.
+
+/**
+ * Offset to a memory location containing 242
+ * precomputed UASTC->ASTC trits mappings
+ */
+const tritEncodingOffset = memory.data<u64>([
+  0x0908060504020100, 0x181615141211100A, 0x1B17130B07031A19,
+  0x25242221200E0D0C, 0x343231302A292826, 0x2B27233A39383635,
+  0x41402E2D2C3B3733, 0x504A494846454442, 0x5A59585655545251,
+  0x4D4C5B57534B4743, 0x888685848281804E, 0x9695949291908A89,
+  0x97938B87839A9998, 0xA4A2A1A08E8D8C9B, 0xB2B1B0AAA9A8A6A5,
+  0xA7A3BAB9B8B6B5B4, 0xC0AEADACBBB7B3AB, 0xCAC9C8C6C5C4C2C1,
+  0xD9D8D6D5D4D2D1D0, 0xCCDBD7D3CBC7C3DA, 0x666564626160CECD,
+  0x75747271706A6968, 0x736B67637A797876, 0xE2E1E06E6D6C7B77,
+  0xF1F0EAE9E8E6E5E4, 0xE3FAF9F8F6F5F4F2, 0xEEEDECFBF7F3EBE7,
+  0x5D5C3E3D3C1E1D1C, 0xDCBEBDBC9E9D9C5E, 0xDFBF9F5F3F1FDEDD,
+  0x00000000007E7D7C
+]);
+if (tritEncodingOffset != 8) {
+  ERROR('Invalid trit encoding data location.');
+}
+
+/**
+ * Offset to a memory location containing 128
+ * precomputed UASTC->ASTC quints mappings
+ */
+const quintEncodingOffset = memory.data<u64>([
+  0x0A09080403020100, 0x1814131211100C0B, 0x1D150D051C1B1A19,
+  0x2928242322212006, 0x34333231302C2B2A, 0x352D253C3B3A3938,
+  0x4844434241400E3D, 0x535251504C4B4A49, 0x4D455C5B5A595854,
+  0x6463626160165D55, 0x7271706C6B6A6968, 0x657C7B7A79787473,
+  0x474667661E7D756D, 0x77762E4F4E6F6E26, 0x3E5F5E7F7E365756,
+  0x0000001F3F372F27
+]);
+if (quintEncodingOffset != 256) {
+  ERROR('Invalid quint encoding data location.');
+}
+
+/**
+ * Offset to a memory location containing 11
+ * UASTC->ASTC pattern index mappings.
+ * Indices are stored as 16-bit values.
+ */
+const threeSubsetsPatternIndicesOffset = memory.data<u64>([
+  0x009C0020004A0104, 0x000002E9000F00B7, 0x000000FE0386014F
+]);
+if (threeSubsetsPatternIndicesOffset != 384) {
+  ERROR('Invalid three subsets pattern indices data location.');
+}
+
+/**
+ * Offset to a memory location containing 19
+ * UASTC->ASTC pattern index mappings.
+ * Indices are stored as 16-bit values.
+ */
+const twoSubsetsModeIndex7PatternIndicesOffset = memory.data<u64>([
+  0x0089003D00300024, 0x011900E200B700A1, 0x01EF01DF0133012E,
+  0x031F025D02520251, 0x000003E103DC032C
+]);
+if (twoSubsetsModeIndex7PatternIndicesOffset != 408) {
+  ERROR('Invalid two subsets mode index 7 pattern indices data location.');
+}
+
+/**
+ * Offset to a memory location containing 30
+ * UASTC->ASTC pattern index mappings.
+ * Indices are stored as 16-bit values.
+ */
+const twoSubsetsPatternIndicesOffset = memory.data<u64>([
+  0x001D00100014001C, 0x0048006B0009005B, 0x0072003200CC0095,
+  0x0027004E001101F0, 0x009C002B033C00FC, 0x011101DC00D20074,
+  0x00C300F6016702AC, 0x00000000020C02B6
+]);
+if (twoSubsetsPatternIndicesOffset != 448) {
+  ERROR('Invalid two subsets pattern indices data location.');
+}
+
 import {
-  storeCommonData,
+  getTwoSubsetPattern,
+  getTwoSubsetPatternForModeIndex7,
+  getThreeSubsetPattern,
+  duplicate16, triplicate16
+} from './lib/patterns';
+
+import {
+  precomputeCommonData,
   getModeIndex,
   unpackQuints, unpackTrits,
   unq11, unq39, unq47, unq159, unq191,
   getThreeSubsetAnchorL, getThreeSubsetAnchorH,
   getTwoSubsetAnchorForModeIndex7, getTwoSubsetAnchor,
-} from './lib/uastc/common';
+} from './lib/common';
 
-import {
-  storePatterns,
-  getTwoSubsetPattern,
-  getTwoSubsetPatternForModeIndex7,
-  getThreeSubsetPattern,
-  duplicate16, triplicate16
-} from './lib/uastc/patterns';
-
-let firstRun = true;
+precomputeCommonData();
 
 /**
  * Repack UASTC data as ASTC in-place
  * @param nBlocks - The total number of compressed blocks
  */
 export function transcode(nBlocks: i32): i32 {
-  const totalBytes = nBlocks * 16;
-  if ((memory.size() - 1) * 65536 < totalBytes) return 1;
+  // Exit immediately on negative or too large values
+  if (<u32>nBlocks > 0x0FFFF000) return 1;
 
-  if (firstRun) {
-    /*
-    Memory layout:
-       0...1475: Common data
-    1536...1791: Trits encoding
-    1792...1919: Quints encoding
-    1920...2047: Pattern indices
-    2048...2239: Pattern data
-    */
-    storeCommonData();
-    storeTritsAstc();
-    storeQuintsAstc();
-    storeAstcPatternIndices();
-    storePatterns();
-    firstRun = false;
-  }
+  const totalBytes = <u32>nBlocks * 16;
+  if (<u32>(memory.size() - 1) * 65536 < totalBytes) return 1;
 
   for (let offset = 65536; offset < 65536 + totalBytes; offset += 16) {
     const q0 = load<u64>(offset, 0);
@@ -54,9 +118,8 @@ export function transcode(nBlocks: i32): i32 {
   return 0;
 }
 
-// @ts-ignore: 1206
-@inline
-function repackASTC(q0: u64, q1: u64, offset: i32): void {
+// @ts-ignore: decorator
+@inline function repackASTC(q0: u64, q1: u64, offset: i32): void {
   const voidExtent: u64 = 0xFFFFFFFFFFFFFDFC;
   const errorColor: u64 = 0xFFFFFFFF0000FFFF;
 
@@ -961,55 +1024,30 @@ function repackASTC(q0: u64, q1: u64, offset: i32): void {
   store<u64>(offset, r1, 8);
 }
 
-const threeSubsetsPatternIndicesOffset = 1920;
-const twoSubsetsModeIndex7PatternIndicesOffset = 1944;
-const twoSubsetsPatternIndicesOffset = 1984;
-
-function storeAstcPatternIndices(): void {
-  store<u64>(threeSubsetsPatternIndicesOffset, 0x009C0020004A0104, 0);
-  store<u64>(threeSubsetsPatternIndicesOffset, 0x000002E9000F00B7, 8);
-  store<u64>(threeSubsetsPatternIndicesOffset, 0x000000FE0386014F, 16);
-
-  store<u64>(twoSubsetsModeIndex7PatternIndicesOffset, 0x0089003D00300024, 0);
-  store<u64>(twoSubsetsModeIndex7PatternIndicesOffset, 0x011900E200B700A1, 8);
-  store<u64>(twoSubsetsModeIndex7PatternIndicesOffset, 0x01EF01DF0133012E, 16);
-  store<u64>(twoSubsetsModeIndex7PatternIndicesOffset, 0x031F025D02520251, 24);
-  store<u64>(twoSubsetsModeIndex7PatternIndicesOffset, 0x000003E103DC032C, 32);
-
-  store<u64>(twoSubsetsPatternIndicesOffset, 0x001D00100014001C, 0);
-  store<u64>(twoSubsetsPatternIndicesOffset, 0x0048006B0009005B, 8);
-  store<u64>(twoSubsetsPatternIndicesOffset, 0x0072003200CC0095, 16);
-  store<u64>(twoSubsetsPatternIndicesOffset, 0x0027004E001101F0, 24);
-  store<u64>(twoSubsetsPatternIndicesOffset, 0x009C002B033C00FC, 32);
-  store<u64>(twoSubsetsPatternIndicesOffset, 0x011101DC00D20074, 40);
-  store<u64>(twoSubsetsPatternIndicesOffset, 0x00C300F6016702AC, 48);
-  store<u64>(twoSubsetsPatternIndicesOffset, 0x00000000020C02B6, 56);
-}
-
 /**
- * Get ASTC partition pattern index for a given UASTC pattern index (Mode Indices 2, 4, 9, 16)
+ * Get ASTC partition pattern index
+ * for a given UASTC pattern index (Mode Indices 2, 4, 9, 16)
  */
-// @ts-ignore: 1206
-@inline
-function getTwoSubsetsPatternIndex(i: u32): u32 {
+// @ts-ignore: decorator
+@inline function getTwoSubsetsPatternIndex(i: u32): u32 {
   return load<u16>(i << 1, twoSubsetsPatternIndicesOffset);
 }
 
 /**
- * Get ASTC partition pattern index for a given UASTC pattern index (Mode Index 7)
+ * Get ASTC partition pattern index
+ * for a given UASTC pattern index (Mode Index 7)
  */
-// @ts-ignore: 1206
-@inline
-function getTwoSubsetsPatternIndexForModeIndex7(i: u32): u32 {
+// @ts-ignore: decorator
+@inline function getTwoSubsetsPatternIndexForModeIndex7(i: u32): u32 {
   return load<u16>(i << 1, twoSubsetsModeIndex7PatternIndicesOffset);
 }
 
 /**
- * Get ASTC partition pattern index for a given UASTC pattern index (Mode Index 3)
+ * Get ASTC partition pattern index
+ * for a given UASTC pattern index (Mode Index 3)
  */
-// @ts-ignore: 1206
-@inline
-function getThreeSubsetsPatternIndex(i: u32): u32 {
+// @ts-ignore: decorator
+@inline function getThreeSubsetsPatternIndex(i: u32): u32 {
   return load<u16>(i << 1, threeSubsetsPatternIndicesOffset);
 }
 
@@ -1018,87 +1056,42 @@ function getThreeSubsetsPatternIndex(i: u32): u32 {
 /**
  * Pack 4-bit RGBA values interleaved with 4-bit zeros
  */
-// @ts-ignore: 1206
-@inline
-function packRGBAz4(r: u32, g: u32, b: u32, a: u32): u32 {
+// @ts-ignore: decorator
+@inline function packRGBAz4(r: u32, g: u32, b: u32, a: u32): u32 {
   return (a << 24) | (b << 16) | (g << 8) | r;
 }
 
 /**
  * Pack 5-bit RGB values interleaved with 5-bit zeros
  */
-// @ts-ignore: 1206
-@inline
-function packRGBz5(r: u32, g: u32, b: u32): u32 {
+// @ts-ignore: decorator
+@inline function packRGBz5(r: u32, g: u32, b: u32): u32 {
   return (b << 20) | (g << 10) | r;
 }
 
 /**
  * Pack 8-bit RGBA values interleaved with 8-bit zeros
  */
-// @ts-ignore: 1206
-@inline
-function packRGBAz8(r: u32, g: u32, b: u32, a: u32): u64 {
+// @ts-ignore: decorator
+@inline function packRGBAz8(r: u32, g: u32, b: u32, a: u32): u64 {
   return (
     (<u64>((a << 16) | b) << 32) |
     (<u64>((g << 16) | r) <<  0)
   );
 }
 
-// @ts-ignore: 1206
-@inline
-function sumUnq31(r: u32, g: u32, b: u32): u32 {
+// @ts-ignore: decorator
+@inline function sumUnq31(r: u32, g: u32, b: u32): u32 {
   return ((r + g + b) << 3) + (r >> 2) + (g >> 2) + (b >> 2);
 }
 
 // BISE Encoding routines
 
 /**
- * Store 256 UASTC->ASTC trits mappings
- */
-
-const tritEncodingOffset = 1536;
-
-function storeTritsAstc(): void {
-  store<u64>(tritEncodingOffset, 650776764766880000, 0);
-  store<u64>(tritEncodingOffset, 1735597882344542218, 8);
-  store<u64>(tritEncodingOffset, 1952049901571611161, 16);
-  store<u64>(tritEncodingOffset, 2676301604231974156, 24);
-  store<u64>(tritEncodingOffset, 3761122721743317030, 32);
-  store<u64>(tritEncodingOffset, 3109492800697677365, 40);
-  store<u64>(tritEncodingOffset, 4701808782525282099, 48);
-  store<u64>(tritEncodingOffset, 5785517246076240962, 56);
-  store<u64>(tritEncodingOffset, 6510331864162783825, 64);
-  store<u64>(tritEncodingOffset, 5569927269768185667, 72);
-  store<u64>(tritEncodingOffset, -8609046833500422066, 80);
-  store<u64>(tritEncodingOffset, -7596001839262168439, 88);
-  store<u64>(tritEncodingOffset, -7524517138261173864, 96);
-  store<u64>(tritEncodingOffset, -6583521994303763301, 104);
-  store<u64>(tritEncodingOffset, -5570477017043261787, 112);
-  store<u64>(tritEncodingOffset, -6367040141341051468, 120);
-  store<u64>(tritEncodingOffset, -4562518415084375125, 128);
-  store<u64>(tritEncodingOffset, -3834312851682180415, 136);
-  store<u64>(tritEncodingOffset, -2749211358622723632, 144);
-  store<u64>(tritEncodingOffset, -3685114565415681062, 152);
-  store<u64>(tritEncodingOffset, 7378413938219732685, 160);
-  store<u64>(tritEncodingOffset, 8463515431278897512, 168);
-  store<u64>(tritEncodingOffset, 8316854813823957110, 176);
-  store<u64>(tritEncodingOffset, -2098149186491090057, 184);
-  store<u64>(tritEncodingOffset, -1013051625802635804, 192);
-  store<u64>(tritEncodingOffset, -2019026635231726350, 200);
-  store<u64>(tritEncodingOffset, -1230066556261372953, 208);
-  store<u64>(tritEncodingOffset, 6727320376107212060, 216);
-  store<u64>(tritEncodingOffset, -2540384521977750434, 224);
-  store<u64>(tritEncodingOffset, -2323963651270123811, 232);
-  store<u64>(tritEncodingOffset, 8289660, 240);
-}
-
-/**
  * Pack five trits into a single 8-bit value
  */
-// @ts-ignore
-@inline
-function packTrits(t0: u32, t1: u32, t2: u32, t3: u32, t4: u32): u32 {
+// @ts-ignore: decorator
+@inline function packTrits(t0: u32, t1: u32, t2: u32, t3: u32, t4: u32): u32 {
   const t = t0 + 3 * (t1 + 3 * (t2 + 3 * (t3 + 3 * t4)));
   return load<u8>(t, tritEncodingOffset);
 }
@@ -1107,9 +1100,8 @@ function packTrits(t0: u32, t1: u32, t2: u32, t3: u32, t4: u32): u32 {
  * Interleave packed 8-bit value of 5 trits
  * with zero-filled 2-bit gaps to form a 18-bit block.
  */
-// @ts-ignore
-@inline
-function interleaveTrits2(t: u32): u32 {
+// @ts-ignore: decorator
+@inline function interleaveTrits2(t: u32): u32 {
   return (
     ((t & 0x80) << 10) |
     ((t & 0x60) <<  8) |
@@ -1123,9 +1115,8 @@ function interleaveTrits2(t: u32): u32 {
  * Concatenate five 2-bit values with zero-filled
  * gaps for packed trit bits to form a 18-bit block.
  */
-// @ts-ignore
-@inline
-function interleaveBits2T(
+// @ts-ignore: decorator
+@inline function interleaveBits2T(
   v0: u32, v1: u32, v2: u32, v3: u32, v4: u32
 ): u32 {
   return (
@@ -1141,9 +1132,8 @@ function interleaveBits2T(
  * Interleave packed 8-bit value of 5 trits
  * with zero-filled 4-bit gaps to form a 28-bit block.
  */
-// @ts-ignore
-@inline
-function interleaveTrits4(t: u32): u32 {
+// @ts-ignore: decorator
+@inline function interleaveTrits4(t: u32): u32 {
   return (
     ((t & 0x80) << 20) |
     ((t & 0x60) << 16) |
@@ -1158,9 +1148,8 @@ function interleaveTrits4(t: u32): u32 {
  * gaps for packed trit bits to form two 28-bit blocks.
  * Unused top two values are always zeros.
  */
-// @ts-ignore
-@inline
-function interleaveBits4Tx2(
+// @ts-ignore: decorator
+@inline function interleaveBits4Tx2(
   v0: u64, v1: u64, v2: u64, v3: u64,
   v4: u64, v5: u64, v6: u64, v7: u64
 ): u64 {
@@ -1180,9 +1169,8 @@ function interleaveBits4Tx2(
  * Interleave packed 8-bit value of 5 trits
  * with zero-filled 6-bit gaps to form a 38-bit block.
  */
-// @ts-ignore
-@inline
-function interleaveTrits6(t: u64): u64 {
+// @ts-ignore: decorator
+@inline function interleaveTrits6(t: u64): u64 {
   return (
     ((t & 0x80) << 30) |
     ((t & 0x60) << 24) |
@@ -1197,9 +1185,8 @@ function interleaveTrits6(t: u64): u64 {
  * gaps for packed trit bits to form two 38-bit blocks.
  * Unused top two values are always zeros, so the result fits in 61 bits.
  */
-// @ts-ignore
-@inline
-function interleaveBits6Tx2(
+// @ts-ignore: decorator
+@inline function interleaveBits6Tx2(
   v0: u64, v1: u64, v2: u64, v3: u64,
   v4: u64, v5: u64, v6: u64, v7: u64
 ): u64 {
@@ -1215,36 +1202,11 @@ function interleaveBits6Tx2(
   );
 }
 
-const quintEncodingOffset = 1792;
-
-/**
- * Store 128 UASTC->ASTC quints mappings
- */
-function storeQuintsAstc(): void {
-  store<u64>(quintEncodingOffset, 0x0A09080403020100, 0);
-  store<u64>(quintEncodingOffset, 0x1814131211100C0B, 8);
-  store<u64>(quintEncodingOffset, 0x1D150D051C1B1A19, 16);
-  store<u64>(quintEncodingOffset, 0x2928242322212006, 24);
-  store<u64>(quintEncodingOffset, 0x34333231302C2B2A, 32);
-  store<u64>(quintEncodingOffset, 0x352D253C3B3A3938, 40);
-  store<u64>(quintEncodingOffset, 0x4844434241400E3D, 48);
-  store<u64>(quintEncodingOffset, 0x535251504C4B4A49, 56);
-  store<u64>(quintEncodingOffset, 0x4D455C5B5A595854, 64);
-  store<u64>(quintEncodingOffset, 0x6463626160165D55, 72);
-  store<u64>(quintEncodingOffset, 0x7271706C6B6A6968, 80);
-  store<u64>(quintEncodingOffset, 0x657C7B7A79787473, 88);
-  store<u64>(quintEncodingOffset, 0x474667661E7D756D, 96);
-  store<u64>(quintEncodingOffset, 0x77762E4F4E6F6E26, 104);
-  store<u64>(quintEncodingOffset, 0x3E5F5E7F7E365756, 112);
-  store<u64>(quintEncodingOffset, 0x0000001F3F372F27, 120);
-}
-
 /**
  * Pack three quints into a single 7-bit value
  */
-// @ts-ignore
-@inline
-function packQuints(q0: u32, q1: u32, q2: u32): u32 {
+// @ts-ignore: decorator
+@inline function packQuints(q0: u32, q1: u32, q2: u32): u32 {
   const q = q0 + 5 * (q1 + 5 * q2);
   return load<u8>(q, quintEncodingOffset);
 }
@@ -1253,9 +1215,8 @@ function packQuints(q0: u32, q1: u32, q2: u32): u32 {
  * Interleave packed 7-bit value of 3 quints
  * with zero-filled 3-bit gaps to form a 16-bit block.
  */
-// @ts-ignore
-@inline
-function interleaveQuints3(q: u32): u32 {
+// @ts-ignore: decorator
+@inline function interleaveQuints3(q: u32): u32 {
   return (
     ((q & 0x60) << 9) |
     ((q & 0x18) << 6) |
@@ -1267,9 +1228,8 @@ function interleaveQuints3(q: u32): u32 {
  * Concatenate six 3-bit values with zero-filled
  * gaps for packed quint bits to form two 16-bit blocks.
  */
-// @ts-ignore
-@inline
-function interleaveBits3Qx2(
+// @ts-ignore: decorator
+@inline function interleaveBits3Qx2(
   v0: u32, v1: u32, v2: u32,
   v3: u32, v4: u32, v5: u32
 ): u32 {
@@ -1287,9 +1247,8 @@ function interleaveBits3Qx2(
  * Interleave packed 7-bit value of 3 quints
  * with zero-filled 5-bit gaps to form a 22-bit block.
  */
-// @ts-ignore
-@inline
-function interleaveQuints5(q: u32): u32 {
+// @ts-ignore: decorator
+@inline function interleaveQuints5(q: u32): u32 {
   return (
     ((q & 0x60) << 15) |
     ((q & 0x18) << 10) |
@@ -1301,9 +1260,8 @@ function interleaveQuints5(q: u32): u32 {
  * Concatenate six 5-bit values with zero-filled
  * gaps for packed quint bits to form two 22-bit blocks.
  */
-// @ts-ignore
-@inline
-function interleaveBits5Qx2(
+// @ts-ignore: decorator
+@inline function interleaveBits5Qx2(
   v0: u64, v1: u64, v2: u64,
   v3: u64, v4: u64, v5: u64): u64 {
   return (
@@ -1324,9 +1282,8 @@ function interleaveBits5Qx2(
 /**
  * Reverse 16 bits
  */
-// @ts-ignore: 1206
-@inline
-function reverse16(v: u32): u32 {
+// @ts-ignore: decorator
+@inline function reverse16(v: u32): u32 {
   v = ((v >> 1) & 0x5555) | ((v & 0x5555) << 1);
   v = ((v >> 2) & 0x3333) | ((v & 0x3333) << 2);
   v = ((v >> 4) & 0x0F0F) | ((v & 0x0F0F) << 4);
@@ -1337,9 +1294,8 @@ function reverse16(v: u32): u32 {
 /**
  * Reverse 32 bits
  */
-// @ts-ignore: 1206
-@inline
-function reverse32(v: u32): u32 {
+// @ts-ignore: decorator
+@inline function reverse32(v: u32): u32 {
   v = ((v >> 1) & 0x55555555) | ((v & 0x55555555) << 1);
   v = ((v >> 2) & 0x33333333) | ((v & 0x33333333) << 2);
   v = ((v >> 4) & 0x0F0F0F0F) | ((v & 0x0F0F0F0F) << 4);
@@ -1351,9 +1307,8 @@ function reverse32(v: u32): u32 {
 /**
  * Reverse 64 bits
  */
-// @ts-ignore: 1206
-@inline
-function reverse64(v: u64): u64 {
+// @ts-ignore: decorator
+@inline function reverse64(v: u64): u64 {
   v = ((v >>  1) & 0x5555555555555555) | ((v & 0x5555555555555555) <<  1);
   v = ((v >>  2) & 0x3333333333333333) | ((v & 0x3333333333333333) <<  2);
   v = ((v >>  4) & 0x0F0F0F0F0F0F0F0F) | ((v & 0x0F0F0F0F0F0F0F0F) <<  4);

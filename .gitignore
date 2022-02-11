@@ -1,2 +1,5 @@
-# build
+# Copyright 2020 The Khronos Group Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+.DS_Store
 node_modules

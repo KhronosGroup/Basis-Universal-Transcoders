@@ -1,3 +1,7 @@
+// Copyright 2020 The Khronos Group Inc.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import * as msc from './msc_basis_transcoder/msc_basis_transcoder';
 
 /** Wrapper for MSC reference transcoder. */
@@ -6,7 +10,7 @@ export class ReferenceTranscoder {
    * Matching transcode targets:
    * - BC7_RGBA:       uastc_bc7.wasm
    * - ASTC_4x4_RGBA:  uastc_astc.wasm
-   * - RGBA32:         uastc_rgba32_unorm.wasm
+   * - RGBA32:         uastc_rgba8_unorm.wasm
    */
   public TranscodeTarget: {[key: string]: unknown};
 

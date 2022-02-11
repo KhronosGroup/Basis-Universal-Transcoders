@@ -11,7 +11,8 @@ These transcoders accept only low-level compressed payloads. Containers such as 
 
 | Target Format | BasisLZ / ETC1S |  UASTC  |
 |:-------------:|:---------------:|:-------:|
-|     RGBA32    |     planned     | ✔️ |
+|     RGBA8     |     planned     | ✔️ |
+|    R8 / RG8   |     planned     | ✔️ |
 |    ASTC 4x4   |     planned     | ✔️ |
 |      BC7      |     planned     | ✔️ |
 |      ETC      |     planned     | planned |
@@ -97,7 +98,7 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 7. In a case when a new texture does not fit into the existing memory, the latter could be expanded by calling [`memory.grow`](
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Memory/grow). Note that the memory view would need to be recreated afterwards, by repeating step (3).
 
-#### RGBA32
+#### RGBA8
 
 Each 16-byte UASTC block is uncompressed to 64 bytes of 32bpp data, so the decoder writes decompressed data in another memory region, leaving the original UASTC data intact.
 
@@ -105,10 +106,10 @@ Since UASTC is a strict subset of ASTC and the latter has several decode modes, 
 
 Currently supported modes are:
 
-- `uastc_rgba32_unorm.wasm` matches the `decode_unorm8` ASTC decode mode.
+- `uastc_rgba8_unorm.wasm` matches the `decode_unorm8` ASTC decode mode.
   > **OpenGL Note:** Sampling UASTC data decoded with this mode and uploaded as `GL_RGBA8` should exactly match sampling UASTC data transcoded to ASTC and uploaded as `GL_COMPRESSED_RGBA_ASTC_4x4_KHR` with the `GL_TEXTURE_ASTC_DECODE_PRECISION_EXT` texture parameter set to `GL_RGBA8`.
 
-- `uastc_rgba32_srgb.wasm` matches the sRGB ASTC decode mode.
+- `uastc_rgba8_srgb.wasm` matches the sRGB ASTC decode mode.
   > **OpenGL Note:** Sampling UASTC data decoded with this mode and uploaded as `GL_SRGB_ALPHA8` should exactly match sampling UASTC data transcoded to ASTC and uploaded as `GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR`.
 
 Regardless of the decode mode, these decoders share the same API and memory requirements.
@@ -158,17 +159,17 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
     ```js
     const decoder = (
         await WebAssembly.instantiateStreaming(
-            fetch('uastc_rgba32_{srgb,unorm}.wasm'),
+            fetch('uastc_rgba8_{srgb,unorm}.wasm'),
             { env: { memory } }
         )
     ).instance.exports;
     ```
 
-7. For each new texture, call the exported `decodeRGBA32` function passing the texture dimensions. If they are negative or exceed the available memory, the function returns `1`. Otherwise, it performs the decoding and returns `0`. The transcoded texture data will be available through the `decodedTextureView` memory view.
+7. For each new texture, call the exported `decode` function passing the texture dimensions. If they are negative, greater than `16384`, or exceed the available memory, the function returns `1`. Otherwise, it performs the decoding and returns `0`. The transcoded texture data will be available through the `decodedTextureView` memory view.
 
     ```js
     compressedTextureView.set(compressedData);
-    if (decoder.decodeRGBA32(width, height) === 0) {
+    if (decoder.decode(width, height) === 0) {
         // Upload decodedTextureView data to the GPU
     } else {
         // Wrong dimensions
@@ -177,3 +178,22 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 
 8. In a case when a new texture does not fit into the existing memory, the latter could be expanded by calling [`memory.grow`](
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Memory/grow). Note that the memory views would need to be recreated afterwards, by repeating step (3) and repeating step (5) in this case.
+
+#### R8 and RG8
+
+When it is known that only Red or Red and Green channels are used, e.g., the texture contains non-color data, and compressed targets are not supported, an application may decode it to R8 or RG8 formats to avoid wasting CPU cycles and GPU memory on the unused channels.
+
+Each 16-byte UASTC block is uncompressed to 16 bytes of 8bpp or to 32 bytes of 16bpp data.
+
+These target formats support only `decode_unorm8` ASTC decode mode.
+  > **OpenGL Note:** Sampling Red or Red-Green UASTC data decoded with this mode and uploaded as `GL_R8` or `GL_RG8` should exactly match sampling Red or Red-Green UASTC data transcoded to ASTC and uploaded as `GL_COMPRESSED_RGBA_ASTC_4x4_KHR` with the `GL_TEXTURE_ASTC_DECODE_PRECISION_EXT` texture parameter set to `GL_RGBA8`.
+
+The two provided decoders, `uastc_r8_unorm.wasm` and `uastc_rg8_unorm.wasm`, share the API with the RGBA8 decoders but they have different memory requirements for the steps 1 and 5 above.
+
+- R8
+  - `uncompressedByteLength = width * yBlocks * 4 * 1`
+  - `textureByteLength = width * height * 1`
+
+- RG8
+  - `uncompressedByteLength = width * yBlocks * 4 * 2`
+  - `textureByteLength = width * height * 2`
