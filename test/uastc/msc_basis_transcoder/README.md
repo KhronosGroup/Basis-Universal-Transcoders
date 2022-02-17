@@ -33,7 +33,7 @@ const nBlocks = 8 * 1024 * 1024; // to match UASTC generator example
     Matching transcode targets:
         BC7_RGBA:       uastc_bc7.wasm
         ASTC_4x4_RGBA:  uastc_astc.wasm
-        RGBA32:         uastc_rgba32_unorm.wasm
+        RGBA32:          uastc_rgba8_unorm.wasm
     */
     const result = transcoder.transcodeImage(
         basisModule.TranscodeTarget.BC7_RGBA,

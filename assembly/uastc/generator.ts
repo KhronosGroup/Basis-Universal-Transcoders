@@ -1,15 +1,19 @@
+// Copyright 2020 The Khronos Group Inc.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * Generate UASTC data
  * @param mode - UASTC Mode Index. Values 0..18 result in a single-mode data. Negative values generate all modes, slightly shuffled.
  * @param nBlocks - The total number of UASTC blocks
  */
-export function generate(mode: i32, nBlocks: u32): i32 {
-  if (mode > 18) return 0;
+export function generate(mode: i32, nBlocks: i32): i32 {
+  if (mode > 18 || <u32>nBlocks > 0x0FFFF000) return -1;
 
-  const totalBytes = nBlocks * 16;
+  const totalBytes = <u32>nBlocks * 16;
   if (<u32>(memory.size() - 1) * 65536 < totalBytes) return -1;
 
-  for (let seed: u64 = 0; seed < nBlocks; seed++) {
+  for (let seed: u64 = 0; seed < <u32>nBlocks; seed++) {
     let r0: u64 = 0;
     switch ((mode >= 0) ? mode : <u32>(seed * 7 + seed / 19 + 1) % 19) {
       case 0:

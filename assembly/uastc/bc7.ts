@@ -3,44 +3,30 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-  storeCommonData,
+  duplicate32, duplicate16, triplicate16,
+  getThreeSubsetPattern, getThreeSubsetPatternForModeIndex7,
+  getTwoSubsetPattern
+} from './lib/patterns';
+
+import {
+  precomputeCommonData,
   getModeIndex,
   unpackQuints, unpackTrits,
   unq11, unq39, unq47, unq159, unq191,
   getThreeSubsetAnchorL, getThreeSubsetAnchorH,
   getTwoSubsetAnchorForModeIndex7, getTwoSubsetAnchor,
-} from './lib/uastc/common';
-
-import {
-  duplicate32, duplicate16, triplicate16
-} from './lib/uastc/patterns';
-
-let firstRun = true;
+} from './lib/common';
 
 /**
  * Transcode UASTC data to BC7 in-place
  * @param nBlocks - The total number of compressed UASTC blocks
  */
 export function transcode(nBlocks: i32): i32 {
-  const totalBytes = nBlocks * 16;
-  if ((memory.size() - 1) * 65536 < totalBytes) return 1;
+  // Exit immediately on negative or too large values
+  if (<u32>nBlocks > 0x0FFFF000) return 1;
 
-  if (firstRun) {
-    /*
-    Memory layout:
-       0...1475: Common data
-    1536...2047: BC7 solid color endpoints
-    2048...2239: Pattern data
-    3072...4095: BC7 mode 1 data
-    4096...5119: BC7 mode 7 data
-    */
-    storeCommonData();
-    storeSolidEndpoints();
-    storePatterns();
-    storeMode1();
-    storeMode7();
-    firstRun = false;
-  }
+  const totalBytes = <u32>nBlocks * 16;
+  if (<u32>(memory.size() - 1) * 65536 < totalBytes) return 1;
 
   for (let offset = 65536; offset < 65536 + totalBytes; offset += 16) {
     const q0 = load<u64>(offset, 0);
@@ -50,9 +36,8 @@ export function transcode(nBlocks: i32): i32 {
   return 0;
 }
 
-// @ts-ignore: 1206
-@inline
-function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
+// @ts-ignore: decorator
+@inline function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
   // Mode 6 with endpoint 0 set to (255, 0, 255, 255) and endpoint 1 set to (0, 0, 0, 0)
   const errorBlock: u64 = 0x80FE03F800003FC0;
 
@@ -365,7 +350,7 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
 
         let packedWeights = weights;
         if (swap1 || swap2) {
-          const pattern = getThreeSubsetPatternForModeIndex3(pat);
+          const pattern = getThreeSubsetPattern(pat);
           const patternMask = (
             select(pattern & 0xFFFF, 0, swap1) |
             select(pattern >> 16, 0, swap2)
@@ -1162,25 +1147,32 @@ function transcodeBC7(q0: u64, q1: u64, offset: i32): void {
   store<u64>(offset, r1, 8);
 }
 
+precomputeCommonData();
+storeSolidEndpoints();
+storeMode1();
+storeMode7();
+
 /// Solid-color endpoints precomputation
 
-const solidEndpointsOffset = 1536;
+/**
+ * Offset to a memory location that will contain
+ * precomputed solid color endpoints
+ */
+const solidEndpointsOffset = 2048;
 
 /**
  * Get packed precomputed 7-bit endpoint pair for a 8-bit channel value.
  */
-// @ts-ignore: 1206
-@inline
-function solidEndpoints(c: i32): i32 {
+// @ts-ignore: decorator
+@inline function solidEndpoints(c: i32): i32 {
   return load<i16>(c << 1, solidEndpointsOffset);
 }
 
 /**
  * Precompute and store packed 7-bit endpoint pairs for each 8-bit channel value.
  */
-// @ts-ignore: 1206
-@inline
-function storeSolidEndpoints(): void {
+// @ts-ignore: decorator
+@inline function storeSolidEndpoints(): void {
   for (let c: u32 = 0; c < 256; c++) {
     const l = c >> 1;
     const h = (c >> 1) + (c & 1) - (c >> 7);
@@ -1194,9 +1186,8 @@ function storeSolidEndpoints(): void {
  * Quantize 8-bit value to 5 bits for BC7 modes 3 and 7.
  * Same as ((v * 31 + 127) / 255)
  */
-// @ts-ignore: 1206
-@inline
-function quant5(v: u32): u32 {
+// @ts-ignore: decorator
+@inline function quant5(v: u32): u32 {
   return (v * 0xF9 + 0x3FF) >> 11;
 }
 
@@ -1204,18 +1195,16 @@ function quant5(v: u32): u32 {
  * Quantize 8-bit value to 7 bits for BC7 mode 5.
  * Same as ((v * 127 + 127) / 255)
  */
-// @ts-ignore: 1206
-@inline
-function quant7(v: u32): u32 {
+// @ts-ignore: decorator
+@inline function quant7(v: u32): u32 {
   return ((v + 1) * 0xFF) >> 9;
 }
 
 /**
  * Quantize 8-bit LA endpoint pair to 7778 and pack for BC7 mode 5.
  */
-// @ts-ignore: 1206
-@inline
-function mode5LA(ll: u32, lh: u32, al: u32, ah: u32): u64 {
+// @ts-ignore: decorator
+@inline function mode5LA(ll: u32, lh: u32, al: u32, ah: u32): u64 {
   const llq = <u64>quant7(ll) * 0x10004001;
   const lhq = <u64>quant7(lh) * 0x800200080;
   return (<u64>((ah << 8) | al) << 42) | lhq | llq;
@@ -1225,9 +1214,8 @@ function mode5LA(ll: u32, lh: u32, al: u32, ah: u32): u64 {
  * Quantize 8-bit RGBA endpoint pair to 7778 with channel rotation.
  * The result needs to be further repacked for BC7 mode 5.
  */
-// @ts-ignore: 1206
-@inline
-function mode5(
+// @ts-ignore: decorator
+@inline function mode5(
   rl: u32, rh: u32, gl: u32, gh: u32,
   bl: u32, bh: u32, al: u32, ah: u32,
   compSel: i32
@@ -1248,17 +1236,21 @@ function mode5(
   }
 }
 
-// @ts-ignore: 1206
-@inline
-function square(v: i32): i32 {
+// @ts-ignore: decorator
+@inline function square(v: i32): i32 {
   return v * v;
 }
 
 /// BC7 mode 1 endpoints precomputation
 
+/**
+ * Offset to a memory location that will contain
+ * precomputed BC7 mode 1 endpoints and errors
+ */
 const mode1EndpointsOffset = 3072;
 
-function storeMode1(): void {
+// @ts-ignore: decorator
+@inline function storeMode1(): void {
   for (let v = 0; v < 256; v++) {
     const vq0 = min(((v + 1) >> 2) << 1, 126);
     const vq1 = min((((max(v, 1) - 1) >> 2) << 1) + 1, 127);
@@ -1276,33 +1268,33 @@ function storeMode1(): void {
  * The result needs to be further repacked for BC7 mode 1.
  */
 function mode1(rl: u32, rh: u32, gl: u32, gh: u32, bl: u32, bh: u32): u64 {
-  rl = (rl << 2) + mode1EndpointsOffset;
-  rh = (rh << 2) + mode1EndpointsOffset;
-  gl = (gl << 2) + mode1EndpointsOffset;
-  gh = (gh << 2) + mode1EndpointsOffset;
-  bl = (bl << 2) + mode1EndpointsOffset;
-  bh = (bh << 2) + mode1EndpointsOffset;
+  rl <<= 2;
+  rh <<= 2;
+  gl <<= 2;
+  gh <<= 2;
+  bl <<= 2;
+  bh <<= 2;
 
-  const rlq0: u32 = load<u8>(rl, 0);
-  const rlq1: u32 = load<u8>(rl, 1);
-  const rhq0: u32 = load<u8>(rh, 0);
-  const rhq1: u32 = load<u8>(rh, 1);
-  const glq0: u32 = load<u8>(gl, 0);
-  const glq1: u32 = load<u8>(gl, 1);
-  const ghq0: u32 = load<u8>(gh, 0);
-  const ghq1: u32 = load<u8>(gh, 1);
-  const blq0: u32 = load<u8>(bl, 0);
-  const blq1: u32 = load<u8>(bl, 1);
-  const bhq0: u32 = load<u8>(bh, 0);
-  const bhq1: u32 = load<u8>(bh, 1);
+  const rlq0: u32 = load<u8>(rl, mode1EndpointsOffset + 0);
+  const rlq1: u32 = load<u8>(rl, mode1EndpointsOffset + 1);
+  const rhq0: u32 = load<u8>(rh, mode1EndpointsOffset + 0);
+  const rhq1: u32 = load<u8>(rh, mode1EndpointsOffset + 1);
+  const glq0: u32 = load<u8>(gl, mode1EndpointsOffset + 0);
+  const glq1: u32 = load<u8>(gl, mode1EndpointsOffset + 1);
+  const ghq0: u32 = load<u8>(gh, mode1EndpointsOffset + 0);
+  const ghq1: u32 = load<u8>(gh, mode1EndpointsOffset + 1);
+  const blq0: u32 = load<u8>(bl, mode1EndpointsOffset + 0);
+  const blq1: u32 = load<u8>(bl, mode1EndpointsOffset + 1);
+  const bhq0: u32 = load<u8>(bh, mode1EndpointsOffset + 0);
+  const bhq1: u32 = load<u8>(bh, mode1EndpointsOffset + 1);
 
   const error = (
-    <i32>load<i8>(rl, 2) +
-    <i32>load<i8>(gl, 2) +
-    <i32>load<i8>(bl, 2) +
-    <i32>load<i8>(rh, 2) +
-    <i32>load<i8>(gh, 2) +
-    <i32>load<i8>(bh, 2)
+    <i32>load<i8>(rl, mode1EndpointsOffset + 2) +
+    <i32>load<i8>(gl, mode1EndpointsOffset + 2) +
+    <i32>load<i8>(bl, mode1EndpointsOffset + 2) +
+    <i32>load<i8>(rh, mode1EndpointsOffset + 2) +
+    <i32>load<i8>(gh, mode1EndpointsOffset + 2) +
+    <i32>load<i8>(bh, mode1EndpointsOffset + 2)
   );
 
   const packed0 = (
@@ -1435,9 +1427,14 @@ function mode6LA(ll: u32, lh: u32, al: u32, ah: u32): u64 {
 
 /// BC7 mode 7 endpoints precomputation
 
+/**
+ * Offset to a memory location that will contain
+ * precomputed BC7 mode 7 endpoints and errors
+ */
 const mode7EndpointsOffset = 4096;
 
-function storeMode7(): void {
+// @ts-ignore: decorator
+@inline function storeMode7(): void {
   for (let v = 0; v < 256; v++) {
     const vq0 = min(((((v * 0xFD) >> 10) + 1) & 0x7E), 62);
     const vq1 = min(((((v * 0xFD) >> 10)) & 0x7E) + 1, 63);
@@ -1458,44 +1455,44 @@ function mode7(
   rl: u32, rh: u32, gl: u32, gh: u32,
   bl: u32, bh: u32, al: u32, ah: u32
 ): u64 {
-  rl = (rl << 2) + mode7EndpointsOffset;
-  rh = (rh << 2) + mode7EndpointsOffset;
-  gl = (gl << 2) + mode7EndpointsOffset;
-  gh = (gh << 2) + mode7EndpointsOffset;
-  bl = (bl << 2) + mode7EndpointsOffset;
-  bh = (bh << 2) + mode7EndpointsOffset;
-  al = (al << 2) + mode7EndpointsOffset;
-  ah = (ah << 2) + mode7EndpointsOffset;
+  rl <<= 2;
+  rh <<= 2;
+  gl <<= 2;
+  gh <<= 2;
+  bl <<= 2;
+  bh <<= 2;
+  al <<= 2;
+  ah <<= 2;
 
-  const rlq0: u32 = load<u8>(rl, 0);
-  const rlq1: u32 = load<u8>(rl, 1);
-  const rhq0: u32 = load<u8>(rh, 0);
-  const rhq1: u32 = load<u8>(rh, 1);
-  const glq0: u32 = load<u8>(gl, 0);
-  const glq1: u32 = load<u8>(gl, 1);
-  const ghq0: u32 = load<u8>(gh, 0);
-  const ghq1: u32 = load<u8>(gh, 1);
-  const blq0: u32 = load<u8>(bl, 0);
-  const blq1: u32 = load<u8>(bl, 1);
-  const bhq0: u32 = load<u8>(bh, 0);
-  const bhq1: u32 = load<u8>(bh, 1);
-  const alq0: u32 = load<u8>(al, 0);
-  const alq1: u32 = load<u8>(al, 1);
-  const ahq0: u32 = load<u8>(ah, 0);
-  const ahq1: u32 = load<u8>(ah, 1);
+  const rlq0: u32 = load<u8>(rl, mode7EndpointsOffset + 0);
+  const rlq1: u32 = load<u8>(rl, mode7EndpointsOffset + 1);
+  const rhq0: u32 = load<u8>(rh, mode7EndpointsOffset + 0);
+  const rhq1: u32 = load<u8>(rh, mode7EndpointsOffset + 1);
+  const glq0: u32 = load<u8>(gl, mode7EndpointsOffset + 0);
+  const glq1: u32 = load<u8>(gl, mode7EndpointsOffset + 1);
+  const ghq0: u32 = load<u8>(gh, mode7EndpointsOffset + 0);
+  const ghq1: u32 = load<u8>(gh, mode7EndpointsOffset + 1);
+  const blq0: u32 = load<u8>(bl, mode7EndpointsOffset + 0);
+  const blq1: u32 = load<u8>(bl, mode7EndpointsOffset + 1);
+  const bhq0: u32 = load<u8>(bh, mode7EndpointsOffset + 0);
+  const bhq1: u32 = load<u8>(bh, mode7EndpointsOffset + 1);
+  const alq0: u32 = load<u8>(al, mode7EndpointsOffset + 0);
+  const alq1: u32 = load<u8>(al, mode7EndpointsOffset + 1);
+  const ahq0: u32 = load<u8>(ah, mode7EndpointsOffset + 0);
+  const ahq1: u32 = load<u8>(ah, mode7EndpointsOffset + 1);
 
   const errorLo = (
-    <i32>load<i8>(rl, 2) +
-    <i32>load<i8>(gl, 2) +
-    <i32>load<i8>(bl, 2) +
-    <i32>load<i8>(al, 2)
+    <i32>load<i8>(rl, mode7EndpointsOffset + 2) +
+    <i32>load<i8>(gl, mode7EndpointsOffset + 2) +
+    <i32>load<i8>(bl, mode7EndpointsOffset + 2) +
+    <i32>load<i8>(al, mode7EndpointsOffset + 2)
   );
 
   const errorHi = (
-    <i32>load<i8>(rh, 2) +
-    <i32>load<i8>(gh, 2) +
-    <i32>load<i8>(bh, 2) +
-    <i32>load<i8>(ah, 2)
+    <i32>load<i8>(rh, mode7EndpointsOffset + 2) +
+    <i32>load<i8>(gh, mode7EndpointsOffset + 2) +
+    <i32>load<i8>(bh, mode7EndpointsOffset + 2) +
+    <i32>load<i8>(ah, mode7EndpointsOffset + 2)
   );
 
   const packedLo0 = (
@@ -1537,22 +1534,24 @@ function mode7(
  * The result needs to be further repacked for BC7 mode 7.
  */
 function mode7LA(ll: u32, lh: u32, al: u32, ah: u32): u32 {
-  ll = (ll << 2) + mode7EndpointsOffset;
-  lh = (lh << 2) + mode7EndpointsOffset;
-  al = (al << 2) + mode7EndpointsOffset;
-  ah = (ah << 2) + mode7EndpointsOffset;
+  ll <<= 2;
+  lh <<= 2;
+  al <<= 2;
+  ah <<= 2;
 
-  const llq0: u32 = load<u8>(ll, 0);
-  const llq1: u32 = load<u8>(ll, 1);
-  const lhq0: u32 = load<u8>(lh, 0);
-  const lhq1: u32 = load<u8>(lh, 1);
-  const alq0: u32 = load<u8>(al, 0);
-  const alq1: u32 = load<u8>(al, 1);
-  const ahq0: u32 = load<u8>(ah, 0);
-  const ahq1: u32 = load<u8>(ah, 1);
+  const llq0: u32 = load<u8>(ll, mode7EndpointsOffset + 0);
+  const llq1: u32 = load<u8>(ll, mode7EndpointsOffset + 1);
+  const lhq0: u32 = load<u8>(lh, mode7EndpointsOffset + 0);
+  const lhq1: u32 = load<u8>(lh, mode7EndpointsOffset + 1);
+  const alq0: u32 = load<u8>(al, mode7EndpointsOffset + 0);
+  const alq1: u32 = load<u8>(al, mode7EndpointsOffset + 1);
+  const ahq0: u32 = load<u8>(ah, mode7EndpointsOffset + 0);
+  const ahq1: u32 = load<u8>(ah, mode7EndpointsOffset + 1);
 
-  const errorLo = 3 * <i32>load<i8>(ll, 2) + <i32>load<i8>(al, 2);
-  const errorHi = 3 * <i32>load<i8>(lh, 2) + <i32>load<i8>(ah, 2);
+  const errorLo = 3 * <i32>load<i8>(ll, mode7EndpointsOffset + 2) +
+                      <i32>load<i8>(al, mode7EndpointsOffset + 2);
+  const errorHi = 3 * <i32>load<i8>(lh, mode7EndpointsOffset + 2) +
+                      <i32>load<i8>(ah, mode7EndpointsOffset + 2);
 
   const packedLo0 = ((alq0 >> 1) << 10) | ((llq0 >> 1) << 0);
   const packedHi0 = ((ahq0 >> 1) << 15) | ((lhq0 >> 1) << 5);
@@ -1566,75 +1565,12 @@ function mode7LA(ll: u32, lh: u32, al: u32, ah: u32): u32 {
   return packedLo | packedHi;
 }
 
-const modeIndex3PatternsOffset = 2048;
-const modeIndex7PatternsOffset = 2096;
-const twoSubsetsPatternsOffset = 2176;
-
-function storePatterns(): void {
-  // 11 3-subset patterns for UASTC Mode Index 3 / BC7 Mode 2.
-  // Each pattern is stored as a 32-bit value.
-  // Lower 16 bits denote subset 1, higher 16 bits denote subset 2.
-  store<u64>(modeIndex3PatternsOffset, 0xF0000F00CC003300, 0);
-  store<u64>(modeIndex3PatternsOffset, 0xFF0000F0F0000FF0, 8);
-  store<u64>(modeIndex3PatternsOffset, 0x8888666688884444, 16);
-  store<u64>(modeIndex3PatternsOffset, 0xEE0000EECCCC2222, 24);
-  store<u64>(modeIndex3PatternsOffset, 0x0F0000F044442222, 32);
-  store<u64>(modeIndex3PatternsOffset, 0x00000000C00C0CC0, 40);
-
-  // 19 3-subset patterns for UASTC Mode Index 7 / BC7 Mode 2.
-  // Each pattern is stored as a 32-bit value.
-  // Lower 16 bits denote subset 1, higher 16 bits denote subset 2.
-  store<u64>(modeIndex7PatternsOffset, 0x88884444FF0000F0, 0);
-  store<u64>(modeIndex7PatternsOffset, 0x3310CC80F60008CC, 8);
-  store<u64>(modeIndex7PatternsOffset, 0xCCCC2222F0000F00, 16);
-  store<u64>(modeIndex7PatternsOffset, 0x08CEC40073008CC8, 24);
-  store<u64>(modeIndex7PatternsOffset, 0xEE0000EE03C0C03C, 32);
-  store<u64>(modeIndex7PatternsOffset, 0xCCCC033077008888, 40);
-  store<u64>(modeIndex7PatternsOffset, 0xEC80130000CEEC00, 48);
-  store<u64>(modeIndex7PatternsOffset, 0xEC80004C90006000, 56);
-  store<u64>(modeIndex7PatternsOffset, 0xEC80136CEE0000EE, 64);
-  store<u64>(modeIndex7PatternsOffset, 0x0000000073108C00, 72);
-
-  // 30 2-subset patterns for UASTC Mode Indices 2, 4, 9, 16
-  // pre-swapped to match their BC7 counterparts.
-  // Each pattern is stored as a 16-bit value.
-  store<u64>(twoSubsetsPatternsOffset, 0xECC8EEEE8888CCCC, 0);
-  store<u64>(twoSubsetsPatternsOffset, 0xEC80FEC8FEECC880, 8);
-  store<u64>(twoSubsetsPatternsOffset, 0xE800FE80FFECC800, 16);
-  store<u64>(twoSubsetsPatternsOffset, 0xF000FFF0FF00FFE8, 24);
-  store<u64>(twoSubsetsPatternsOffset, 0x008C08CE7100008E, 32);
-  store<u64>(twoSubsetsPatternsOffset, 0x088C8CCE31007310, 40);
-  store<u64>(twoSubsetsPatternsOffset, 0xAAAA0FF066663110, 48);
-  store<u64>(twoSubsetsPatternsOffset, 0x00000000C936F0F0, 56);
-}
-
 /**
- * Get 3-subset BC7 mode 2 patterns for a given UASTC pattern index (Mode Index 3).
+ * Get BC7 mode 2 partition pattern index
+ * for a given UASTC pattern index (Mode Index 3).
  */
-function getThreeSubsetPatternForModeIndex3(i: u32): u32 {
-  return load<u32>(i << 2, modeIndex3PatternsOffset);
-}
-
-/**
- * Get 3-subset BC7 mode 2 patterns for a given UASTC pattern index (Mode Index 7).
- */
-function getThreeSubsetPatternForModeIndex7(i: u32): u32 {
-  return load<u32>(i << 2, modeIndex7PatternsOffset);
-}
-
-/**
- * Get pattern value for a given UASTC pattern index (Mode Indices 2, 4, 9, 16).
- */
-function getTwoSubsetPattern(i: u32): u32 {
-  return load<u16>(i << 1, twoSubsetsPatternsOffset);
-}
-
-/**
- * Get BC7 mode 2 partition pattern index for a given UASTC pattern index (Mode Index 3).
- */
-// @ts-ignore: 1206
-@inline
-function getThreeSubsetPatternIndexForModeIndex3(pat: u32): u32 {
+// @ts-ignore: decorator
+@inline function getThreeSubsetPatternIndexForModeIndex3(pat: u32): u32 {
   const c00_07: u64 = 0x140D0C0B0A090804;
   const c08_10: u64 = 0x392423;
   const c = pat > 7 ? c08_10 : c00_07;
@@ -1642,11 +1578,11 @@ function getThreeSubsetPatternIndexForModeIndex3(pat: u32): u32 {
 }
 
 /**
- * Get BC7 partition pattern index a given pattern index (Mode Index 7).
+ * Get BC7 partition pattern index
+ * for a given pattern index (Mode Index 7).
  */
-// @ts-ignore: 1206
-@inline
-function getThreeSubsetPatternIndexForModeIndex7(pat: u32): u32 {
+// @ts-ignore: decorator
+@inline function getThreeSubsetPatternIndexForModeIndex7(pat: u32): u32 {
   const c00_07: u64 = 0x21010D0802000B0A;
   const c08_15: u64 = 0x223B20033A151428;
   const c16_18: u64 = 0x1F0E14;
@@ -1655,52 +1591,52 @@ function getThreeSubsetPatternIndexForModeIndex7(pat: u32): u32 {
 }
 
 /**
- * Get BC7 partition pattern index for a given pattern index (Mode Indices 2, 4, 9, 16).
+ * Get BC7 partition pattern index
+ * for a given pattern index (Mode Indices 2, 4, 9, 16).
  */
-// @ts-ignore: 1206
-@inline
-function getTwoSubsetPatternIndex(pat: u32): u32 {
+// @ts-ignore: decorator
+@inline function getTwoSubsetPatternIndex(pat: u32): u32 {
   if (pat < 26) return pat + u32(pat > 15);
   return (0x3421201D >> ((pat - 26) << 3)) & 0xFF;
 }
 
 /**
- * Get BC7 subset 1 anchor value for a given UASTC pattern index (Mode Index 7).
+ * Get BC7 subset 1 anchor value
+ * for a given UASTC pattern index (Mode Index 7).
  */
-// @ts-ignore: 1206
-@inline
-function getBC7ThreeSubsetAnchor1ForModeIndex7(pat: u32): u32 {
+// @ts-ignore: decorator
+@inline function getBC7ThreeSubsetAnchor1ForModeIndex7(pat: u32): u32 {
   const c00_15: u64 = 0x3D8F833FF358F366;
   const c16_18: u64 = 0xF33;
   return <u32>(((pat > 15) ? c16_18 : c00_15) >> ((pat & 0xF) << 2)) & 0xF;
 }
 
 /**
- * Get BC7 subset 2 anchor value for a given UASTC pattern index (Mode Index 7).
+ * Get BC7 subset 2 anchor value
+ * for a given UASTC pattern index (Mode Index 7).
  */
-// @ts-ignore: 1206
-@inline
-function getBC7ThreeSubsetAnchor2ForModeIndex7(pat: u32): u32 {
+// @ts-ignore: decorator
+@inline function getBC7ThreeSubsetAnchor2ForModeIndex7(pat: u32): u32 {
   const c00_15: u64 = 0xFFF3F8F638FF8FFF;
   const c16_18: u64 = 0x8FF;
   return <u32>(((pat > 15) ? c16_18 : c00_15) >> ((pat & 0xF) << 2)) & 0xF;
 }
 
 /**
- * Get BC7 subset swap flag for a given pattern index (Mode Indices 2, 4, 9, 16).
+ * Get BC7 subset swap flag
+ * for a given pattern index (Mode Indices 2, 4, 9, 16).
  */
-// @ts-ignore: 1206
-@inline
-function getBC7TwoSubsetSwap(pat: u32): u32 {
+// @ts-ignore: decorator
+@inline function getBC7TwoSubsetSwap(pat: u32): u32 {
   return (0x3D63BAD4 >> pat) & 1;
 }
 
 /**
- * Get BC7 subset 1 anchor value for a given UASTC pattern index (Mode Indices 2, 4, 9, 16).
+ * Get BC7 subset 1 anchor value
+ * for a given UASTC pattern index (Mode Indices 2, 4, 9, 16).
  */
-// @ts-ignore: 1206
-@inline
-function getBC7TwoSubsetAnchor(pat: u32): u32 {
+// @ts-ignore: decorator
+@inline function getBC7TwoSubsetAnchor(pat: u32): u32 {
   if (pat < 16) return 15;
   return <u32>(0xFFF8282F882282 >> ((pat & 0xF) << 2)) & 0xF;
 }
@@ -1708,9 +1644,8 @@ function getBC7TwoSubsetAnchor(pat: u32): u32 {
 /**
  * Convert 2-bit UASTC weights to 4-bit BC7.
  */
-// @ts-ignore: 1206
-@inline
-function scaleWeights2(v: u64): u64 {
+// @ts-ignore: decorator
+@inline function scaleWeights2(v: u64): u64 {
   // ab * 16 -> 00ab * 16
   v = ((v << 16) & 0x0000FFFF00000000) | (v & 0x000000000000FFFF);
   v = ((v <<  8) & 0x00FF000000FF0000) | (v & 0x000000FF000000FF);
@@ -1724,9 +1659,8 @@ function scaleWeights2(v: u64): u64 {
 /**
  * Convert 3-bit UASTC weights to 4-bit BC7.
  */
-// @ts-ignore: 1206
-@inline
-function scaleWeights3(w: u64): u64 {
+// @ts-ignore: decorator
+@inline function scaleWeights3(w: u64): u64 {
   // abc * 16 -> 0abc * 16
   w = ((w << 8) & 0x00FFFFFF00000000) | (w & 0x0000000000FFFFFF);
   w = ((w << 4) & 0x0FFF00000FFF0000) | (w & 0x00000FFF00000FFF);
@@ -1740,9 +1674,8 @@ function scaleWeights3(w: u64): u64 {
 /**
  * Convert 5-bit UASTC weights to 4-bit BC7.
  */
-// @ts-ignore: 1206
-@inline
-function scaleWeights5(weights: u64): u64 {
+// @ts-ignore: decorator
+@inline function scaleWeights5(weights: u64): u64 {
   // Weights could be scaled by a single right shift
   // but 14 and 17 must first be mapped to 12 or 13 and 18 or 19 respectively.
 
@@ -1774,9 +1707,8 @@ function scaleWeights5(weights: u64): u64 {
 /**
  * Regroup 2x2x16 bits to 2x16x2 for BC7 mode 5.
  */
-// @ts-ignore: 1206
-@inline
-function regroupWeights(w: u64): u64 {
+// @ts-ignore: decorator
+@inline function regroupWeights(w: u64): u64 {
   let x: u64 = 0;
   x = ((w >>  2) ^ (w >>  4)) & 0x0303030303030303;
   w ^= (x <<  2) | (x <<  4);
