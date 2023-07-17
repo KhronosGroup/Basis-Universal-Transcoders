@@ -5,7 +5,7 @@
 
 A collection of optimized WebAssembly transcoders for [Basis Universal](https://github.com/BinomialLLC/basis_universal/) compressed GPU texture formats.
 
-These transcoders accept only low-level compressed payloads. Containers such as `.basis` or `.ktx2` ([KTX](https://github.khronos.org/KTX-Specification/)) should first be parsed by other means, then transcoded to the target format with this library.
+These transcoders accept only low-level compressed payloads. Containers such as `.basis` or `.ktx2` ([KTX](https://registry.khronos.org/KTX/specs/2.0/ktxspec.v2.html)) should first be parsed by other means, then transcoded to the target format with this library.
 
 ## Implementation Status
 
